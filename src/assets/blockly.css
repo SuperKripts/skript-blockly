@@ -1,0 +1,284 @@
+:root {
+  --skript-event: #a763ff;
+  --skript-condition: #ff3d3d;
+  --skript-effect: #0178ff;
+  --skript-expression: #0de505;
+  --skript-type: #f39c12;
+  --skript-function: #b4b4b4;
+  --skript-section: #1abc9c;
+  --skript-structure: #e056fd;
+
+  --skript-event-bg: rgba(167, 99, 255, 0.08);
+  --skript-condition-bg: rgba(255, 61, 61, 0.08);
+  --skript-effect-bg: rgba(1, 120, 255, 0.08);
+  --skript-expression-bg: rgba(13, 229, 5, 0.08);
+  --skript-type-bg: rgba(243, 156, 18, 0.08);
+  --skript-function-bg: rgba(180, 180, 180, 0.08);
+  --skript-section-bg: rgba(26, 188, 156, 0.08);
+  --skript-structure-bg: rgba(224, 86, 253, 0.08);
+
+  --skript-event-selected: rgba(167, 99, 255, 0.12);
+  --skript-condition-selected: rgba(255, 61, 61, 0.12);
+  --skript-effect-selected: rgba(1, 120, 255, 0.12);
+  --skript-expression-selected: rgba(13, 229, 5, 0.12);
+  --skript-type-selected: rgba(243, 156, 18, 0.12);
+  --skript-function-selected: rgba(180, 180, 180, 0.12);
+  --skript-section-selected: rgba(26, 188, 156, 0.12);
+  --skript-structure-selected: rgba(224, 86, 253, 0.12);
+
+  --accent-primary-bg-light: rgba(255, 152, 0, 0.04);
+  --accent-primary-focus-ring: rgba(255, 152, 0, 0.15);
+
+  --blockly-grid-color: #ededed;
+}
+
+:root.dark {
+  --skript-event-bg: rgba(167, 99, 255, 0.16);
+  --skript-condition-bg: rgba(255, 61, 61, 0.16);
+  --skript-effect-bg: rgba(1, 120, 255, 0.16);
+  --skript-expression-bg: rgba(13, 229, 5, 0.16);
+  --skript-type-bg: rgba(243, 156, 18, 0.16);
+  --skript-function-bg: rgba(180, 180, 180, 0.12);
+  --skript-section-bg: rgba(26, 188, 156, 0.16);
+  --skript-structure-bg: rgba(224, 86, 253, 0.16);
+
+  --skript-event-selected: rgba(167, 99, 255, 0.24);
+  --skript-condition-selected: rgba(255, 61, 61, 0.24);
+  --skript-effect-selected: rgba(1, 120, 255, 0.24);
+  --skript-expression-selected: rgba(13, 229, 5, 0.24);
+  --skript-type-selected: rgba(243, 156, 18, 0.24);
+  --skript-function-selected: rgba(180, 180, 180, 0.18);
+  --skript-section-selected: rgba(26, 188, 156, 0.24);
+  --skript-structure-selected: rgba(224, 86, 253, 0.24);
+
+  --accent-primary-bg-light: rgba(255, 152, 0, 0.08);
+  --accent-primary-focus-ring: rgba(255, 152, 0, 0.25);
+
+  --blockly-grid-color: #3c3c3c;
+}
+
+.blocklyFlyoutLabelText {
+  fill: var(--text-secondary) !important;
+}
+
+.blocklyToolbox {
+  padding: 0;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+}
+
+@keyframes flyoutSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.blocklyFlyoutBackground {
+  fill: var(--bg-secondary);
+}
+
+.blocklySvg {
+  background-color: var(--bg-primary) !important;
+}
+
+pattern[id^='blocklyGridPattern'] line {
+  stroke: var(--blockly-grid-color);
+}
+
+.blocklyToolboxCategory {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: 6px;
+}
+
+.blocklyToolboxCategoryContainer:hover:not(.blocklyToolboxSelected) {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.blocklyToolboxCategory.blocklyToolboxSelected {
+  background-color: var(--accent-primary-bg-light) !important;
+  color: var(--accent-primary) !important;
+  border-left-color: var(--accent-primary) !important;
+}
+
+.blocklyToolboxCategory.blocklyToolboxSelected .blocklyToolboxCategoryLabel {
+  color: var(--accent-primary) !important;
+  font-weight: bold;
+}
+
+.blocklyToolboxCategory.blocklyToolboxSelected .blocklyToolboxCategoryIcon {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: var(--accent-primary);
+}
+
+.blocklyToolboxCategoryIcon {
+  display: none !important;
+}
+
+.blocklyTreeRowContentContainer::before {
+  content: '';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.blocklyTreeRowContentContainer:has(.blocklyToolboxCategoryIconClosed)::before {
+  content: '▶';
+  font-size: 10px;
+}
+
+.blocklyTreeRowContentContainer:has(.blocklyToolboxCategoryIconOpen)::before {
+  content: '▼';
+  font-size: 10px;
+}
+
+.blocklyToolboxCategoryLabel {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: var(--transition);
+}
+
+.blocklyToolboxCategory:hover {
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.blocklyToolboxCategoryContainer:has(#toolbox-search-input) {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+}
+
+.blocklyToolboxCategory:has(#toolbox-search-input) {
+  margin: 0;
+  padding: 0;
+  height: inherit;
+  background-color: var(--bg-primary) !important;
+}
+
+.blocklyTreeRowContentContainer:has(#toolbox-search-input)::before {
+  content: none;
+}
+
+#toolbox-search-input {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  margin-left: 0px !important;
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: var(--transition);
+}
+
+#toolbox-search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-primary-focus-ring);
+}
+
+.blocklyScrollbarVertical,
+.blocklyScrollbarVertical .blocklyScrollbarBackground {
+  width: 9px;
+}
+
+.blocklyScrollbarHorizontal,
+.blocklyScrollbarHorizontal .blocklyScrollbarBackground {
+  height: 9px;
+}
+
+.blocklyScrollbarVertical .blocklyScrollbarHandle {
+  rx: 3px;
+  ry: 3px;
+  width: 6px;
+}
+
+.blocklyScrollbarHorizontal .blocklyScrollbarHandle {
+  rx: 3px;
+  ry: 3px;
+  height: 6px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.blocklyToolboxCategoryContainer {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.blocklyToolboxCategoryContainer.toolbox-event:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-event-bg);
+}
+.blocklyToolboxCategoryContainer.toolbox-condition:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-condition-bg);
+}
+.blocklyToolboxCategoryContainer.toolbox-effect:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-effect-bg);
+}
+.blocklyToolboxCategoryContainer.toolbox-expression:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-expression-bg);
+}
+.blocklyToolboxCategoryContainer.toolbox-type:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-type-bg);
+}
+.blocklyToolboxCategoryContainer.toolbox-function:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-function-bg);
+}
+.blocklyToolboxCategoryContainer.toolbox-section:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-section-bg);
+}
+.blocklyToolboxCategoryContainer.toolbox-structure:hover:not(.blocklyToolboxSelected) {
+  background-color: var(--skript-structure-bg);
+}
+
+.blocklyToolboxCategoryContainer.toolbox-event:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-event-selected);
+}
+.blocklyToolboxCategoryContainer.toolbox-condition:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-condition-selected);
+}
+.blocklyToolboxCategoryContainer.toolbox-effect:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-effect-selected);
+}
+.blocklyToolboxCategoryContainer.toolbox-expression:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-expression-selected);
+}
+.blocklyToolboxCategoryContainer.toolbox-type:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-type-selected);
+}
+.blocklyToolboxCategoryContainer.toolbox-function:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-function-selected);
+}
+.blocklyToolboxCategoryContainer.toolbox-section:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-section-selected);
+}
+.blocklyToolboxCategoryContainer.toolbox-structure:has(.blocklyToolboxSelected) {
+  background-color: var(--skript-structure-selected);
+}

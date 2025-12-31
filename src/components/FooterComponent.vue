@@ -1,0 +1,131 @@
+<script setup lang="ts">
+import { useThemeStore } from '@/stores/theme';
+import { useWorkspaceStore } from '@/stores/workspace';
+
+const workspaceStore = useWorkspaceStore()
+const themeStore = useThemeStore()
+</script>
+
+<template>
+  <footer class="status-bar">
+    <div class="status-items">
+      <div class="status-item">
+        <i class="fas fa-cube status-icon"></i>
+        <span>
+          <span class="status-text">积木数量:</span>
+          <span>{{ workspaceStore.blockCount }}</span>
+        </span>
+      </div>
+      <div class="status-item">
+        <i class="fas fa-code status-icon"></i>
+        <span>
+          <span class="status-text">代码行数:</span>
+          <span>{{ workspaceStore.codeLine }}</span>
+        </span>
+      </div>
+      <!-- 太麻烦了监听一大堆事件 -->
+      <div class="status-item">
+        <i class="fas fa-check-circle status-icon"></i>
+        <span>
+          <span class="status-text">状态:</span>
+          <span>{{ workspaceStore.state }}</span>
+        </span>
+      </div>
+      <div class="status-item" v-if="!workspaceStore.isSaved">
+        <i class="fas fa-exclamation-circle status-icon" style="color: #ff9800;"></i>
+        <span>
+          <span>未保存</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="status-actions">
+      <button class="status-btn" @click="themeStore.toggle">
+        <i class="fas" :class="themeStore.isDark ? 'fa-sun' : 'fa-moon'"></i>
+        <!-- 本来就是亮色模式... -->
+        <span class="btn-text">{{ themeStore.isDark ? '亮色模式' : '暗色模式' }}</span>
+      </button>
+      <button class="status-btn" id="toggleGrid" @click="workspaceStore.toggleGrid">
+        <i class="fas fa-th"></i>
+        <span class="btn-text">{{ workspaceStore.grid ? '隐藏网格' : '显示网格' }}</span>
+      </button>
+      <button class="status-btn" id="helpBtn">
+        <i class="fas fa-question-circle"></i>
+        <span class="btn-text">帮助</span>
+      </button>
+    </div>
+  </footer>
+</template>
+
+<style scoped>
+.status-bar {
+  background-color: var(--bg-dark);
+  color: white;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  height: var(--status-height);
+}
+
+.status-items {
+  display: flex;
+  gap: 24px;
+  height: 100%;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+.status-icon {
+  color: var(--accent-primary);
+  font-size: 14px;
+  width: 14px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-text {
+  opacity: 0.8;
+}
+
+.status-value {
+  font-weight: 600;
+}
+
+.status-actions {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+}
+
+.status-btn {
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.8;
+  transition: var(--transition);
+  padding: 0;
+  height: 100%;
+}
+
+.status-btn:hover {
+  opacity: 1;
+}
+
+.btn-text {
+  line-height: 1;
+}
+</style>

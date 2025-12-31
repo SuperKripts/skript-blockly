@@ -1,0 +1,61 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import './blockly.css';
+
+:root {
+  --bg-primary: #f7f7f7;
+  --bg-secondary: #ffffff;
+  --bg-dark: #1e1e1e;
+  --accent-primary: #ff9800;
+  --accent-secondary: #ffb74d;
+  --accent-light: #ffe0b2;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-light: #999999;
+  --border-color: #e0e0e0;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 999px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --header-height: 70px;
+  --status-height: 50px;
+}
+
+:root.dark {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --accent-primary: #ff9800;
+  --accent-secondary: #ffb74d;
+  --accent-light: #ffe0b2;
+  --text-primary: #f7f7f7;
+  --text-secondary: #d4d4d4;
+  --text-light: #a0a0a0;
+  --border-color: #3c3c3c;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+}
