@@ -1,4 +1,4 @@
-import * as Blockly from 'blockly'
+import * as Blockly from 'blockly/core'
 
 import { eventBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSeach'

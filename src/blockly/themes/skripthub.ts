@@ -1,4 +1,4 @@
-import * as Blockly from 'blockly'
+import * as Blockly from 'blockly/core'
 
 // 主题 改用css定义样式
 export const skript = Blockly.Theme.defineTheme('skript', {

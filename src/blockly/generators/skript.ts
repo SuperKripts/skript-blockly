@@ -1,4 +1,4 @@
-import * as Blockly from 'blockly'
+import * as Blockly from 'blockly/core'
 
 export class SkriptCodeGenerator extends Blockly.Generator {
   constructor() {

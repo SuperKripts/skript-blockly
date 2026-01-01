@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { syntaxlistPlugin } from './syntaxlist-plugin'
+import { resolve } from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,27 +18,16 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          const posixId = id.replace(/\\/g, '/')
-          const projectRoot = __dirname.replace(/\\/g, '/')
-          if (posixId.startsWith(projectRoot)) {
-            const path = posixId.substring(projectRoot.length)
-            if (path.startsWith('/src/blockly/blocks/syntaxlist')) {
-              return 'syntaxlist'
-            }
-            if (path.startsWith('/src/blockly/lang/zh-cn') || path.startsWith('/node_modules/blockly/msg/zh-hans')) {
-              return 'zh_cn'
-            }
-            if (path.startsWith('/src/blockly/lang/en_us') || path.startsWith('/node_modules/blockly/msg/en')) {
-              return 'en_us'
-            }
-            if (path.startsWith('/node_modules/blockly') || path.startsWith('/node_modules/@blockly')) {
-              return 'blockly'
-            }
-            if (path.startsWith('/node_modules/vue') || path.startsWith('/node_modules/@vue') || path.startsWith('/node_modules/pinia')) {
-              return 'vue'
-            }
+        manualChunks: {
+          blockly: ['blockly'],
+          vue: ['vue', 'vue-router', 'pinia', 'vue-i18n'],
+          syntaxlist: [resolve(__dirname, 'src/blockly/blocks/syntaxlist.json')],
+        },
+        chunkFileNames(chunkInfo) {
+          if (chunkInfo.facadeModuleId?.includes('/locales/')) {
+            return 'lang/[name]-[hash].js'
           }
+          return 'assets/[name]-[hash].js'
         },
       },
     },

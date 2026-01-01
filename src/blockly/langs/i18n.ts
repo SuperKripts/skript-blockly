@@ -1,9 +1,9 @@
-import { Msg, setLocale } from 'blockly/core'
+import { Msg } from 'blockly/core'
 
-import { defaultMsg, extendLang } from '@/blockly/langs/zh-cn'
+// import { defaultMsg, extendLang } from '@/blockly/langs/zh-cn'
 
-setLocale(defaultMsg)
-setLocale(extendLang)
+// setLocale(defaultMsg)
+// setLocale(extendLang)
 
 const s = /%([1-9]\d*)/g
 

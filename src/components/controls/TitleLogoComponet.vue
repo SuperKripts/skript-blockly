@@ -4,8 +4,8 @@
       <i class="fas fa-cubes"></i>
     </div>
     <div class="logo-text">
-      <h1>Skript Blockly</h1>
-      <p>积木编程平台</p>
+      <h1>{{ $t('title') }}</h1>
+      <p>{{ $t('description') }}</p>
     </div>
   </div>
 </template>
