@@ -27,12 +27,17 @@ const open = (event: MouseEvent) => {
   visible.value = true
 
   nextTick(() => {
-    if (menuRef.value) {
-      const rect = menuRef.value.getBoundingClientRect()
-      const maxX = window.innerWidth - rect.width
-      const maxY = window.innerHeight - rect.height
-      x.value = Math.min(clientX, maxX)
-      y.value = Math.min(clientY, maxY)
+    const menu = menuRef.value
+    if (menu) {
+      const rect = menu.getBoundingClientRect()
+      const { clientX, clientY } = event
+      const { innerWidth, innerHeight } = globalThis
+      if (clientX + rect.width > innerWidth) {
+        x.value = clientX - rect.width
+      }
+      if (clientY + rect.height > innerHeight) {
+        y.value = clientY - rect.height
+      }
     }
   })
 }
