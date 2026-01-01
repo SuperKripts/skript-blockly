@@ -10,16 +10,18 @@ type SkriptBlocklyContent = {
 }
 
 export const useWorkspaceStore = defineStore('workspace', () => {
-  const WORKSPACE_PREFIX = 'skriptblockly-workspace-'
+  const INDEXED_DB_VERSION = 1
   const CURRENT_WORKSPACE_KEY = 'skriptblockly-current-workspace'
 
   const _workspace = shallowRef<Blockly.Workspace | null>(null)
-  const _workspaceNames = ref(getWorkspaceNamesFromBrowser())
+  const _workspaceNames = ref<string[]>([])
   const _workspaceName = ref('未命名')
   const _isSaved = ref(true)
   const _code = ref('')
   const _grid = ref(true)
   const _state = ref('')
+
+  updateWorkspaceNames()
 
   const codeLine = computed(() => {
     return _code.value.split('\n').length
@@ -56,14 +58,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     })
 
     globalThis.addEventListener('beforeunload', (e) => !_isSaved.value && e.preventDefault())
-
-    const workspaceName = localStorage.getItem(CURRENT_WORKSPACE_KEY)
-    if (workspaceName) {
-      const content = localStorage.getItem(WORKSPACE_PREFIX + workspaceName)
-      if (content) {
-        loadWorkspace(JSON.parse(content))
-      }
-    }
+    loadWorkspaceFromBrowser()
   }
 
   function getWorkspace(): Blockly.Workspace {
@@ -113,12 +108,12 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     return content
   }
 
-  function newWorkspace(name?: string): boolean {
+  async function newWorkspace(name?: string): Promise<boolean> {
     const workspaceName = name ?? prompt('请输入新的工作区名称', '未命名')
     if (!workspaceName) {
       return false
     }
-    if (getWorkspaceNamesFromBrowser().includes(workspaceName)) {
+    if (await getWorkspaceNamesFromBrowser().then((names) => names.includes(workspaceName))) {
       alert('工作区名称已存在!')
       return false
     }
@@ -127,51 +122,113 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     return true
   }
 
-  function getWorkspaceNamesFromBrowser() {
-    const workspaces = []
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      if (key?.startsWith(WORKSPACE_PREFIX)) {
-        workspaces.push(key.substring(WORKSPACE_PREFIX.length))
+  async function openIndexedDB() {
+    return new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('skriptblockly-workspaces', INDEXED_DB_VERSION)
+      request.onsuccess = () => resolve(request.result)
+      request.onerror = () => reject(new Error('无法打开IndexedDB'))
+      request.onupgradeneeded = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result
+        if (!db.objectStoreNames.contains('workspaces')) {
+          db.createObjectStore('workspaces')
+        }
       }
-    }
-    return workspaces
+    })
+  }
+
+  function updateWorkspaceNames() {
+    getWorkspaceNamesFromBrowser().then((names) => {
+      _workspaceNames.value = names
+    })
+  }
+
+  async function getWorkspaceNamesFromBrowser(): Promise<string[]> {
+    const db = await openIndexedDB()
+    const transaction = db.transaction('workspaces', 'readonly')
+    const objectStore = transaction.objectStore('workspaces')
+    const request = objectStore.getAllKeys()
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result as string[])
+      request.onerror = () => reject(new Error('无法获取工作区列表'))
+    })
   }
 
   function removeWorkspaceFromBrowser(name: string) {
     if (confirm('确定要删除这个工作区吗？')) {
-      localStorage.removeItem(WORKSPACE_PREFIX + name)
-      _workspaceNames.value = getWorkspaceNamesFromBrowser()
+      openIndexedDB().then((db) => {
+        const transaction = db.transaction('workspaces', 'readwrite')
+        const objectStore = transaction.objectStore('workspaces')
+        const request = objectStore.delete(name)
+        request.onsuccess = function () {
+          alert(`工作区 "${name}" 已删除`)
+          updateWorkspaceNames()
+        }
+        request.onerror = function () {
+          alert('删除工作区失败')
+        }
+      })
     }
   }
 
   function saveWorkspaceToBrowser() {
     const content = saveWorkspace()
-    localStorage.setItem(WORKSPACE_PREFIX + content.skriptblockly, JSON.stringify(content))
-    localStorage.setItem(CURRENT_WORKSPACE_KEY, content.skriptblockly)
-    _isSaved.value = true
-    _workspaceNames.value = getWorkspaceNamesFromBrowser()
-    alert(`工作区 "${content.skriptblockly}" 已保存至浏览器`)
+    openIndexedDB().then((db) => {
+      const transaction = db.transaction('workspaces', 'readwrite')
+      const objectStore = transaction.objectStore('workspaces')
+      const request = objectStore.put(content, content.skriptblockly)
+      request.onsuccess = function () {
+        alert(`工作区 "${content.skriptblockly}" 已保存至浏览器`)
+        localStorage.setItem(CURRENT_WORKSPACE_KEY, content.skriptblockly)
+        _isSaved.value = true
+        updateWorkspaceNames()
+      }
+      request.onerror = function () {
+        alert('保存工作区失败')
+      }
+    })
   }
 
   function loadWorkspaceFromBrowser(name?: string) {
-    const workspaceName = name ?? localStorage.getItem(CURRENT_WORKSPACE_KEY)
-    if (!workspaceName) {
-      alert('没有保存的工作区')
-      return
-    }
-
-    const item = localStorage.getItem(WORKSPACE_PREFIX + workspaceName)
-    if (item) {
-      try {
-        const content: SkriptBlocklyContent = JSON.parse(item)
-        loadWorkspace(content)
-      } catch (e) {
-        console.error('加载失败:', e)
-        alert('工作区数据损坏')
-      }
+    if (name) {
+      openIndexedDB().then((db) => {
+        const transaction = db.transaction('workspaces', 'readonly')
+        const objectStore = transaction.objectStore('workspaces')
+        const request = objectStore.get(name)
+        request.onsuccess = function () {
+          const content = request.result
+          if (content) {
+            loadWorkspace(content)
+            localStorage.setItem(CURRENT_WORKSPACE_KEY, name)
+            alert(`工作区 "${name}" 已从浏览器加载`)
+          } else {
+            alert(`工作区 "${name}" 不存在`)
+          }
+        }
+        request.onerror = function () {
+          alert('加载工作区失败')
+        }
+      })
     } else {
-      alert(`未找到工作区 "${workspaceName}"`)
+      const workspaceName = localStorage.getItem(CURRENT_WORKSPACE_KEY)
+      if (!workspaceName) {
+        return
+      }
+      openIndexedDB().then((db) => {
+        const transaction = db.transaction('workspaces', 'readonly')
+        const objectStore = transaction.objectStore('workspaces')
+        const request = objectStore.get(workspaceName)
+        request.onsuccess = function () {
+          const content = request.result
+          if (content) {
+            loadWorkspace(content)
+          } else {
+            alert(`工作区 "${workspaceName}" 不存在`)
+          }
+        }
+        request.onerror = function () {
+          alert('加载工作区失败')
+        }
+      })
     }
   }
 
