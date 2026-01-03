@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly/core'
-import I18n from '@/blockly/langs/i18n'
+import { t } from '@/locales/i18n'
 
 export type MutatorExtractValue<T> = {
   id: string
@@ -45,10 +45,10 @@ export class SimpleMutator<T> {
     Blockly.Blocks[topBlockId] = {
       init: function (this: Blockly.Block) {
         if (multiple) {
-          this.appendDummyInput().appendField(I18n.getLang(topBlockDesc))
+          this.appendDummyInput().appendField(t(topBlockDesc))
           this.appendStatementInput('items')
         } else {
-          this.appendValueInput('items').appendField(I18n.getLang(topBlockDesc))
+          this.appendValueInput('items').appendField(t(topBlockDesc))
         }
         this.setColour(120)
       },
@@ -59,7 +59,7 @@ export class SimpleMutator<T> {
     const { fieldName, multiple } = this.config
     Blockly.Blocks[id] = {
       init: function (this: Blockly.Block) {
-        this.appendDummyInput().appendField(I18n.getLang(desc))
+        this.appendDummyInput().appendField(t(desc))
         this.appendDummyInput().appendField(String(value), fieldName).setVisible(false)
         if (multiple) {
           this.setPreviousStatement(true, null)
@@ -77,7 +77,7 @@ export class SimpleMutator<T> {
     const { fieldName, multiple } = this.config
     Blockly.Blocks[id] = {
       init: function (this: Blockly.Block) {
-        this.appendDummyInput().appendField(I18n.getLang(desc)).appendField(field(), fieldName)
+        this.appendDummyInput().appendField(t(desc)).appendField(field(), fieldName)
         if (multiple) {
           this.setPreviousStatement(true, null)
           this.setNextStatement(true, null)

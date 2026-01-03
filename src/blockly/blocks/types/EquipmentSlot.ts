@@ -1,14 +1,14 @@
-import I18n from '@/blockly/langs/i18n'
 import { SimpleMutator } from '@/blockly/utils/SimpleMutator'
+import { t } from '@/locales/i18n'
 import * as Blockly from 'blockly/core'
 
 export function createEquipmentSlotArmorFieldDropdown() {
   return new Blockly.FieldDropdown([
-    [I18n.getLang('SKRIPT_EQUIPMENT_SLOT_DEFAULT'), ''],
-    [I18n.getLang('SKRIPT_EQUIPMENT_SLOT_HELMET'), 'helmet'],
-    [I18n.getLang('SKRIPT_EQUIPMENT_SLOT_CHESTPLATE'), 'chestplate'],
-    [I18n.getLang('SKRIPT_EQUIPMENT_SLOT_LEGGINGS'), 'leggings'],
-    [I18n.getLang('SKRIPT_EQUIPMENT_SLOT_BOOTS'), 'boots'],
+    [t('SKRIPT_EQUIPMENT_SLOT_DEFAULT'), ''],
+    [t('SKRIPT_EQUIPMENT_SLOT_HELMET'), 'helmet'],
+    [t('SKRIPT_EQUIPMENT_SLOT_CHESTPLATE'), 'chestplate'],
+    [t('SKRIPT_EQUIPMENT_SLOT_LEGGINGS'), 'leggings'],
+    [t('SKRIPT_EQUIPMENT_SLOT_BOOTS'), 'boots'],
   ])
 }
 
