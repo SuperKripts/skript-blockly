@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js'
 import * as Blockly from 'blockly/core'
+import { t } from '@/locales/i18n'
 
 export type BlockData = {
   type: string
@@ -125,7 +126,7 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
     if (this.flyoutItems_.length === 0) {
       this.flyoutItems_.push({
         kind: 'label',
-        text: '未找到相关积木块',
+        text: t('BLOCKLY_NOT_FOUND'),
       })
     }
     this.parentToolbox_.refreshSelection()

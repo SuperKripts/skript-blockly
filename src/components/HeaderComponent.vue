@@ -6,30 +6,32 @@ import ContentMenuComponet from "@/components/controls/ContentMenuComponet.vue";
 import CardComponet from "@/components/controls/CardComponet.vue";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const selectWorkspace = ref<HTMLDialogElement>()
 const ws = useWorkspaceStore()
+const { t } = useI18n()
 
 const saveMenu = ref<InstanceType<typeof ContentMenuComponet>>()
 const loadMenu = ref<InstanceType<typeof ContentMenuComponet>>()
 const genMenu = ref<InstanceType<typeof ContentMenuComponet>>()
 const saveMenuInfo = [
-  { key: 'saveToBrowser', label: '保存工作区至浏览器', icon: 'fa-file-arrow-down', onClick: ws.saveWorkspaceToBrowser },
-  { key: 'saveToFile', label: '保存工作区至本地文件', icon: 'fa-floppy-disk', onClick: ws.saveWorkspaceToFile },
-  { key: 'saveToClipboard', label: '保存工作区至剪切板', icon: 'fa-clipboard', onClick: ws.saveWorkspaceToClipboard },
-  { key: 'saveToConsole', label: '保存工作区至控制台', icon: 'fa-terminal', onClick: ws.saveWorkspaceToConsole }
+  { key: 'saveToBrowser', label: t('WORKSPACE_SAVE_TO_BROWSER'), icon: 'fa-file-arrow-down', onClick: ws.saveWorkspaceToBrowser },
+  { key: 'saveToFile', label: t('WORKSPACE_SAVE_TO_FILE'), icon: 'fa-floppy-disk', onClick: ws.saveWorkspaceToFile },
+  { key: 'saveToClipboard', label: t('WORKSPACE_SAVE_TO_CLIPBOARD'), icon: 'fa-clipboard', onClick: ws.saveWorkspaceToClipboard },
+  { key: 'saveToConsole', label: t('WORKSPACE_SAVE_TO_CONSOLE'), icon: 'fa-terminal', onClick: ws.saveWorkspaceToConsole }
 ]
 
 const loadMenuInfo = [
-  { key: 'loadFromBrowser', label: '从浏览器中加载工作区', icon: 'fa-file-arrow-up', onClick: () => selectWorkspace.value?.showModal() },
-  { key: 'loadFromFile', label: '从本地文件中加载工作区', icon: 'fa-folder-open', onClick: ws.loadWorkspaceFromFile },
-  { key: 'loadFromClipboard', label: '从剪切板中加载工作区', icon: 'fa-clipboard-check', onClick: ws.loadWorkspaceFromClipboard }
+  { key: 'loadFromBrowser', label: t('WORKSPACE_LOAD_FROM_BROWSER'), icon: 'fa-file-arrow-up', onClick: () => selectWorkspace.value?.showModal() },
+  { key: 'loadFromFile', label: t('WORKSPACE_LOAD_FROM_FILE'), icon: 'fa-folder-open', onClick: ws.loadWorkspaceFromFile },
+  { key: 'loadFromClipboard', label: t('WORKSPACE_LOAD_FROM_CLIPBOARD'), icon: 'fa-clipboard-check', onClick: ws.loadWorkspaceFromClipboard }
 ]
 
 const genMenuInfo = [
-  { key: 'genToFile', label: '生成代码至文件', icon: 'fa-file-code', onClick: ws.generateCodeToFile },
-  { key: 'genToClipboard', label: '生成代码至剪切板', icon: 'fa-clipboard', onClick: ws.generateCodeToClipboard },
-  { key: 'genToConsole', label: '生成代码至控制台', icon: 'fa-terminal', onClick: ws.generateCodeToConsole }
+  { key: 'genToFile', label: t('WORKSPACE_GENERATE_CODE_TO_FILE'), icon: 'fa-file-code', onClick: ws.generateCodeToFile },
+  { key: 'genToClipboard', label: t('WORKSPACE_GENERATE_CODE_TO_CLIPBOARD'), icon: 'fa-clipboard', onClick: ws.generateCodeToClipboard },
+  { key: 'genToConsole', label: t('WORKSPACE_GENERATE_CODE_TO_CONSOLE'), icon: 'fa-terminal', onClick: ws.generateCodeToConsole }
 ]
 function openSaveMenu(event: MouseEvent) {
   saveMenu.value?.open(event)
@@ -50,14 +52,14 @@ function openGenMenu(event: MouseEvent) {
         <SelectComponet :options="['中文', 'Chinese', '中国語', '중국어']" :flag="['🇨🇳', '🇺🇸', '🇯🇵', '🇰🇷']"
           i="fa-globe" />
         <ButtonComponet i="fa-save" @contextmenu.prevent="openSaveMenu" @click="ws.saveWorkspaceToBrowser">
-          保存
+          {{ $t('WORKSPACE_SAVE') }}
         </ButtonComponet>
         <ButtonComponet i="fa-folder-open" @contextmenu.prevent="openLoadMenu" @click="selectWorkspace?.showModal()">
-          打开
+          {{ $t('WORKSPACE_LOAD') }}
         </ButtonComponet>
         <ButtonComponet type="primary" i="fa-code" @contextmenu.prevent="openGenMenu"
           @click="ws.generateCodeToClipboard">
-          生成代码
+          {{ $t('WORKSPACE_GENERATE_CODE') }}
         </ButtonComponet>
 
         <ContentMenuComponet ref="saveMenu" :items="saveMenuInfo"></ContentMenuComponet>
@@ -66,10 +68,13 @@ function openGenMenu(event: MouseEvent) {
       </div>
     </div>
     <dialog ref="selectWorkspace" class="select_workspace_dialog">
-      <CardComponet class="workspace_card" :title="{ name: '选择工作区', icon: 'fa-layer-group' }">
+      <CardComponet class="workspace_card" :title="{ name: $t('WORKSPACE_SELECT'), icon: 'fa-layer-group' }">
         <template #titleAction>
-          <ButtonComponet i="fa-times" @click="selectWorkspace?.close()">关闭</ButtonComponet>
-          <ButtonComponet type="primary" i="fa-plus" @click="!ws.newWorkspace() || selectWorkspace?.close()">新建
+          <ButtonComponet i="fa-times" @click="selectWorkspace?.close()">
+            {{ $t('MODEL_CLOSE') }}
+          </ButtonComponet>
+          <ButtonComponet type="primary" i="fa-plus" @click="!ws.newWorkspace() || selectWorkspace?.close()">
+            {{ $t('WORKSPACE_NEW') }}
           </ButtonComponet>
         </template>
         <template #default>
@@ -77,12 +82,13 @@ function openGenMenu(event: MouseEvent) {
             <div v-for="(workspaceName, index) in ws.workspaceNames" :key="index" class="workspace-item"
               @click="ws.loadWorkspaceFromBrowser(workspaceName); selectWorkspace?.close()">
               <span class="workspace-name">{{ workspaceName }}</span>
-              <ButtonComponet size="small" i="fa-trash-alt" @click.stop="ws.removeWorkspaceFromBrowser(workspaceName)"
-                title="删除工作区" />
+              <ButtonComponet size="small" i="fa-trash-alt" @click.stop="ws.removeWorkspaceFromBrowser(workspaceName)">
+                <!-- {{ $t('WORKSPACE_REMOVE') }} -->
+              </ButtonComponet>
             </div>
           </div>
           <div v-if="ws.workspaceNames.length === 0" class="empty-tip">
-            暂无工作区
+            {{ $t('WORKSPACE_EMPTY') }}
           </div>
         </template>
       </CardComponet>

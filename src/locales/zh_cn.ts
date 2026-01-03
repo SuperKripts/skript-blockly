@@ -1,8 +1,49 @@
 export * from 'blockly/msg/zh-hans'
 
 // General
-export const title = 'Skript Blockly'
-export const description = '积木编程平台'
+export const TITLE = 'Skript Blockly'
+export const DESCRIPTION = '积木编程平台'
+
+export const WORKSPACE = '工作区'
+export const WORKSPACE_CLEAR = '清空'
+export const WORKSPACE_UNDO = '撤销'
+export const WORKSPACE_REDO = '重做'
+export const WORKSPACE_SAVE = '保存'
+export const WORKSPACE_UNSAVED = '未保存'
+export const WORKSPACE_LOAD = '打开'
+export const WORKSPACE_GENERATE_CODE = '生成代码'
+export const WORKSPACE_EMPTY = '暂无工作区'
+export const WORKSPACE_REMOVE = '删除工作区'
+export const WORKSPACE_SELECT = '选择工作区'
+export const WORKSPACE_NEW = '新建'
+export const WORKSPACE_SAVE_TO_BROWSER = '保存工作区至浏览器'
+export const WORKSPACE_SAVE_TO_FILE = '保存工作区至本地文件'
+export const WORKSPACE_SAVE_TO_CLIPBOARD = '保存工作区至剪切板'
+export const WORKSPACE_SAVE_TO_CONSOLE = '保存工作区至控制台'
+export const WORKSPACE_LOAD_FROM_BROWSER = '从浏览器中加载工作区'
+export const WORKSPACE_LOAD_FROM_FILE = '从本地文件中加载工作区'
+export const WORKSPACE_LOAD_FROM_CLIPBOARD = '从剪切板中加载工作区'
+export const WORKSPACE_GENERATE_CODE_TO_FILE = '生成代码至文件'
+export const WORKSPACE_GENERATE_CODE_TO_CLIPBOARD = '生成代码至剪切板'
+export const WORKSPACE_GENERATE_CODE_TO_CONSOLE = '生成代码至控制台'
+export const WORKSPACE_DEFAULT_NAME = '未命名'
+
+export const WORKSPACE_STATE = '状态: '
+export const BLOCKLY_COUNT = '积木数量: '
+export const CODE_LINE = '代码行数: '
+export const THEME_DARK = '暗色模式'
+export const THEME_LIGHT = '亮色模式'
+export const GRID_SHOW = '显示网格'
+export const GRID_HIDE = '隐藏网格'
+export const HELP = '帮助'
+
+export const STATE_ADD_BLOCKLY = '添加积木块'
+export const STATE_REMOVE_BLOCKLY = '删除积木块'
+
+export const BLOCKLY_SEARCH = '搜索'
+export const BLOCKLY_NOT_FOUND = '未找到相关积木块'
+
+export const MODEL_CLOSE = '关闭'
 
 // Blockly
 export const SKRIPT_SYNTAX_TYPE_EVENT = '事件'

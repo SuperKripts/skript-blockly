@@ -2,7 +2,7 @@ import * as Blockly from 'blockly/core'
 
 import { eventBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSeach'
-import I18n from './langs/i18n'
+import { t } from '@/locales/i18n'
 
 function customCss(type: string): Blockly.ToolboxCategory.CssConfig {
   return {
@@ -24,7 +24,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
     contents: [
       {
         kind: 'search',
-        name: '搜索',
+        name: t('BLOCKLY_SEARCH'),
       },
       // ...Object.values(SyntaxType),
       // {
@@ -32,13 +32,13 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
       // },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_EVENT'),
+        name: t('SKRIPT_SYNTAX_TYPE_EVENT'),
         cssconfig: customCss('event'),
         contents: eventBlockInfos,
       },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_CONDITION'),
+        name: t('SKRIPT_SYNTAX_TYPE_CONDITION'),
         cssconfig: customCss('condition'),
         // contents: [
         //   {
@@ -57,37 +57,37 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
       },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_EFFECT'),
+        name: t('SKRIPT_SYNTAX_TYPE_EFFECT'),
         cssconfig: customCss('effect'),
         contents: [],
       },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_EXPRESSION'),
+        name: t('SKRIPT_SYNTAX_TYPE_EXPRESSION'),
         cssconfig: customCss('expression'),
         contents: [],
       },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_TYPE'),
+        name: t('SKRIPT_SYNTAX_TYPE_TYPE'),
         cssconfig: customCss('type'),
         contents: [],
       },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_FUNCTION'),
+        name: t('SKRIPT_SYNTAX_TYPE_FUNCTION'),
         cssconfig: customCss('function'),
         contents: [],
       },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_SECTION'),
+        name: t('SKRIPT_SYNTAX_TYPE_SECTION'),
         cssconfig: customCss('section'),
         contents: [],
       },
       {
         kind: 'category',
-        name: I18n.getLang('SKRIPT_SYNTAX_TYPE_STRUCTURE'),
+        name: t('SKRIPT_SYNTAX_TYPE_STRUCTURE'),
         cssconfig: customCss('structure'),
         contents: [],
       },

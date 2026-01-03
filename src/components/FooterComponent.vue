@@ -12,29 +12,28 @@ const themeStore = useThemeStore()
       <div class="status-item">
         <i class="fas fa-cube status-icon"></i>
         <span>
-          <span class="status-text">积木数量:</span>
+          <span class="status-text">{{ $t('BLOCKLY_COUNT') }}</span>
           <span>{{ workspaceStore.blockCount }}</span>
         </span>
       </div>
       <div class="status-item">
         <i class="fas fa-code status-icon"></i>
         <span>
-          <span class="status-text">代码行数:</span>
+          <span class="status-text">{{ $t('CODE_LINE') }}</span>
           <span>{{ workspaceStore.codeLine }}</span>
         </span>
       </div>
-      <!-- 太麻烦了监听一大堆事件 -->
       <div class="status-item">
         <i class="fas fa-check-circle status-icon"></i>
         <span>
-          <span class="status-text">状态:</span>
+          <span class="status-text">{{ $t('WORKSPACE_STATE') }}</span>
           <span>{{ workspaceStore.state }}</span>
         </span>
       </div>
       <div class="status-item" v-if="!workspaceStore.isSaved">
         <i class="fas fa-exclamation-circle status-icon" style="color: #ff9800;"></i>
         <span>
-          <span>未保存</span>
+          <span>{{ $t('WORKSPACE_UNSAVED') }}</span>
         </span>
       </div>
     </div>
@@ -42,16 +41,15 @@ const themeStore = useThemeStore()
     <div class="status-actions">
       <button class="status-btn" @click="themeStore.toggle">
         <i class="fas" :class="themeStore.isDark ? 'fa-sun' : 'fa-moon'"></i>
-        <!-- 本来就是亮色模式... -->
-        <span class="btn-text">{{ themeStore.isDark ? '亮色模式' : '暗色模式' }}</span>
+        <span class="btn-text">{{ themeStore.isDark ? $t('THEME_LIGHT') : $t('THEME_DARK') }}</span>
       </button>
       <button class="status-btn" id="toggleGrid" @click="workspaceStore.toggleGrid">
         <i class="fas fa-th"></i>
-        <span class="btn-text">{{ workspaceStore.grid ? '隐藏网格' : '显示网格' }}</span>
+        <span class="btn-text">{{ workspaceStore.grid ? $t('GRID_HIDE') : $t('GRID_SHOW') }}</span>
       </button>
       <button class="status-btn" id="helpBtn">
         <i class="fas fa-question-circle"></i>
-        <span class="btn-text">帮助</span>
+        <span class="btn-text">{{ $t('HELP') }}</span>
       </button>
     </div>
   </footer>

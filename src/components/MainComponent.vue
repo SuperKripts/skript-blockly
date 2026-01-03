@@ -9,14 +9,14 @@ const ws = useWorkspaceStore()
 
 <template>
   <main class="main_content">
-    <CardComponet class="workspace_card" :title="{ name: '工作区', icon: 'fa-puzzle-piece' }">
+    <CardComponet class="workspace_card" :title="{ name: $t('WORKSPACE'), icon: 'fa-puzzle-piece' }">
       <template #titleText>
         <EditTextComponet :text="ws.workspaceName" :isSaved="ws.isSaved" @edit="e => ws.workspaceName = e" />
       </template>
       <template #titleAction>
-        <ButtonComponet i="fa-trash-alt" @click="ws.workspace?.clear()">清空</ButtonComponet>
-        <ButtonComponet i="fa-undo" @click="ws.workspace?.undo(false)">撤销</ButtonComponet>
-        <ButtonComponet i="fa-redo" @click="ws.workspace?.undo(true)">重做</ButtonComponet>
+        <ButtonComponet i="fa-trash-alt" @click="ws.workspace?.clear()">{{ $t('WORKSPACE_CLEAR') }}</ButtonComponet>
+        <ButtonComponet i="fa-undo" @click="ws.workspace?.undo(false)">{{ $t('WORKSPACE_UNDO') }}</ButtonComponet>
+        <ButtonComponet i="fa-redo" @click="ws.workspace?.undo(true)">{{ $t('WORKSPACE_REDO') }}</ButtonComponet>
       </template>
       <template #default>
         <WorkspaceComponent />
