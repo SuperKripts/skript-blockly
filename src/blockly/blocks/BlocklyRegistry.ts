@@ -7,90 +7,89 @@ import { simpleEvents } from './events/SimpleEvents'
 
 console.log(Blockly.Blocks)
 
-import syntaxlist from '@/blockly/blocks/syntaxlist.json'
-import { createEventValueContextMenu } from './events/EventValues'
-import { createCancellableContextMenu } from './events/Cancellable'
-import I18n from '../langs/i18n'
-import { createEventPriorityFieldDropdown } from './events/EventPriority'
-
-const eventSyntaxs: EventSyntax[] = []
-
-type SyntaxList = {
-  keyMap: { title: string; syntax_pattern: string; description: string; event_values: string; event_cancellable: string; [key: string]: string }
+export type SyntaxList = {
+  keyMap: {
+    id: string
+    json_id: string
+    title: string
+    syntax_type: string
+    syntax_pattern: string
+    description: string
+    event_values: string
+    event_cancellable: string
+    [key: string]: string
+  }
   addonMap: Record<string, { name: string; link_to_addon: string; usage_score: number }>
   syntaxlist: Record<string, unknown>[]
 }
-
-class EventSyntax {
-  private title: string
-  private description: string
-  private eventValues: string[]
-  private cancellable: boolean
-
-  constructor(title: string, description: string, eventValues: string[], cancellable: boolean) {
-    this.title = title
-    this.description = description
-    this.eventValues = eventValues
-    this.cancellable = cancellable
-  }
-
-  getBlocklyId() {
-    return this.title.replace(/ /g, '_').toLowerCase()
-  }
-
-  registerBlockly() {
-    const { title, description, eventValues, cancellable } = this
-    Blockly.Blocks[this.getBlocklyId()] = {
-      init: function (this: Blockly.Block) {
-        this.appendDummyInput().appendField(description)
-        this.appendDummyInput()
-          .appendField(I18n.getLang('SKRIPT_EVENT_PRIORITY'))
-          .appendField(createEventPriorityFieldDropdown(), 'event-priority')
-          .setAlign(Blockly.inputs.Align.RIGHT)
-        this.appendStatementInput('block')
-        this.setStyle('event')
-        this.setTooltip(title)
-        // this.setHelpUrl(helpUrl)
-      },
-      customContextMenu: function (this: Blockly.Block, items: { text: string; enabled: boolean; callback: () => void }[]) {
-        items.push(...createEventValueContextMenu(eventValues))
-        if (cancellable) items.push(...createCancellableContextMenu())
-      },
-    }
-  }
+export const syntaxTypes = ['event', 'condition', 'effect', 'expression', 'type', 'function', 'section', 'structure'] as const
+export type SyntaxType = (typeof syntaxTypes)[number]
+export type Syntax = {
+  id: number
+  jsonId: string
+  title: string
+  syntaxType: SyntaxType
+  syntaxPattern: string
 }
 
-const data = syntaxlist as SyntaxList
-console.log(data.keyMap)
+export type EventSyntax = Syntax & {
+  eventValues: string[]
+  cancellable: boolean
+}
 
-console.log(data.syntaxlist[0])
-console.log(data.addonMap)
+export const syntaxRegistry = {
+  event: new Map<string, EventSyntax>(),
+  condition: new Map<string, Syntax>(),
+  effect: new Map<string, Syntax>(),
+  expression: new Map<string, Syntax>(),
+  type: new Map<string, Syntax>(),
+  function: new Map<string, Syntax>(),
+  section: new Map<string, Syntax>(),
+  structure: new Map<string, Syntax>(),
+}
 
-const info: { x: string[]; y: string[]; z: string[] } = { x: [], y: [], z: [] }
-for (const a of data.syntaxlist) {
-  const syntaxType = a[data.keyMap['syntax_type']!] as string
-  if (syntaxType === 'event') {
-    const title = a[data.keyMap.title] as string
-    const syntaxPattern = a[data.keyMap.syntax_pattern] as string
-    const description = a[data.keyMap.description] as string
-    const eventValue = a[data.keyMap.event_values] as string
-    const cancellable = a[data.keyMap.event_cancellable] as boolean
-    // 语法存在 % | 或者 多条语法的 情况下 说明这个语法可能较为复杂 不归为简单点事件
-
-    if (syntaxPattern.includes('%')) {
-      info.x.push(syntaxPattern)
-    } else if (syntaxPattern.includes('|')) {
-      info.y.push(syntaxPattern)
-    } else if (syntaxPattern.includes('\n')) {
-      info.z.push(syntaxPattern)
-    } else {
-      const eventSyntax = new EventSyntax(title, description, eventValue?.split(', ') ?? [], cancellable)
-      eventSyntax.registerBlockly()
-      eventSyntaxs.push(eventSyntax)
+async function registerSyntax() {
+  const syntaxlistData = await import('@/blockly/blocks/syntaxlist.json').then((e) => e.default as SyntaxList)
+  for (const syntax of syntaxlistData.syntaxlist) {
+    const id = syntax[syntaxlistData.keyMap.id] as number
+    const jsonId = syntax[syntaxlistData.keyMap.json_id] as string
+    const title = syntax[syntaxlistData.keyMap.title] as string
+    const syntaxType = syntax[syntaxlistData.keyMap.syntax_type] as SyntaxType
+    const syntaxPattern = syntax[syntaxlistData.keyMap.syntax_pattern] as string
+    switch (syntaxType) {
+      case 'event': {
+        const eventValues = syntax[syntaxlistData.keyMap.event_values] as string
+        const cancellable = syntax[syntaxlistData.keyMap.event_cancellable] as boolean
+        syntaxRegistry.event.set(jsonId, {
+          id,
+          jsonId,
+          title,
+          syntaxType,
+          syntaxPattern,
+          eventValues: eventValues ? eventValues.split(',').map((e) => e.trim()) : [],
+          cancellable,
+        })
+        break
+      }
+      case 'condition':
+      case 'effect':
+      case 'expression':
+      case 'type':
+      case 'function':
+      case 'section':
+      case 'structure':
+        syntaxRegistry[syntaxType].set(jsonId, { id, jsonId, title, syntaxType, syntaxPattern })
+        break
     }
   }
+  console.log(syntaxlistData.keyMap)
+  console.log(syntaxlistData.syntaxlist)
+  console.log(syntaxlistData.addonMap)
 }
-console.log(info)
+
+await registerSyntax()
+
+console.log(syntaxRegistry)
 
 export const eventBlockInfos: Blockly.utils.toolbox.BlockInfo[] = [
   {
@@ -99,8 +98,5 @@ export const eventBlockInfos: Blockly.utils.toolbox.BlockInfo[] = [
   },
   ...simpleEvents.map((e) => {
     return { kind: 'block', type: e }
-  }),
-  ...eventSyntaxs.map((e) => {
-    return { kind: 'block', type: e.getBlocklyId() }
   }),
 ]

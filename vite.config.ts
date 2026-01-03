@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { syntaxlistPlugin } from './syntaxlist-plugin'
-import { resolve } from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -21,7 +20,7 @@ export default defineConfig({
         manualChunks: {
           blockly: ['blockly'],
           vue: ['vue', 'vue-router', 'pinia', 'vue-i18n'],
-          syntaxlist: [resolve(__dirname, 'src/blockly/blocks/syntaxlist.json')],
+          // syntaxlist: [resolve(__dirname, 'src/blockly/blocks/syntaxlist.json')],
         },
         chunkFileNames(chunkInfo) {
           if (chunkInfo.facadeModuleId?.includes('/locales/')) {

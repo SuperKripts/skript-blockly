@@ -1,5 +1,9 @@
 import { PluginOption } from 'vite'
 
+function generateKey(keyId: number) {
+  return keyId < 26 ? String.fromCodePoint(97 + keyId) : String.fromCodePoint(65 + (keyId - 26))
+}
+
 export function syntaxlistPlugin(): PluginOption {
   return {
     name: 'syntaxlist',
@@ -32,7 +36,7 @@ export function syntaxlistPlugin(): PluginOption {
 
             let newKey = keyMap.get(key)
             if (newKey === undefined) {
-              newKey = keyId < 26 ? String.fromCodePoint(97 + keyId) : String.fromCodePoint(65 + (keyId - 26))
+              newKey = generateKey(keyId)
               keyMap.set(key, newKey)
               keyId++
             }
