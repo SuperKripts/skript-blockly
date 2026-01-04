@@ -4,8 +4,8 @@
       <i class="fas fa-cubes"></i>
     </div>
     <div class="logo-text">
-      <h1>{{ $t('title') }}</h1>
-      <p>{{ $t('description') }}</p>
+      <h1>{{ $t('TITLE') }}</h1>
+      <p>{{ $t('DESCRIPTION') }}</p>
     </div>
   </div>
 </template>
