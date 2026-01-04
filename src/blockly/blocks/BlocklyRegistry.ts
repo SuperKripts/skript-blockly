@@ -49,7 +49,7 @@ export const syntaxRegistry = {
 }
 
 async function registerSyntax() {
-  const syntaxlistData = await import('@/blockly/blocks/syntaxlist.json').then((e) => e.default as SyntaxList)
+  const syntaxlistData = await import('@/assets/syntaxlist.json').then((e) => e.default as SyntaxList)
   for (const syntax of syntaxlistData.syntaxlist) {
     const id = syntax[syntaxlistData.keyMap.id] as number
     const jsonId = syntax[syntaxlistData.keyMap.json_id] as string

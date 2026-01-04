@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import * as Blockly from 'blockly/core'
 import { ref, readonly, shallowRef, computed } from 'vue'
 import SkriptCodeGenerator from '@/blockly/generators/skript'
+import { t } from '@/locales/i18n'
 
 type SkriptBlocklyContent = {
   skriptblockly: string
@@ -15,7 +16,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
   const _workspace = shallowRef<Blockly.Workspace | null>(null)
   const _workspaceNames = ref<string[]>([])
-  const _workspaceName = ref('未命名')
+  const _workspaceName = ref(t('WORKSPACE_DEFAULT_NAME'))
   const _isSaved = ref(true)
   const _code = ref('')
   const _grid = ref(true)
@@ -38,11 +39,11 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       }
       if (e.type == 'create') {
         blockCount.value++
-        _state.value = '添加方块'
+        _state.value = t('STATE_ADD_BLOCKLY')
       }
       if (e.type == 'delete') {
         blockCount.value--
-        _state.value = '删除方块'
+        _state.value = t('STATE_REMOVE_BLOCKLY')
       }
       if (e.type == 'finished_loading') {
         blockCount.value = workspace.getAllBlocks().length
@@ -109,7 +110,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   }
 
   async function newWorkspace(name?: string): Promise<boolean> {
-    const workspaceName = name ?? prompt('请输入新的工作区名称', '未命名')
+    const workspaceName = name ?? prompt('请输入新的工作区名称', t('WORKSPACE_DEFAULT_NAME'))
     if (!workspaceName) {
       return false
     }
