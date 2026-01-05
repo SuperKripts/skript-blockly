@@ -43,13 +43,13 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         // contents: [
         //   {
         //     kind: 'category',
-        //     name: I18n.getLang('SKRIPT_SYNTAX_TYPE_CONDITION'),
+        //     name: t('SKRIPT_SYNTAX_TYPE_CONDITION'),
         //     colour: '120',
         //     contents: [],
         //   },
         //   {
         //     kind: 'category',
-        //     name: I18n.getLang('SKRIPT_SYNTAX_TYPE_CONDITION'),
+        //     name: t('SKRIPT_SYNTAX_TYPE_CONDITION'),
         //     colour: '120',
         //     contents: [],
         //   },

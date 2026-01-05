@@ -17,4 +17,11 @@ watch(
 )
 
 export default i18n
-export const { t } = i18n.global
+export const { t, tm } = i18n.global
+export const pt = (key: string, list: unknown[] = []): (string | number)[] => {
+  const msg = t(key, list)
+  return msg
+    .split(/%([1-9]\d*)/)
+    .filter((segment) => segment !== '')
+    .map((segment, index) => (index % 2 === 1 ? Number.parseInt(segment) : segment))
+}

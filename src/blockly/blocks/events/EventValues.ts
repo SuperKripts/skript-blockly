@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 import CodeGenerator from '@/blockly/generators/skript'
-import I18n from '@/blockly/langs/i18n'
 import { useWorkspaceStore } from '@/stores/workspace'
+import { t } from '@/locales/i18n'
 
 export const EVENT_VALUE = 'skript_event_value'
 
@@ -25,11 +25,11 @@ export const langMap: Record<string, string> = {
 export function createEventValueContextMenu(eventValues: string[]): { text: string; enabled: boolean; callback: () => void }[] {
   const result = []
   for (const eventValue of eventValues) {
-    const text = I18n.getLang(langMap[eventValue])
+    const text = t(langMap[eventValue] ?? eventValue)
     const { workspace } = useWorkspaceStore()
     if (workspace) {
       result.push({
-        text: I18n.getLang('SKRIPT_MENU_OPTION', text),
+        text: t('SKRIPT_MENU_OPTION', [text]),
         enabled: true,
         callback: function () {
           const block = workspace.newBlock(EVENT_VALUE) as Blockly.BlockSvg

@@ -1,11 +1,11 @@
 import * as Blockly from 'blockly/core'
 import SkriptCodeGenerator from '@/blockly/generators/skript'
-import I18n from '@/blockly/langs/i18n'
 import { createEventValueContextMenu } from './EventValues'
 import { createEventPriorityFieldDropdown } from './EventPriority'
 import { createCancellableContextMenu } from './Cancellable'
 import { createEquipmentSlotArmorFieldDropdown } from '../types/EquipmentSlot'
 import { createPotionEffectTypeFieldDropdown } from '../types/PointEffect'
+import { pt, t } from '@/locales/i18n'
 
 export const simpleEvents: string[] = []
 
@@ -26,17 +26,18 @@ function registerSimpleEventBlock(
   Blockly.Blocks[key] = {
     init: function (this: Blockly.Block) {
       if (parameter) {
-        this.appendDummyInput()
-          .appendField(I18n.getLang(desc + '_PREFIX'))
-          .appendField(parameter.input(), parameter.fieldName ?? 'value')
-          .appendField(I18n.getLang(desc + '_SUFFIX'))
+        const input = this.appendDummyInput()
+        for (const part of pt(desc)) {
+          if (typeof part === 'string') {
+            input.appendField(part)
+          } else {
+            input.appendField(parameter.input(), parameter.fieldName ?? 'value')
+          }
+        }
       } else {
-        this.appendDummyInput().appendField(I18n.getLang(desc))
+        this.appendDummyInput().appendField(t(desc))
       }
-      this.appendDummyInput()
-        .appendField(I18n.getLang('SKRIPT_EVENT_PRIORITY'))
-        .appendField(createEventPriorityFieldDropdown(), 'event-priority')
-        .setAlign(Blockly.inputs.Align.RIGHT)
+      this.appendDummyInput().appendField(t('SKRIPT_EVENT_PRIORITY')).appendField(createEventPriorityFieldDropdown(), 'event-priority').setAlign(Blockly.inputs.Align.RIGHT)
       this.appendStatementInput('block')
       this.setStyle('event')
       this.setTooltip(name)

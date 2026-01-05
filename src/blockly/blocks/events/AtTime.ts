@@ -1,15 +1,13 @@
 import * as Blockly from 'blockly/core'
 import SkriptCodeGenerator, { arrayJoin } from '@/blockly/generators/skript'
-import I18n from '@/blockly/langs/i18n'
 import { createEventValueContextMenu } from './EventValues'
 import WorldMutator from '../types/World'
 import { FieldTime } from '@/blockly/inputs/FieldTime'
 import { createEventPriorityFieldDropdown } from './EventPriority'
+import { pt, t } from '@/locales/i18n'
 
 const key = 'skript_event_at_time'
-const descPrefix = 'SKRIPT_EVENT_AT_TIME_DESC_PREFIX'
-const descHasWorldPrefix = 'SKRIPT_EVENT_AT_TIME_DESC_HAS_WORLD_PREFIX'
-const descSuffix = 'SKRIPT_EVENT_AT_TIME_DESC_SUFFIX'
+const desc = 'SKRIPT_EVENT_AT_TIME_DESC'
 const name = 'at time'
 const helpUrl = 'https://docs.skriptlang.org/events.html#at_time'
 const eventValue = ['event-world']
@@ -26,11 +24,16 @@ type AtTimeBlock = Blockly.BlockSvg & {
 
 Blockly.Blocks[key] = {
   init: function (this: AtTimeBlock) {
-    this.appendDummyInput().appendField('', 'world').appendField<string>(new FieldTime(), 'time').appendField(I18n.getLang(descSuffix))
-    this.appendDummyInput()
-      .appendField(I18n.getLang('SKRIPT_EVENT_PRIORITY'))
-      .appendField(createEventPriorityFieldDropdown(), 'event-priority')
-      .setAlign(Blockly.inputs.Align.RIGHT)
+    const input = this.appendDummyInput()
+    const parts = pt(desc, ['world'])
+    parts.forEach((v, i) => {
+      if (typeof v === 'string') {
+        input.appendField(v, 'part-' + i)
+      } else {
+        input.appendField<string>(new FieldTime(), 'time')
+      }
+    })
+    this.appendDummyInput().appendField(t('SKRIPT_EVENT_PRIORITY')).appendField(createEventPriorityFieldDropdown(), 'event-priority').setAlign(Blockly.inputs.Align.RIGHT)
     this.appendStatementInput('block')
     this.setStyle('event')
     this.setTooltip(name)
@@ -43,11 +46,13 @@ Blockly.Blocks[key] = {
     this._ex_world = []
   },
   updateShape_: function (this: AtTimeBlock) {
-    if (this._ex_world.length == 0) {
-      this.setFieldValue(I18n.getLang(descPrefix), 'world')
-    } else {
-      const lang = I18n.getLang(descHasWorldPrefix, this._ex_world.map((e) => e.value).join(', '))
-      this.setFieldValue(lang, 'world')
+    const worlds = t('SKRIPT_EVENT_AT_TIME_DESC_WORLD', [this._ex_world.map((e) => e.value).join(', ')], this._ex_world.length)
+    const parts = pt(desc, [worlds])
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i]
+      if (typeof part === 'string') {
+        this.setFieldValue(part, 'part-' + i)
+      }
     }
   },
   compose: function (this: AtTimeBlock, topBlock: Blockly.Block) {
