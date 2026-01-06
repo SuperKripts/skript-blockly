@@ -7,9 +7,13 @@ import CardComponet from "@/components/controls/CardComponet.vue";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import highlight from "@/skript/highlight";
+import { useThemeStore } from "@/stores/theme";
 
 const selectWorkspace = ref<HTMLDialogElement>()
+const generateCode = ref<HTMLDialogElement>()
 const ws = useWorkspaceStore()
+const ts = useThemeStore()
 const { t } = useI18n()
 
 const saveMenu = ref<InstanceType<typeof ContentMenuComponet>>()
@@ -58,7 +62,7 @@ function openGenMenu(event: MouseEvent) {
           {{ $t('WORKSPACE_LOAD') }}
         </ButtonComponet>
         <ButtonComponet type="primary" i="fa-code" @contextmenu.prevent="openGenMenu"
-          @click="ws.generateCodeToClipboard">
+          @click="generateCode?.showModal(); ws.generateCode()">
           {{ $t('WORKSPACE_GENERATE_CODE') }}
         </ButtonComponet>
 
@@ -93,6 +97,23 @@ function openGenMenu(event: MouseEvent) {
         </template>
       </CardComponet>
     </dialog>
+    <dialog ref="generateCode" class="generate_code_dialog">
+      <CardComponet :title="{ name: $t('CODE_PREVIEW'), icon: 'fa-code' }">
+        <template #titleAction>
+          <ButtonComponet i="fa-times" @click="generateCode?.close()">
+            {{ $t('MODEL_CLOSE') }}
+          </ButtonComponet>
+          <ButtonComponet type="primary" i="fa-clipboard" @click="ws.copyCodeToClipboard() || selectWorkspace?.close()">
+            {{ t('CODE_TO_CLIPBOARD') }}
+          </ButtonComponet>
+        </template>
+        <template #default>
+          <div class="code_view"
+            v-html="highlight.codeToHtml(ws.code, { lang: 'Skript', theme: ts.isDark ? 'github-dark-default' : 'github-light-default' })">
+          </div>
+        </template>
+      </CardComponet>
+    </dialog>
   </header>
 </template>
 
@@ -119,18 +140,18 @@ function openGenMenu(event: MouseEvent) {
   gap: 12px;
 }
 
-.select_workspace_dialog {
+dialog {
   border: none;
   background: transparent;
   max-width: 100%;
   max-height: 100%;
 }
 
-.select_workspace_dialog::backdrop {
+dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
 
-.select_workspace_dialog[open] {
+dialog[open] {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -140,9 +161,16 @@ function openGenMenu(event: MouseEvent) {
   padding: 0;
 }
 
+.generate_code_dialog :deep(.card) {
+  width: 70%;
+}
+
+.code_view {
+  height: 80vh;
+}
+
 .select_workspace_dialog :deep(.card) {
-  max-width: 500px;
-  width: 90%;
+  width: 500px;
 }
 
 .workspace-list {

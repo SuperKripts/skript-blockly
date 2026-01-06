@@ -59,3 +59,8 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.shiki {
+  height: calc(100% - 24px);
+  padding: 12px;
+}

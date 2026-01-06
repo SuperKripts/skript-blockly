@@ -10,6 +10,13 @@ export function blocklyPrunePlugin(): PluginOption {
           code: content.replace("require('blockly/msg/en')", '{}').replace("require('blockly/blocks')", 'undefined'),
         }
       }
+      // 剔除注释 并不能缩减多少体积
+      // if (id.endsWith('/node_modules/blockly/blockly_compressed.js')) {
+      //   const content = await this.fs.readFile(id, { encoding: 'utf8' })
+      //   return {
+      //     code: content.replace(/\/\*.*?\*\//gs, ''),
+      //   }
+      // }
     },
   }
 }

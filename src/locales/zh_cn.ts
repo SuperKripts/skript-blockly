@@ -44,6 +44,8 @@ export const BLOCKLY_SEARCH = '搜索'
 export const BLOCKLY_NOT_FOUND = '未找到相关积木块'
 
 export const MODEL_CLOSE = '关闭'
+export const CODE_TO_CLIPBOARD = '复制到剪切板'
+export const CODE_PREVIEW = '代码预览'
 
 // Blockly
 export const SKRIPT_SYNTAX_TYPE_EVENT = '事件'

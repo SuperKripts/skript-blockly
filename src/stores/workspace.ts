@@ -326,6 +326,10 @@ export const useWorkspaceStore = defineStore('workspace', () => {
 
   async function generateCodeToClipboard() {
     generateCode()
+    copyCodeToClipboard()
+  }
+
+  async function copyCodeToClipboard() {
     try {
       await navigator.clipboard.writeText(_code.value)
       alert('代码已复制到剪贴板')
@@ -359,9 +363,11 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     saveWorkspaceToClipboard,
     loadWorkspaceFromClipboard,
     saveWorkspaceToConsole,
+    generateCode,
     generateCodeToFile,
     generateCodeToClipboard,
     generateCodeToConsole,
+    copyCodeToClipboard,
     newWorkspace,
     toggleGrid,
     getWorkspace,
