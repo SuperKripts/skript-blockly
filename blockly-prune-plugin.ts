@@ -3,15 +3,11 @@ import { PluginOption } from 'vite'
 export function blocklyPrunePlugin(): PluginOption {
   return {
     name: 'blocklyPrune',
-    transform(code, id) {
+    async load(id) {
       if (id.endsWith('/node_modules/blockly/index.js')) {
-        console.log(id)
-
-        const newCode = code.replace(/blockly\/msg\/en/g, '')
-        console.log(newCode)
-
+        const content = await this.fs.readFile(id, { encoding: 'utf8' })
         return {
-          code: newCode,
+          code: content.replace("require('blockly/msg/en')", '{}').replace("require('blockly/blocks')", 'undefined'),
         }
       }
     },

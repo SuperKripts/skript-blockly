@@ -61,15 +61,9 @@ export function syntaxlistPlugin(): PluginOption {
           syntaxlist.push(compress(a))
         }
 
-        console.log(addonMap)
         return {
           code: JSON.stringify({ keyMap: Object.fromEntries(keyMap), addonMap: Object.fromEntries(addonMap), syntaxlist }),
         }
-      }
-    },
-    transform(code, id) {
-      if (id.endsWith('syntaxlist.json')) {
-        // console.log(code)
       }
     },
   }
