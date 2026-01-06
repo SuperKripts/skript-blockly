@@ -25,7 +25,7 @@ type AtTimeBlock = Blockly.BlockSvg & {
 Blockly.Blocks[key] = {
   init: function (this: AtTimeBlock) {
     const input = this.appendDummyInput()
-    const parts = pt(desc, ['world'])
+    const parts = pt(desc)
     parts.forEach((v, i) => {
       if (typeof v === 'string') {
         input.appendField(v, 'part-' + i)
@@ -46,8 +46,7 @@ Blockly.Blocks[key] = {
     this._ex_world = []
   },
   updateShape_: function (this: AtTimeBlock) {
-    const worlds = t('SKRIPT_EVENT_AT_TIME_DESC_WORLD', [this._ex_world.map((e) => e.value).join(', ')], this._ex_world.length)
-    const parts = pt(desc, [worlds])
+    const parts = pt(desc, [this._ex_world.map((e) => e.value).join(', ')], this._ex_world.length + 1)
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i]
       if (typeof part === 'string') {

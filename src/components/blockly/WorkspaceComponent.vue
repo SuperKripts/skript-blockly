@@ -7,6 +7,7 @@ import * as SkriptHubTheme from "@/blockly/themes/skripthub";
 const blocklyContent = ref()
 
 onMounted(() => {
+  Blockly.ContextMenuItems.registerCommentOptions()
   const workspace = Blockly.inject(blocklyContent.value, {
     // scrollbars: false,
     toolbox: useToolbox(),

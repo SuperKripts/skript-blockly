@@ -4,15 +4,17 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { syntaxlistPlugin } from './syntaxlist-plugin'
+import { blocklyPrunePlugin } from './blockly-prune-plugin'
 import { resolve } from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/blockly',
-  plugins: [vue(), vueDevTools(), syntaxlistPlugin()],
+  plugins: [vue(), vueDevTools(), syntaxlistPlugin(), blocklyPrunePlugin()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'blockly/blocks': resolve(__dirname, './src/blockly/defblocks.ts'),
     },
   },
   build: {
