@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
-import * as Blockly from "blockly"
+import * as Blockly from "blockly/core"
 import useToolbox from "@/blockly/toolbox";
 import { useWorkspaceStore } from "@/stores/workspace";
 import * as SkriptHubTheme from "@/blockly/themes/skripthub";
 const blocklyContent = ref()
 
 onMounted(() => {
-  Blockly.ContextMenuItems.registerCommentOptions()
   const workspace = Blockly.inject(blocklyContent.value, {
     // scrollbars: false,
     toolbox: useToolbox(),

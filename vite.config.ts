@@ -14,7 +14,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'blockly/blocks': resolve(__dirname, './src/blockly/defblocks.ts'), // 不加这个 生产环境也是正常的
+      // 'blockly/blocks': resolve(__dirname, './src/blockly/defblocks.ts'),
     },
   },
   build: {

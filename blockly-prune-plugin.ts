@@ -7,7 +7,7 @@ export function blocklyPrunePlugin(): PluginOption {
       if (id.endsWith('/node_modules/blockly/index.js')) {
         const content = await this.fs.readFile(id, { encoding: 'utf8' })
         return {
-          code: content.replace("require('blockly/msg/en')", '{}').replace("require('blockly/blocks')", 'undefined'),
+          code: content.replace("require('blockly/msg/en')", '{}'),
         }
       }
       // 剔除注释 并不能缩减多少体积
