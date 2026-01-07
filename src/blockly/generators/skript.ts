@@ -22,6 +22,32 @@ export class SkriptCodeGenerator extends Blockly.Generator {
     this.isInitialized = true
   }
 
+  public workspaceToCode(workspace?: Blockly.Workspace): string {
+    const code = super.workspaceToCode(workspace)
+    const generateInfo = `# SkriptBlockly ${new Date()}\n\n`
+
+    if (workspace) {
+      const topComments = workspace.getTopComments()
+      const sortedComments = topComments
+        .map((comment) => {
+          const { x, y } = comment.getRelativeToSurfaceXY()
+          return { text: comment.getText(), x, y }
+        })
+        .sort((a, b) => {
+          if (a.y !== b.y) return a.y - b.y
+          return a.x - b.x
+        })
+
+      const commentLines = sortedComments
+        .flatMap((item) => item.text.split('\n'))
+        .map((line) => '# ' + line)
+        .join('\n')
+
+      return generateInfo + commentLines + '\n\n' + code
+    }
+    return generateInfo + code
+  }
+
   public scrub_(_block: Blockly.Block, code: string, _opt_thisOnly?: boolean | undefined): string {
     let comments = _block.getCommentText() ?? ''
     if (comments != '') {

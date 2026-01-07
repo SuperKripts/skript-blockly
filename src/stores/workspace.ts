@@ -54,6 +54,10 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     globalThis.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.key === 's') {
         e.preventDefault()
+        const ele = document.activeElement as HTMLTextAreaElement
+        if (ele?.classList.contains('blocklyCommentText')) {
+          ele.blur()
+        }
         saveWorkspaceToBrowser()
       }
     })
