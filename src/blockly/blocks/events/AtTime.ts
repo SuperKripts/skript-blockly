@@ -1,16 +1,13 @@
 import * as Blockly from 'blockly/core'
 import SkriptCodeGenerator, { arrayJoin } from '@/blockly/generators/skript'
-import { createEventValueContextMenu } from './EventValues'
 import WorldMutator from '../types/World'
 import { FieldTime } from '@/blockly/inputs/FieldTime'
-import { createEventPriorityFieldDropdown } from './EventPriority'
-import { pt, t } from '@/locales/i18n'
+import { pt } from '@/locales/i18n'
 
 const key = 'skript_event_at_time'
 const desc = 'SKRIPT_EVENT_AT_TIME_DESC'
 const name = 'at time'
 const helpUrl = 'https://docs.skriptlang.org/events.html#at_time'
-const eventValue = ['event-world']
 
 type AtTimeBlockExtraState = {
   worlds: { id: string; value: string }[]
@@ -33,7 +30,6 @@ Blockly.Blocks[key] = {
         input.appendField<string>(new FieldTime(), 'time')
       }
     })
-    this.appendDummyInput().appendField(t('SKRIPT_EVENT_PRIORITY')).appendField(createEventPriorityFieldDropdown(), 'event-priority').setAlign(Blockly.inputs.Align.RIGHT)
     this.appendStatementInput('block')
     this.setStyle('event')
     this.setTooltip(name)
@@ -67,9 +63,6 @@ Blockly.Blocks[key] = {
   loadExtraState: function (this: AtTimeBlock, state: AtTimeBlockExtraState) {
     this._ex_world = state.worlds ?? []
     this.updateShape_()
-  },
-  customContextMenu: function (this: AtTimeBlock, items: { text: string; enabled: boolean; callback: () => void }[]) {
-    items.push(...createEventValueContextMenu(eventValue))
   },
 }
 

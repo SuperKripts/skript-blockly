@@ -1,35 +1,52 @@
+import { t } from '@/locales/i18n'
 import * as Blockly from 'blockly/core'
 import CodeGenerator from '@/blockly/generators/skript'
-import { useWorkspaceStore } from '@/stores/workspace'
-import { t } from '@/locales/i18n'
+import type { SkriptEventBlock } from '../SkriptBlock'
 
-export const key = 'skript_effect_cancel_event'
+const event_cancelable = 'event_cancelable'
 
-export function createCancellableContextMenu(): { text: string; enabled: boolean; callback: () => void }[] {
-  const { workspace } = useWorkspaceStore()
-  if (workspace) {
-    return [
-      {
-        text: t('SKRIPT_MENU_OPTION', t('SKRIPT_EFFECT_CANCEL_EVENT')),
-        enabled: true,
-        callback: function () {
-          const block = workspace.newBlock(key) as Blockly.BlockSvg
-          block.initSvg()
-        },
-      },
-    ]
-  }
-  return []
+export const EVENT_VALUE_BLOCK_TYPE = 'effect_cancel_event'
+
+if (!Blockly.ContextMenuRegistry.registry.getItem(event_cancelable)) {
+  Blockly.ContextMenuRegistry.registry.register({
+    id: event_cancelable,
+    scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
+    weight: 50,
+    callback: (scope: Blockly.ContextMenuRegistry.Scope) => {
+      const block = scope.block
+      if (block) {
+        if (block.workspace.isFlyout) {
+          const newBlock = block.workspace.targetWorkspace?.newBlock(EVENT_VALUE_BLOCK_TYPE)
+          newBlock?.initSvg()
+        } else {
+          const newBlock = block.workspace.newBlock(EVENT_VALUE_BLOCK_TYPE)
+          newBlock.initSvg()
+        }
+      }
+    },
+    displayText: () => {
+      return t('MENU_OPTION_GET', [t('EFFECT_CANCEL_EVENT')])
+    },
+    preconditionFn: (scope: Blockly.ContextMenuRegistry.Scope) => {
+      if (scope.block?.getStyleName() === 'event') {
+        const eventBlock = scope.block as SkriptEventBlock
+        if (eventBlock.eventCancellable_) {
+          return 'enabled'
+        }
+      }
+      return 'hidden'
+    },
+  })
 }
 
-Blockly.Blocks[key] = {
+Blockly.Blocks[EVENT_VALUE_BLOCK_TYPE] = {
   init: function (this: Blockly.Block) {
-    this.appendDummyInput().appendField(t('SKRIPT_EFFECT_CANCEL_EVENT'), 'desc')
+    this.appendDummyInput().appendField(t('EFFECT_CANCEL_EVENT'), 'desc')
     this.setPreviousStatement(true)
     this.setStyle('effect')
   },
 }
 
-CodeGenerator.forBlock[key] = function (this: Blockly.Block) {
+CodeGenerator.forBlock[EVENT_VALUE_BLOCK_TYPE] = function (this: Blockly.Block) {
   return 'cancel event'
 }

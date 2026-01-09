@@ -1,14 +1,12 @@
 import * as Blockly from 'blockly/core'
 import { t } from '@/locales/i18n'
 
+export const SuppertedEventPriority = ['default', 'lowest', 'low', 'normal', 'high', 'highest', 'monitor'] as const
+export type EventPriority = (typeof SuppertedEventPriority)[number]
 export function createEventPriorityFieldDropdown() {
-  return new Blockly.FieldDropdown([
-    [t('SKRIPT_EVENT_PRIORITY_DEFAULT'), ''],
-    [t('SKRIPT_EVENT_PRIORITY_LOWEST'), ' with priority lowest'],
-    [t('SKRIPT_EVENT_PRIORITY_LOW'), ' with priority low'],
-    [t('SKRIPT_EVENT_PRIORITY_NORMAL'), ' with priority normal'],
-    [t('SKRIPT_EVENT_PRIORITY_HIGH'), ' with priority high'],
-    [t('SKRIPT_EVENT_PRIORITY_HIGHEST'), ' with priority highest'],
-    [t('SKRIPT_EVENT_PRIORITY_MONITOR'), ' with priority monitor'],
-  ])
+  return new Blockly.FieldDropdown(SuppertedEventPriority.map((priority) => [t(`EVENT_PRIORITY_${priority.toUpperCase()}`), priority]))
+}
+
+export function generateCodeForEventPriority(priority: EventPriority) {
+  return priority === 'default' ? '' : ' with priority ' + priority
 }

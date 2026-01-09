@@ -1,5 +1,6 @@
 import * as Blockly from 'blockly/core'
 
+import '@/blockly/config'
 import { eventBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSeach'
 import { t } from '@/locales/i18n'
@@ -110,7 +111,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         contents: [
           {
             kind: 'block',
-            type: 'skript_event_at_time',
+            type: 'event_join',
           },
           {
             kind: 'category',
@@ -118,7 +119,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
             contents: [
               {
                 kind: 'block',
-                type: 'skript_event_at_time',
+                type: 'event_join',
               },
             ],
           },
@@ -128,7 +129,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
             contents: [
               {
                 kind: 'block',
-                type: 'skript_event_at_time',
+                type: 'event_join',
               },
             ],
           },

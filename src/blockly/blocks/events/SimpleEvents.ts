@@ -1,117 +1,115 @@
-import * as Blockly from 'blockly/core'
-import SkriptCodeGenerator from '@/blockly/generators/skript'
-import { createEventValueContextMenu } from './EventValues'
-import { createEventPriorityFieldDropdown } from './EventPriority'
-import { createCancellableContextMenu } from './Cancellable'
-import { createEquipmentSlotArmorFieldDropdown } from '../types/EquipmentSlot'
-import { createPotionEffectTypeFieldDropdown } from '../types/PointEffect'
-import { pt, t } from '@/locales/i18n'
+// Vault Display Item 和 Villager Career Change 居然没文档
+export const SkriptSimpleEvents: string[] = [
+  'chunk_generate',
+  'ignition',
+  'creeper_power',
+  'spread',
+  'zombie_break_door',
+  'combust',
+  'explode',
+  'slime_split',
+  'bucket_fill',
+  'leaves_decay',
+  'piston_extend',
+  'piston_retract',
+  'tame',
+  'redstone',
+  'lightning_strike',
+  'quit',
+  'vehicle_create',
+  'shoot',
+  'vehicle_damage',
+  'vehicle_enter',
+  'spawn_change',
+  'inventory_close',
+  'resurrect_attempt',
+  'vehicle_exit',
+  'inventory_open',
+  'player_world_change',
+  'sneak_toggle',
+  'bed_leave',
+  'connect',
+  'jump',
+  'entity_dismount',
+  'hand_item_swap',
+  'chunk_unload',
+  'item_damage',
+  'sponge_absorb',
+  'enchant',
+  'item_mend',
+  'block_fertilize',
+  'block_damage',
+  'chat',
+  'can_build_check',
+  'language_change',
+  'flight_toggle',
+  'gliding_state_change',
+  'entity_mount',
+  'hunger_meter_change',
+  'join',
+  'sheep_regrow_wool',
+  'swim_toggle',
+  'projectile_collide',
+  'broadcast',
+  'piglin_barter',
+  'anvil_damage',
+  'chunk_load',
+  'anvil_prepare',
+  'arm_swing',
+  'bed_enter',
+  'aoe_cloud_effect',
+  'bucket_empty',
+  'flow',
+  'player_deep_sleep',
+  'player_trade',
+  'explosion_prime',
+  'physics',
+  'inventory_pickup',
+  'inventory_slot_change',
+  'inventory_drag',
+  'kick',
+  'horse_jump',
+  'entity_jump',
+  'vehicle_destroy',
+  'server_list_ping',
+  'respawn',
+  'sprint_toggle',
+  'tool_change',
+  'riptide',
+  'projectile_hit',
+  'bat_toggle_sleep',
+  'egg_throw',
+  'player_pickup_arrow',
+  'portal_enter',
+  'ready_arrow',
+  'stop_using_item',
+  'bell_ring',
+  'beacon_change_effect',
+  'bell_resonate',
+  'portal_create',
+  'vehicle_move',
+  'elytra_boost',
+  'experience_cooldown_change',
+  'pig_zap',
+  'sign_change',
+  'enderman_enrage',
+  'item_break',
+  'world_border_bounds_change',
+  'world_border_bounds_finish_change',
+  'world_border_center_change',
+  'enchant_prepare',
+  'vault_display_item',
+  'villager_career_change',
+] as const
 
-export const simpleEvents: string[] = []
+// Player Chunk Enter
+export const OhterSimpleEvents = ['first_join', 'loot_generate', 'book_edit', 'brewing_start', 'player_chunk_enter'] as const
 
-function registerSimpleEventBlock(
-  key: string,
-  name: string,
-  desc: string,
-  eventValue: string[],
-  cancelable: boolean,
-  helpUrl: string,
-  parameter?: {
-    input: () => Blockly.Field
-    fieldName?: string
-    codePrefix: (text: string) => string
-  },
-) {
-  // 注册事件积木块
-  Blockly.Blocks[key] = {
-    init: function (this: Blockly.Block) {
-      if (parameter) {
-        const input = this.appendDummyInput()
-        for (const part of pt(desc)) {
-          if (typeof part === 'string') {
-            input.appendField(part)
-          } else {
-            input.appendField(parameter.input(), parameter.fieldName ?? 'value')
-          }
-        }
-      } else {
-        this.appendDummyInput().appendField(t(desc))
-      }
-      this.appendDummyInput().appendField(t('SKRIPT_EVENT_PRIORITY')).appendField(createEventPriorityFieldDropdown(), 'event-priority').setAlign(Blockly.inputs.Align.RIGHT)
-      this.appendStatementInput('block')
-      this.setStyle('event')
-      this.setTooltip(name)
-      this.setHelpUrl(helpUrl)
-    },
-    customContextMenu: function (this: Blockly.Block, items: { text: string; enabled: boolean; callback: () => void }[]) {
-      items.push(...createEventValueContextMenu(eventValue))
-      if (cancelable) items.push(...createCancellableContextMenu())
-    },
-  }
+export const SimpleEvents = [...SkriptSimpleEvents, ...OhterSimpleEvents] as const
 
-  // 注册积木块代码生成
-  SkriptCodeGenerator.forBlock[key] = function (block, generator) {
-    const statementMembers = generator.statementToCode(block, 'block')
-    const eventPriority = block.getFieldValue('event-priority')
-    let prefix = name
-    if (parameter) {
-      const text = block.getFieldValue(parameter.fieldName ?? 'value')
-      prefix = parameter.codePrefix(text)
-    }
-    const code = `${prefix}${eventPriority}:\n${statementMembers}`
-    return code
-  }
+export type SimpleEvent = (typeof SimpleEvents)[number]
 
-  simpleEvents.push(key)
+export const SimpleEventSyntax: Record<SimpleEvent, string> = {} as const
+export function generateCodeForSimpleEvent(event: SimpleEvent) {
+  return SimpleEventSyntax[event] ?? `on ${event.replace(/_/g, ' ')}`
 }
-
-const rsb = (
-  skriptId: string,
-  eventValues: string[],
-  cancelable = true,
-  options: {
-    name?: string
-    parameter?: {
-      input: () => Blockly.Field
-      fieldName?: string
-      codePrefix: (text: string) => string
-    }
-  } = {},
-) => {
-  const blockId = 'skript_event_' + skriptId
-  const name = options.name ?? 'on ' + skriptId.replace(/_/g, ' ')
-  const desc = 'SKRIPT_EVENT_' + skriptId.toUpperCase() + '_DESC'
-  const helpUrl = 'https://docs.skriptlang.org/events.html?search=#' + skriptId
-  registerSimpleEventBlock(blockId, name, desc, eventValues, cancelable, helpUrl, options.parameter)
-}
-
-rsb('anvil_damage', ['event-inventory'])
-rsb('anvil_prepare', ['event-inventory', 'event-item stack'], false)
-rsb('aoe_cloud_effect', ['event-command sender', 'event-entity', 'event-living entities', 'event-location', 'event-potion effect type', 'event-world'], true, {
-  name: 'on area cloud effect',
-})
-rsb('arm_swing', ['event-player', 'event-world'])
-rsb('armor_change', ['event-equipment slot', 'event-player', 'event-slot', 'event-world', 'future event-item stack', 'past event-item stack'], false, {
-  parameter: {
-    input: createEquipmentSlotArmorFieldDropdown,
-    fieldName: 'equipment-slot',
-    codePrefix: function (text) {
-      return text == '' ? 'on armor change' : 'on ' + text + ' change'
-    },
-  },
-})
-rsb('bat_toggle_sleep', ['event-command sender', 'event-entity', 'event-location', 'event-world'])
-rsb('beacon_change_effect', ['event-block', 'event-player', 'event-world'])
-// TODO https://skripthub.net/docs/?id=13318
-rsb('beacon_toggle', ['event-block', 'event-location', 'event-world'], false, {
-  parameter: {
-    input: () => createPotionEffectTypeFieldDropdown(),
-    codePrefix: function (text) {
-      return 'on beacon ' + (text === '' ? 'toggle' : text)
-    },
-  },
-})
-rsb('bed_enter', ['event-block', 'event-player', 'event-world'])
-rsb('bed_leave', ['event-block', 'event-player', 'event-world'])
-
-rsb('join', ['event-player', 'event-world'])
