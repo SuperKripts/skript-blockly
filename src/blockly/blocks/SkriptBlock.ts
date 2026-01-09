@@ -13,6 +13,7 @@ export type SkriptBlockDefinition = {
   updateShape_: (this: SkriptBlock) => void
   description_: (this: SkriptBlock) => string
   generateDescriptionLangKey_: (this: SkriptBlock) => string
+  generateToCode_: (this: SkriptBlock) => string
   descriptionLangKey_?: string
 }
 
@@ -20,11 +21,6 @@ export type SkriptBlock = Blockly.BlockSvg &
   SkriptBlockDefinition & {
     extra_: SkriptBlockExtraState
   }
-
-export type SkriptEventBlock = SkriptBlock & {
-  eventValues_: string[]
-  eventCancellable_: boolean | undefined
-}
 
 export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
   return {
@@ -57,6 +53,9 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
     },
     initStyle_(this: SkriptBlock) {
       this.setStyle('skript')
+    },
+    generateToCode_() {
+      throw new Error('Method not implemented.')
     },
   }
 }

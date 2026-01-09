@@ -1,3 +1,8 @@
+import * as Blockly from 'blockly/core'
+import type { EventSyntax } from '@/skript/SyntaxRegistry'
+import CodeGenerator from '@/blockly/generators/skript'
+import { createEventCodeGenerator, createEventDefinition } from './EventBlock'
+
 // Vault Display Item 和 Villager Career Change 居然没文档
 export const SkriptSimpleEvents: string[] = [
   'chunk_generate',
@@ -112,4 +117,21 @@ export type SimpleEvent = (typeof SimpleEvents)[number]
 export const SimpleEventSyntax: Record<SimpleEvent, string> = {} as const
 export function generateCodeForSimpleEvent(event: SimpleEvent) {
   return SimpleEventSyntax[event] ?? `on ${event.replace(/_/g, ' ')}`
+}
+
+function generateEventBlockKey(syntax: EventSyntax) {
+  return `event_${syntax.jsonId}`
+}
+
+export function registerSimpleEvent(key: SimpleEvent, syntax: EventSyntax): Blockly.utils.toolbox.BlockInfo {
+  const blockKey = generateEventBlockKey(syntax)
+  const definition = createEventDefinition(syntax)
+  Object.assign(definition, {
+    generateToCode_() {
+      return generateCodeForSimpleEvent(key)
+    },
+  })
+  Blockly.Blocks[blockKey] = definition
+  CodeGenerator.forBlock[blockKey] = createEventCodeGenerator()
+  return { kind: 'block', type: blockKey }
 }

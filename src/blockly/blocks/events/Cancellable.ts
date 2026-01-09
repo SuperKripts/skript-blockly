@@ -1,7 +1,7 @@
 import { t } from '@/locales/i18n'
 import * as Blockly from 'blockly/core'
 import CodeGenerator from '@/blockly/generators/skript'
-import type { SkriptEventBlock } from '../SkriptBlock'
+import { type SkriptEventBlock } from '@/blockly/blocks/events/EventBlock'
 
 const event_cancelable = 'event_cancelable'
 
