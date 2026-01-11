@@ -24,6 +24,7 @@ export default defineConfig({
           blockly: ['blockly'],
           vue: ['vue', 'vue-router', 'pinia', 'vue-i18n'],
           shiki: ['shiki', resolve(__dirname, 'src/assets/skript-grammar.json')],
+          pinyin: ['pinyin-pro'],
           // syntaxlist: [resolve(__dirname, 'src/blockly/blocks/syntaxlist.json')],
         },
         chunkFileNames(chunkInfo) {

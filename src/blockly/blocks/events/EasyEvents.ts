@@ -32,6 +32,10 @@ export const EasyEventConfigs: Record<string, EasyEventConfig> = {
     fields: [buildMenuOption('event_level_change', ['change', 'up', 'down'])],
     codeTemplate: ['on level', 0],
   },
+  damage: {
+    fields: [buildMenuOption('event_entity_data', ['', 'entity', 'player'])],
+    codeTemplate: ['on damage', { index: 0, prefix: 'of' }, { index: 1, prefix: 'by' }],
+  },
 } as const
 
 export const EasyEvents = Object.keys(EasyEventConfigs)

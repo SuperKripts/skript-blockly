@@ -1,10 +1,12 @@
 import Fuse from 'fuse.js'
 import * as Blockly from 'blockly/core'
 import { t } from '@/locales/i18n'
+import { pinyin } from 'pinyin-pro'
 
 export type BlockData = {
   type: string
   inputs: string[]
+  inputsPinyin: string[]
   blockInfo: Blockly.utils.toolbox.BlockInfo
 }
 
@@ -24,7 +26,7 @@ export class BlockSearcher {
             inputs.push(field.getText())
           }
         }
-        dataList.push({ type, inputs, blockInfo })
+        dataList.push({ type, inputs, inputsPinyin: inputs.map((s) => pinyin(s, { pattern: 'final', toneType: 'none', separator: '' })), blockInfo })
       }
     }
 
