@@ -26,12 +26,12 @@ export class BlockSearcher {
             inputs.push(field.getText())
           }
         }
-        dataList.push({ type, inputs, inputsPinyin: inputs.map((s) => pinyin(s, { pattern: 'final', toneType: 'none', separator: '' })), blockInfo })
+        dataList.push({ type, inputs, inputsPinyin: inputs.map((s) => pinyin(s, { toneType: 'none', separator: '' })), blockInfo })
       }
     }
 
     this.fuse = new Fuse(dataList, {
-      keys: ['type', 'inputs'],
+      keys: ['type', 'inputs', 'inputsPinyin'],
       threshold: 0.3,
       minMatchCharLength: 1,
       ignoreLocation: true,
