@@ -1,7 +1,13 @@
 import * as Blockly from 'blockly/core'
+
+type FieldDefaultTextInputState = {
+  defVal: string
+  value: string | null
+}
+
 class FieldDefaultTextInput extends Blockly.FieldTextInput {
   SERIALIZABLE = true
-  private readonly defVal_: string
+  private defVal_: string
 
   constructor(defVal: string, value?: string) {
     super(value)
@@ -10,7 +16,23 @@ class FieldDefaultTextInput extends Blockly.FieldTextInput {
 
   protected getDisplayText_(): string {
     const value = this.getValue() as string
-    return value.trim() == '' ? this.defVal_ : value.trim()
+    if (!value && value.trim() == '') {
+      return this.defVal_
+    } else {
+      return value
+    }
+  }
+
+  saveState(): FieldDefaultTextInputState {
+    return {
+      defVal: this.defVal_,
+      value: this.getValue(),
+    }
+  }
+
+  loadState(state: FieldDefaultTextInputState): void {
+    this.setValue(state.value)
+    this.defVal_ = state.defVal
   }
 }
 

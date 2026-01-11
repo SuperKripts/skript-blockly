@@ -8,7 +8,27 @@ export function syntaxlistPlugin(): PluginOption {
   return {
     name: 'syntaxlist',
     async load(id) {
-      if (id.endsWith('syntaxlist.json')) {
+      if (id.endsWith('.syntaxlist.json')) {
+        const raw = await this.fs.readFile(id, { encoding: 'utf8' })
+
+        const content = Object.fromEntries(
+          Object.entries(JSON.parse(raw))
+            .filter(([key]) => key !== 'metadata')
+            .map(([type, list]) => {
+              const cleanedList = (list as Record<string, unknown>[]).map((item) => {
+                const newItem = { ...item }
+                delete newItem.description
+                delete newItem.examples
+                delete newItem.since
+                return newItem
+              })
+              return [type, cleanedList]
+            }),
+        )
+        return {
+          code: JSON.stringify(content),
+        }
+      } else if (id.endsWith('syntaxlist.json')) {
         const keyMap = new Map()
         const addonMap = new Map()
         const syntaxlist = []

@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly/core'
 import SkriptCodeGenerator, { arrayJoin } from '@/blockly/generators/skript'
-import WorldMutator from '../types/World'
+import WorldMutator from '@/blockly/blocks/types/World'
 import { FieldTime } from '@/blockly/inputs/FieldTime'
 import { pt } from '@/locales/i18n'
 

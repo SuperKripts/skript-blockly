@@ -18,10 +18,9 @@ watch(i18n.global.locale, (locale) => {
 
 export default i18n
 export const { t, tm } = i18n.global
-export const pt = (key: string, list: unknown[] = [], plural: number = 0): (string | number)[] => {
-  const msg = t(key, list, plural)
+export const pt = (msg: string): (string | number)[] => {
   return msg
-    .split(/%([1-9]\d*)/)
+    .split(/%(\d+)/)
     .filter((segment) => segment !== '')
     .map((segment, index) => (index % 2 === 1 ? Number.parseInt(segment) : segment))
 }

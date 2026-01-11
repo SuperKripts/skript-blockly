@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 import type { EventSyntax } from '@/skript/SyntaxRegistry'
 import CodeGenerator from '@/blockly/generators/skript'
-import { createEventCodeGenerator, createEventDefinition } from './EventBlock'
+import { createEventCodeGenerator, createEventDefinition, generateEventBlockKey } from '@/blockly/blocks/events/EventBlock'
 
 // Vault Display Item 和 Villager Career Change 居然没文档
 export const SkriptSimpleEvents: string[] = [
@@ -108,7 +108,19 @@ export const SkriptSimpleEvents: string[] = [
 ] as const
 
 // Player Chunk Enter
-export const OhterSimpleEvents = ['first_join', 'loot_generate', 'book_edit', 'brewing_start', 'player_chunk_enter'] as const
+export const OhterSimpleEvents = [
+  'first_join',
+  'loot_generate',
+  'book_edit',
+  'brewing_start',
+  'player_chunk_enter',
+  'experience_spawn',
+  'portal',
+  'entity_portal',
+  'throwing_of_an_egg',
+  'love_mode_enter',
+  'book_sign',
+] as const
 
 export const SimpleEvents = [...SkriptSimpleEvents, ...OhterSimpleEvents] as const
 
@@ -119,19 +131,15 @@ export function generateCodeForSimpleEvent(event: SimpleEvent) {
   return SimpleEventSyntax[event] ?? `on ${event.replace(/_/g, ' ')}`
 }
 
-function generateEventBlockKey(syntax: EventSyntax) {
-  return `event_${syntax.jsonId}`
-}
-
 export function registerSimpleEvent(key: SimpleEvent, syntax: EventSyntax): Blockly.utils.toolbox.BlockInfo {
   const blockKey = generateEventBlockKey(syntax)
   const definition = createEventDefinition(syntax)
-  Object.assign(definition, {
-    generateToCode_() {
+  const mixin = {
+    generateEventCode_() {
       return generateCodeForSimpleEvent(key)
     },
-  })
-  Blockly.Blocks[blockKey] = definition
+  }
+  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
   CodeGenerator.forBlock[blockKey] = createEventCodeGenerator()
   return { kind: 'block', type: blockKey }
 }
