@@ -51,6 +51,11 @@ const themeStore = useThemeStore()
         <i class="fas fa-question-circle"></i>
         <span class="btn-text">{{ $t('HELP') }}</span>
       </button>
+      <a href="https://github.com/SuperKripts/superkripts.github.io/issues" target="_blank" rel="noopener noreferrer"
+        class="status-btn" style="text-decoration: none; color: inherit;">
+        <i class="fas fa-comment-dots"></i>
+        <span class="btn-text">{{ $t('FEEDBACK') }}</span>
+      </a>
     </div>
   </footer>
 </template>

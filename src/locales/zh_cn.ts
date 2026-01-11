@@ -35,6 +35,7 @@ export const THEME_DARK = '暗色模式'
 export const THEME_LIGHT = '亮色模式'
 export const GRID_SHOW = '显示网格'
 export const GRID_HIDE = '隐藏网格'
+export const FEEDBACK = '问题反馈'
 export const HELP = '帮助'
 
 export const STATE_ADD_BLOCKLY = '添加积木块'
