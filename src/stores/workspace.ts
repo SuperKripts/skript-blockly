@@ -35,7 +35,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       // const needFilterTypes = ['click', 'selected', 'bubble_open', 'viewport_change', 'toolbox_item_select', 'trashcan_open']
       if (!e.isUiEvent) {
         _isSaved.value = false
-        console.log(e)
+        // console.log(e)
       }
       if (e.type == 'create') {
         blockCount.value++

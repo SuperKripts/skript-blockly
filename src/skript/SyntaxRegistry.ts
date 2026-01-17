@@ -8,6 +8,7 @@ export type SyntaxList = {
     description: string
     event_values: string
     event_cancellable: string
+    type_usage: string
     [key: string]: string
   }
   addonMap: Record<string, { name: string; link_to_addon: string; usage_score: number }>
@@ -31,12 +32,16 @@ export type EventSyntax = Syntax & {
   cancellable: boolean
 }
 
+export type TypeSyntax = Syntax & {
+  typeUsage: string
+}
+
 export const SyntaxRegistry = {
   event: new Map<string, EventSyntax>(),
   condition: new Map<string, Syntax>(),
   effect: new Map<string, Syntax>(),
   expression: new Map<string, Syntax>(),
-  type: new Map<string, Syntax>(),
+  type: new Map<string, TypeSyntax>(),
   function: new Map<string, Syntax>(),
   section: new Map<string, Syntax>(),
   structure: new Map<string, Syntax>(),
@@ -44,9 +49,9 @@ export const SyntaxRegistry = {
 
 async function registerSyntax() {
   const syntaxlistData = await import('@/assets/syntaxlist.json').then((e) => e.default as SyntaxList)
-  console.log(syntaxlistData.keyMap)
-  console.log(syntaxlistData.syntaxlist)
-  console.log(syntaxlistData.addonMap)
+  // console.log(syntaxlistData.keyMap)
+  // console.log(syntaxlistData.syntaxlist)
+  // console.log(syntaxlistData.addonMap)
   for (const syntax of syntaxlistData.syntaxlist) {
     const id = syntax[syntaxlistData.keyMap.id] as number
     const jsonId = syntax[syntaxlistData.keyMap.json_id] as string
@@ -68,10 +73,21 @@ async function registerSyntax() {
         })
         break
       }
+      case 'type': {
+        const typeUsage = syntax[syntaxlistData.keyMap.type_usage] as string
+        SyntaxRegistry.type.set(jsonId, {
+          id,
+          jsonId,
+          title,
+          syntaxType,
+          syntaxPattern,
+          typeUsage,
+        })
+        break
+      }
       case 'condition':
       case 'effect':
       case 'expression':
-      case 'type':
       case 'function':
       case 'section':
       case 'structure':

@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 
 import '@/blockly/config'
-import { eventBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
+import { eventBlockInfos, effectBlockInfos, typeBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSeach'
 import { t } from '@/locales/i18n'
 
@@ -60,7 +60,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         kind: 'category',
         name: t('SYNTAX_TYPE_EFFECT'),
         cssconfig: customCss('effect'),
-        contents: [],
+        contents: effectBlockInfos,
       },
       {
         kind: 'category',
@@ -72,7 +72,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         kind: 'category',
         name: t('SYNTAX_TYPE_TYPE'),
         cssconfig: customCss('type'),
-        contents: [],
+        contents: typeBlockInfos,
       },
       {
         kind: 'category',

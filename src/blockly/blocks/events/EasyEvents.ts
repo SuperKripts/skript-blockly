@@ -3,20 +3,20 @@ import type { EventSyntax } from '@/skript/SyntaxRegistry'
 import { createEventCodeGenerator, createEventDefinition, generateEventBlockKey, type SkriptEventBlock } from '@/blockly/blocks/events/EventBlock'
 import CodeGenerator from '@/blockly/generators/skript'
 import { pt, t } from '@/locales/i18n'
-import { buildMenuOption } from '@/blockly/blocks/types/Types'
+import { createTempFieldDropdownBuilder, createFieldDropdownBuilder, GameModes, Entities, EquipmentSlots } from '@/blockly/blocks/types/Types'
 
 export type EasyEventConfig = {
   fields: (() => Blockly.Field)[]
-  codeTemplate: (string | number | { index: number; prefix?: string; suffix?: string })[]
+  codeTemplate: (string | number | { index: number; default?: string; prefix?: string; suffix?: string })[]
 }
 
 export const EasyEventConfigs: Record<string, EasyEventConfig> = {
   gamemode_change: {
-    fields: [buildMenuOption('event_gamemode_change', ['', 'adventure', 'survival', 'spectator', 'creative'])],
+    fields: [createFieldDropdownBuilder(GameModes, true)],
     codeTemplate: ['on gamemode change', { index: 0, prefix: 'to ' }],
   },
   server_startstop: {
-    fields: [buildMenuOption('event_server_startstop', ['start', 'stop'])],
+    fields: [createTempFieldDropdownBuilder('event_server_startstop', ['start', 'stop'])],
     codeTemplate: ['on skript', 0],
   },
   // 存在 entity portal 划分成简单语法
@@ -25,16 +25,28 @@ export const EasyEventConfigs: Record<string, EasyEventConfig> = {
   //   codeTemplate: ['on', 0, 'portal'],
   // },
   target: {
-    fields: [buildMenuOption('event_target', ['target', 'untarget'])],
+    fields: [createTempFieldDropdownBuilder('event_target', ['target', 'untarget'])],
     codeTemplate: ['on', 0],
   },
   level_change: {
-    fields: [buildMenuOption('event_level_change', ['change', 'up', 'down'])],
+    fields: [createTempFieldDropdownBuilder('event_level_change', ['change', 'up', 'down'])],
     codeTemplate: ['on level', 0],
   },
   damage: {
-    fields: [buildMenuOption('event_entity_data', ['', 'entity', 'player'])],
-    codeTemplate: ['on damage', { index: 0, prefix: 'of' }, { index: 1, prefix: 'by' }],
+    fields: [createFieldDropdownBuilder(Entities, true), createFieldDropdownBuilder(Entities, true)],
+    codeTemplate: ['on damage', { index: 0, prefix: 'of ' }, { index: 1, prefix: 'by ' }],
+  },
+  experience_change: {
+    fields: [createTempFieldDropdownBuilder('event_experience_change', ['change', 'increase', 'decrease'])],
+    codeTemplate: ['on experience', 0],
+  },
+  beacon_toggle: {
+    fields: [createTempFieldDropdownBuilder('event_beacon_toggle', ['toggle', 'activate', 'deactivate'])],
+    codeTemplate: ['on beacon', 0],
+  },
+  armor_change: {
+    fields: [createFieldDropdownBuilder(EquipmentSlots, true)],
+    codeTemplate: ['on', { index: 0, default: 'armor' }, 'change'],
   },
 } as const
 
@@ -72,10 +84,10 @@ export function registerEasyEvent(key: EasyEvent, syntax: EventSyntax): Blockly.
             return `${this.getFieldValue('field-' + segment) ?? ''}`
           } else {
             const field = this.getFieldValue(`field-${segment.index}`)
-            if (!field && field != '') {
+            if (field && field != '') {
               return `${segment.prefix ?? ''}${this.getFieldValue('field-' + segment.index)}${segment.suffix ?? ''}`
             }
-            return field
+            return segment.default ?? field
           }
         })
         .filter((s) => s?.trim())

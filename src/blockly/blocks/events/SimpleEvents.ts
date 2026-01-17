@@ -120,6 +120,8 @@ export const OhterSimpleEvents = [
   'throwing_of_an_egg',
   'love_mode_enter',
   'book_sign',
+  'send_command_list',
+  'inventory_item_move',
 ] as const
 
 export const SimpleEvents = [...SkriptSimpleEvents, ...OhterSimpleEvents] as const
