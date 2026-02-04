@@ -51,7 +51,7 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
       this.appendDummyInput().appendField(this.description_())
     },
     initStyle_(this: SkriptBlock) {
-      this.setStyle('skript')
+      this.setStyle(syntax.syntaxType)
     },
   }
 }
