@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useThemeStore } from '@/stores/theme';
-import { useWorkspaceStore } from '@/stores/workspace';
+import { useThemeStore } from '@/stores/theme'
+import { useWorkspaceStore } from '@/stores/workspace'
 
 const workspaceStore = useWorkspaceStore()
 const themeStore = useThemeStore()
@@ -31,7 +31,7 @@ const themeStore = useThemeStore()
         </span>
       </div>
       <div class="status-item" v-if="!workspaceStore.isSaved">
-        <i class="fas fa-exclamation-circle status-icon" style="color: #ff9800;"></i>
+        <i class="fas fa-exclamation-circle status-icon" style="color: #ff9800"></i>
         <span>
           <span>{{ $t('WORKSPACE_UNSAVED') }}</span>
         </span>
@@ -51,8 +51,13 @@ const themeStore = useThemeStore()
         <i class="fas fa-question-circle"></i>
         <span class="btn-text">{{ $t('HELP') }}</span>
       </button>
-      <a href="https://github.com/SuperKripts/superkripts.github.io/issues" target="_blank" rel="noopener noreferrer"
-        class="status-btn" style="text-decoration: none; color: inherit;">
+      <a
+        href="https://github.com/SuperKripts/superkripts.github.io/issues"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="status-btn"
+        style="text-decoration: none; color: inherit"
+      >
         <i class="fas fa-comment-dots"></i>
         <span class="btn-text">{{ $t('FEEDBACK') }}</span>
       </a>

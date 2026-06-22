@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import CardComponent from "@/components/controls/CardComponent.vue";
-import WorkspaceComponent from "@/components/blockly/WorkspaceComponent.vue";
-import ButtonComponent from "@/components/controls/ButtonComponent.vue";
-import EditTextComponent from "@/components/controls/EditTextComponent.vue";
-import { useWorkspaceStore } from "@/stores/workspace";
+import CardComponent from '@/components/controls/CardComponent.vue'
+import WorkspaceComponent from '@/components/blockly/WorkspaceComponent.vue'
+import ButtonComponent from '@/components/controls/ButtonComponent.vue'
+import EditTextComponent from '@/components/controls/EditTextComponent.vue'
+import { useWorkspaceStore } from '@/stores/workspace'
 const ws = useWorkspaceStore()
 </script>
 
@@ -11,7 +11,7 @@ const ws = useWorkspaceStore()
   <main class="main_content">
     <CardComponent class="workspace_card" :title="{ name: $t('WORKSPACE'), icon: 'fa-puzzle-piece' }">
       <template #titleText>
-        <EditTextComponent :text="ws.workspaceName" :isSaved="ws.isSaved" @edit="e => ws.workspaceName = e" />
+        <EditTextComponent :text="ws.workspaceName" :isSaved="ws.isSaved" @edit="(e) => (ws.workspaceName = e)" />
       </template>
       <template #titleAction>
         <ButtonComponent i="fa-trash-alt" @click="ws.workspace?.clear()">{{ $t('WORKSPACE_CLEAR') }}</ButtonComponent>

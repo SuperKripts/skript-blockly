@@ -72,8 +72,7 @@ defineExpose({ open, close })
 <template>
   <Teleport to="body">
     <div v-if="visible" ref="menuRef" class="context-menu" :style="{ top: y + 'px', left: x + 'px' }" @click.stop>
-      <div v-for="item in props.items" :key="item.key" class="context-menu-item" :class="{ disabled: item.disabled }"
-        @click="handleClick(item)">
+      <div v-for="item in props.items" :key="item.key" class="context-menu-item" :class="{ disabled: item.disabled }" @click="handleClick(item)">
         <i v-if="item.icon" class="fas" :class="item.icon"></i>
         <span>{{ item.label }}</span>
       </div>

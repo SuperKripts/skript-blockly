@@ -1,40 +1,38 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref } from 'vue'
 
-const { text, defaultText = '', isSaved = true } = defineProps<{ text: string, defaultText?: string, isSaved?: boolean }>();
-const emit = defineEmits(['edit']);
+const { text, defaultText = '', isSaved = true } = defineProps<{ text: string; defaultText?: string; isSaved?: boolean }>()
+const emit = defineEmits(['edit'])
 const displayText = ref()
 const input = ref()
 
 function editText() {
-  displayText.value.style.display = "none";
-  input.value.style.display = "";
+  displayText.value.style.display = 'none'
+  input.value.style.display = ''
 
-  input.value.focus();
-  input.value.select();
-  input.value.value = text;
+  input.value.focus()
+  input.value.select()
+  input.value.value = text
 }
 
 function saveText() {
-  displayText.value.style.display = "";
-  input.value.style.display = "none";
+  displayText.value.style.display = ''
+  input.value.style.display = 'none'
 
-  const newText = input.value.value.trim();
+  const newText = input.value.value.trim()
   if (newText != '' && newText != text) {
-    emit('edit', newText);
+    emit('edit', newText)
   }
 }
 
 defineExpose({ editText })
-
 </script>
 
 <template>
   <div class="click-to-edit">
-    <span class='editable-text' @click="editText" :class="{ 'editable-text--unsaved': !isSaved }" ref="displayText"
-      v-text="text && text != '' ? text : defaultText"></span>
-    <form class='edit-form' @submit.prevent="saveText">
-      <input class='edit-input' @blur="saveText" ref="input" type="text" :placeholder="text" style="display: none;">
+    <span class="editable-text" @click="editText" :class="{ 'editable-text--unsaved': !isSaved }" ref="displayText" v-text="text && text != '' ? text : defaultText"></span>
+    <form class="edit-form" @submit.prevent="saveText">
+      <input class="edit-input" @blur="saveText" ref="input" type="text" :placeholder="text" style="display: none" />
     </form>
   </div>
 </template>
@@ -49,7 +47,9 @@ defineExpose({ editText })
   padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   user-select: none;
   outline: none;
   color: var(--text-primary);

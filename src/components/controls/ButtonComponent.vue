@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { type = 'secondary', i } = defineProps<{ type?: 'secondary' | 'primary', i?: string }>()
+const { type = 'secondary', i } = defineProps<{ type?: 'secondary' | 'primary'; i?: string }>()
 </script>
 
 <template>

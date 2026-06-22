@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import TitleLogoComponent from "@/components/controls/TitleLogoComponent.vue";
-import SelectComponent from "@/components/controls/SelectComponent.vue";
-import ButtonComponent from "@/components/controls/ButtonComponent.vue";
-import ContentMenuComponent from "@/components/controls/ContentMenuComponent.vue";
-import CardComponent from "@/components/controls/CardComponent.vue";
-import { useWorkspaceStore } from "@/stores/workspace";
-import { ref } from "vue";
-import { useI18n } from "vue-i18n";
-import highlight from "@/skript/highlight";
-import { useThemeStore } from "@/stores/theme";
+import TitleLogoComponent from '@/components/controls/TitleLogoComponent.vue'
+import SelectComponent from '@/components/controls/SelectComponent.vue'
+import ButtonComponent from '@/components/controls/ButtonComponent.vue'
+import ContentMenuComponent from '@/components/controls/ContentMenuComponent.vue'
+import CardComponent from '@/components/controls/CardComponent.vue'
+import { useWorkspaceStore } from '@/stores/workspace'
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import highlight from '@/skript/highlight'
+import { useThemeStore } from '@/stores/theme'
 
 const selectWorkspace = ref<HTMLDialogElement>()
 const generateCode = ref<HTMLDialogElement>()
@@ -23,19 +23,19 @@ const saveMenuInfo = [
   { key: 'saveToBrowser', label: t('WORKSPACE_SAVE_TO_BROWSER'), icon: 'fa-file-arrow-down', onClick: ws.saveWorkspaceToBrowser },
   { key: 'saveToFile', label: t('WORKSPACE_SAVE_TO_FILE'), icon: 'fa-floppy-disk', onClick: ws.saveWorkspaceToFile },
   { key: 'saveToClipboard', label: t('WORKSPACE_SAVE_TO_CLIPBOARD'), icon: 'fa-clipboard', onClick: ws.saveWorkspaceToClipboard },
-  { key: 'saveToConsole', label: t('WORKSPACE_SAVE_TO_CONSOLE'), icon: 'fa-terminal', onClick: ws.saveWorkspaceToConsole }
+  { key: 'saveToConsole', label: t('WORKSPACE_SAVE_TO_CONSOLE'), icon: 'fa-terminal', onClick: ws.saveWorkspaceToConsole },
 ]
 
 const loadMenuInfo = [
   { key: 'loadFromBrowser', label: t('WORKSPACE_LOAD_FROM_BROWSER'), icon: 'fa-file-arrow-up', onClick: () => selectWorkspace.value?.showModal() },
   { key: 'loadFromFile', label: t('WORKSPACE_LOAD_FROM_FILE'), icon: 'fa-folder-open', onClick: ws.loadWorkspaceFromFile },
-  { key: 'loadFromClipboard', label: t('WORKSPACE_LOAD_FROM_CLIPBOARD'), icon: 'fa-clipboard-check', onClick: ws.loadWorkspaceFromClipboard }
+  { key: 'loadFromClipboard', label: t('WORKSPACE_LOAD_FROM_CLIPBOARD'), icon: 'fa-clipboard-check', onClick: ws.loadWorkspaceFromClipboard },
 ]
 
 const genMenuInfo = [
   { key: 'genToFile', label: t('WORKSPACE_GENERATE_CODE_TO_FILE'), icon: 'fa-file-code', onClick: ws.generateCodeToFile },
   { key: 'genToClipboard', label: t('WORKSPACE_GENERATE_CODE_TO_CLIPBOARD'), icon: 'fa-clipboard', onClick: ws.generateCodeToClipboard },
-  { key: 'genToConsole', label: t('WORKSPACE_GENERATE_CODE_TO_CONSOLE'), icon: 'fa-terminal', onClick: ws.generateCodeToConsole }
+  { key: 'genToConsole', label: t('WORKSPACE_GENERATE_CODE_TO_CONSOLE'), icon: 'fa-terminal', onClick: ws.generateCodeToConsole },
 ]
 function openSaveMenu(event: MouseEvent) {
   saveMenu.value?.open(event)

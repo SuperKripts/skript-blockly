@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref } from 'vue'
-const { options, defaultOption = 0, flag, i } = defineProps<{ options: string[], defaultOption?: number, flag: string[], i?: string }>()
+const { options, defaultOption = 0, flag, i } = defineProps<{ options: string[]; defaultOption?: number; flag: string[]; i?: string }>()
 const dropdown = ref(false)
 const select = ref(defaultOption)
 const dropdownRef = ref<Element>()
@@ -22,13 +22,13 @@ onUnmounted(() => {
 
 <template>
   <div class="selector" ref="dropdownRef">
-    <div class="btn" :class="{ 'active': dropdown }" @click="dropdown = !dropdown">
+    <div class="btn" :class="{ active: dropdown }" @click="dropdown = !dropdown">
       <i v-if="i" class="fas" :class="i"></i>
       <span>{{ options[select] }}</span>
     </div>
 
-    <div class="dropdown" :class="{ 'show': dropdown }">
-      <div class="option" :class="{ 'active': select == index }" v-for="(option, index) in options" :key="index"
+    <div class="dropdown" :class="{ show: dropdown }">
+      <div class="option" :class="{ active: select == index }" v-for="(option, index) in options" :key="index"
         @click="select = index; dropdown = false">
         <span class="flag">{{ flag[index] }}</span>
         <span>{{ option }}</span>
@@ -65,7 +65,7 @@ onUnmounted(() => {
 }
 
 .btn::after {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   border-left: 4px solid transparent;
@@ -94,7 +94,10 @@ onUnmounted(() => {
   transform: scaleY(0);
   transform-origin: top;
   visibility: hidden;
-  transition: opacity 0.25s, transform 0.25s ease-out, visibility 0.25s;
+  transition:
+    opacity 0.25s,
+    transform 0.25s ease-out,
+    visibility 0.25s;
 }
 
 .dropdown.show {

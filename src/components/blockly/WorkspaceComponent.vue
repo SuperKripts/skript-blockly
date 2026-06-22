@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import * as Blockly from "blockly/core"
-import { useWorkspaceStore } from "@/stores/workspace";
-import { config } from "@/blockly/config";
+import { ref, onMounted } from 'vue'
+import * as Blockly from 'blockly/core'
+import { useWorkspaceStore } from '@/stores/workspace'
+import { config } from '@/blockly/config'
 const blocklyContent = ref()
 
 onMounted(() => {
