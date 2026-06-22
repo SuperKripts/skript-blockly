@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TitleLogoComponet from "@/components/controls/TitleLogoComponet.vue";
-import SelectComponet from "@/components/controls/SelectComponet.vue";
-import ButtonComponet from "@/components/controls/ButtonComponet.vue";
-import ContentMenuComponet from "@/components/controls/ContentMenuComponet.vue";
-import CardComponet from "@/components/controls/CardComponet.vue";
+import TitleLogoComponent from "@/components/controls/TitleLogoComponent.vue";
+import SelectComponent from "@/components/controls/SelectComponent.vue";
+import ButtonComponent from "@/components/controls/ButtonComponent.vue";
+import ContentMenuComponent from "@/components/controls/ContentMenuComponent.vue";
+import CardComponent from "@/components/controls/CardComponent.vue";
 import { useWorkspaceStore } from "@/stores/workspace";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -16,9 +16,9 @@ const ws = useWorkspaceStore()
 const ts = useThemeStore()
 const { t } = useI18n()
 
-const saveMenu = ref<InstanceType<typeof ContentMenuComponet>>()
-const loadMenu = ref<InstanceType<typeof ContentMenuComponet>>()
-const genMenu = ref<InstanceType<typeof ContentMenuComponet>>()
+const saveMenu = ref<InstanceType<typeof ContentMenuComponent>>()
+const loadMenu = ref<InstanceType<typeof ContentMenuComponent>>()
+const genMenu = ref<InstanceType<typeof ContentMenuComponent>>()
 const saveMenuInfo = [
   { key: 'saveToBrowser', label: t('WORKSPACE_SAVE_TO_BROWSER'), icon: 'fa-file-arrow-down', onClick: ws.saveWorkspaceToBrowser },
   { key: 'saveToFile', label: t('WORKSPACE_SAVE_TO_FILE'), icon: 'fa-floppy-disk', onClick: ws.saveWorkspaceToFile },
@@ -50,69 +50,70 @@ function openGenMenu(event: MouseEvent) {
 
 <template>
   <header class="header">
-    <TitleLogoComponet />
+    <TitleLogoComponent />
     <div class="header-controls">
       <div class="toolbar">
-        <SelectComponet :options="['中文', 'Chinese', '中国語', '중국어']" :flag="['🇨🇳', '🇺🇸', '🇯🇵', '🇰🇷']"
+        <SelectComponent :options="['中文', 'Chinese', '中国語', '중국어']" :flag="['🇨🇳', '🇺🇸', '🇯🇵', '🇰🇷']"
           i="fa-globe" />
-        <ButtonComponet i="fa-save" @contextmenu.prevent="openSaveMenu" @click="ws.saveWorkspaceToBrowser">
+        <ButtonComponent i="fa-save" @contextmenu.prevent="openSaveMenu" @click="ws.saveWorkspaceToBrowser">
           {{ $t('WORKSPACE_SAVE') }}
-        </ButtonComponet>
-        <ButtonComponet i="fa-folder-open" @contextmenu.prevent="openLoadMenu" @click="selectWorkspace?.showModal()">
+        </ButtonComponent>
+        <ButtonComponent i="fa-folder-open" @contextmenu.prevent="openLoadMenu" @click="selectWorkspace?.showModal()">
           {{ $t('WORKSPACE_LOAD') }}
-        </ButtonComponet>
-        <ButtonComponet type="primary" i="fa-code" @contextmenu.prevent="openGenMenu"
+        </ButtonComponent>
+        <ButtonComponent type="primary" i="fa-code" @contextmenu.prevent="openGenMenu"
           @click="generateCode?.showModal(); ws.generateCode()">
           {{ $t('WORKSPACE_GENERATE_CODE') }}
-        </ButtonComponet>
+        </ButtonComponent>
 
-        <ContentMenuComponet ref="saveMenu" :items="saveMenuInfo"></ContentMenuComponet>
-        <ContentMenuComponet ref="loadMenu" :items="loadMenuInfo"></ContentMenuComponet>
-        <ContentMenuComponet ref="genMenu" :items="genMenuInfo"></ContentMenuComponet>
+        <ContentMenuComponent ref="saveMenu" :items="saveMenuInfo"></ContentMenuComponent>
+        <ContentMenuComponent ref="loadMenu" :items="loadMenuInfo"></ContentMenuComponent>
+        <ContentMenuComponent ref="genMenu" :items="genMenuInfo"></ContentMenuComponent>
       </div>
     </div>
     <dialog ref="selectWorkspace" class="select_workspace_dialog">
-      <CardComponet class="workspace_card" :title="{ name: $t('WORKSPACE_SELECT'), icon: 'fa-layer-group' }">
+      <CardComponent class="workspace_card" :title="{ name: $t('WORKSPACE_SELECT'), icon: 'fa-layer-group' }">
         <template #titleAction>
-          <ButtonComponet i="fa-times" @click="selectWorkspace?.close()">
+          <ButtonComponent i="fa-times" @click="selectWorkspace?.close()">
             {{ $t('MODEL_CLOSE') }}
-          </ButtonComponet>
-          <ButtonComponet type="primary" i="fa-plus" @click="!ws.newWorkspace() || selectWorkspace?.close()">
+          </ButtonComponent>
+          <ButtonComponent type="primary" i="fa-plus" @click="!ws.newWorkspace() || selectWorkspace?.close()">
             {{ $t('WORKSPACE_NEW') }}
-          </ButtonComponet>
+          </ButtonComponent>
         </template>
         <template #default>
           <div class="workspace-list">
             <div v-for="(workspaceName, index) in ws.workspaceNames" :key="index" class="workspace-item"
               @click="ws.loadWorkspaceFromBrowser(workspaceName); selectWorkspace?.close()">
               <span class="workspace-name">{{ workspaceName }}</span>
-              <ButtonComponet size="small" i="fa-trash-alt" @click.stop="ws.removeWorkspaceFromBrowser(workspaceName)">
+              <ButtonComponent size="small" i="fa-trash-alt" @click.stop="ws.removeWorkspaceFromBrowser(workspaceName)">
                 <!-- {{ $t('WORKSPACE_REMOVE') }} -->
-              </ButtonComponet>
+              </ButtonComponent>
             </div>
           </div>
           <div v-if="ws.workspaceNames.length === 0" class="empty-tip">
             {{ $t('WORKSPACE_EMPTY') }}
           </div>
         </template>
-      </CardComponet>
+      </CardComponent>
     </dialog>
     <dialog ref="generateCode" class="generate_code_dialog">
-      <CardComponet :title="{ name: $t('CODE_PREVIEW'), icon: 'fa-code' }">
+      <CardComponent :title="{ name: $t('CODE_PREVIEW'), icon: 'fa-code' }">
         <template #titleAction>
-          <ButtonComponet i="fa-times" @click="generateCode?.close()">
+          <ButtonComponent i="fa-times" @click="generateCode?.close()">
             {{ $t('MODEL_CLOSE') }}
-          </ButtonComponet>
-          <ButtonComponet type="primary" i="fa-clipboard" @click="ws.copyCodeToClipboard() || selectWorkspace?.close()">
+          </ButtonComponent>
+          <ButtonComponent type="primary" i="fa-clipboard"
+            @click="ws.copyCodeToClipboard() || selectWorkspace?.close()">
             {{ t('CODE_TO_CLIPBOARD') }}
-          </ButtonComponet>
+          </ButtonComponent>
         </template>
         <template #default>
           <div class="code_view"
             v-html="highlight.codeToHtml(ws.code, { lang: 'Skript', theme: ts.isDark ? 'github-dark-default' : 'github-light-default' })">
           </div>
         </template>
-      </CardComponet>
+      </CardComponent>
     </dialog>
   </header>
 </template>
