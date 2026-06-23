@@ -12,6 +12,8 @@ import { useThemeStore } from '@/stores/theme'
 
 const selectWorkspace = ref<HTMLDialogElement>()
 const generateCode = ref<HTMLDialogElement>()
+const mobileMenu = ref<HTMLDivElement>()
+const mobileMenuOpen = ref(false)
 const ws = useWorkspaceStore()
 const ts = useThemeStore()
 const { t } = useI18n()
@@ -46,14 +48,28 @@ function openLoadMenu(event: MouseEvent) {
 function openGenMenu(event: MouseEvent) {
   genMenu.value?.open(event)
 }
+
+function toggleMobileMenu() {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+  if (mobileMenuOpen.value) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}
+
+function closeMobileMenu() {
+  mobileMenuOpen.value = false
+  document.body.style.overflow = ''
+}
 </script>
 
 <template>
   <header class="header">
     <TitleLogoComponent />
     <div class="header-controls">
-      <div class="toolbar">
-        <SelectComponent :options="['中文', 'Chinese', '中国語', '중국어']" :flag="['🇨🇳', '🇺🇸', '🇯🇵', '🇰🇷']"
+      <div class="toolbar desktop-toolbar">
+        <SelectComponent :options="['中文', 'Chinese', '中国語', '한국어']" :flag="['🇨🇳', '🇺🇸', '🇯🇵', '🇰🇷']"
           i="fa-globe" />
         <ButtonComponent i="fa-save" @contextmenu.prevent="openSaveMenu" @click="ws.saveWorkspaceToBrowser">
           {{ $t('WORKSPACE_SAVE') }}
@@ -70,7 +86,86 @@ function openGenMenu(event: MouseEvent) {
         <ContentMenuComponent ref="loadMenu" :items="loadMenuInfo"></ContentMenuComponent>
         <ContentMenuComponent ref="genMenu" :items="genMenuInfo"></ContentMenuComponent>
       </div>
+      <button class="hamburger" @click="toggleMobileMenu">
+        <i class="fas" :class="mobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+      </button>
     </div>
+
+    <!-- 移动端抽屉菜单 -->
+    <Teleport to="body">
+      <div v-if="mobileMenuOpen" class="mobile-overlay" @click="closeMobileMenu"></div>
+      <div ref="mobileMenu" class="mobile-drawer" :class="{ open: mobileMenuOpen }">
+        <div class="mobile-menu-header">
+          <span>{{ $t('MENU') }}</span>
+          <button class="close-btn" @click="closeMobileMenu">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="mobile-menu-content">
+          <div class="mobile-menu-section">
+            <SelectComponent :options="['中文', 'Chinese', '中国語', '한국어']" :flag="['🇨🇳', '🇺🇸', '🇯🇵', '🇰🇷']"
+              i="fa-globe" />
+          </div>
+
+          <div class="mobile-menu-section">
+            <h4><i class="fas fa-puzzle-piece"></i> {{ $t('WORKSPACE') }}</h4>
+            <ButtonComponent i="fa-plus" @click="!ws.newWorkspace() || closeMobileMenu()">
+              {{ $t('WORKSPACE_NEW') }}
+            </ButtonComponent>
+            <ButtonComponent :i="ws.toolbox ? 'fa-chevron-left' : 'fa-chevron-right'"
+              @click="ws.toggleToolbox(); closeMobileMenu()">
+              {{ ws.toolbox ? $t('TOOLBOX_HIDE') : $t('TOOLBOX_SHOW') }}
+            </ButtonComponent>
+          </div>
+
+          <div class="mobile-menu-section">
+            <h4><i class="fas fa-file-arrow-down"></i> {{ $t('WORKSPACE_SAVE') }}</h4>
+            <ButtonComponent i="fa-file-arrow-down" @click="ws.saveWorkspaceToBrowser(); closeMobileMenu()">
+              {{ $t('WORKSPACE_SAVE_TO_BROWSER') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-floppy-disk" @click="ws.saveWorkspaceToFile(); closeMobileMenu()">
+              {{ $t('WORKSPACE_SAVE_TO_FILE') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-clipboard" @click="ws.saveWorkspaceToClipboard(); closeMobileMenu()">
+              {{ $t('WORKSPACE_SAVE_TO_CLIPBOARD') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-terminal" @click="ws.saveWorkspaceToConsole(); closeMobileMenu()">
+              {{ $t('WORKSPACE_SAVE_TO_CONSOLE') }}
+            </ButtonComponent>
+          </div>
+
+          <div class="mobile-menu-section">
+            <h4><i class="fas fa-folder-open"></i> {{ $t('WORKSPACE_LOAD') }}</h4>
+            <ButtonComponent i="fa-file-arrow-up" @click="selectWorkspace?.showModal(); closeMobileMenu()">
+              {{ $t('WORKSPACE_LOAD_FROM_BROWSER') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-folder-open" @click="ws.loadWorkspaceFromFile(); closeMobileMenu()">
+              {{ $t('WORKSPACE_LOAD_FROM_FILE') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-clipboard-check" @click="ws.loadWorkspaceFromClipboard(); closeMobileMenu()">
+              {{ $t('WORKSPACE_LOAD_FROM_CLIPBOARD') }}
+            </ButtonComponent>
+          </div>
+
+          <div class="mobile-menu-section">
+            <h4><i class="fas fa-code"></i> {{ $t('WORKSPACE_GENERATE_CODE') }}</h4>
+            <ButtonComponent type="primary" i="fa-code"
+              @click="generateCode?.showModal(); ws.generateCode(); closeMobileMenu()">
+              {{ $t('CODE_PREVIEW') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-file-code" @click="ws.generateCodeToFile(); closeMobileMenu()">
+              {{ $t('WORKSPACE_GENERATE_CODE_TO_FILE') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-clipboard" @click="ws.generateCodeToClipboard(); closeMobileMenu()">
+              {{ $t('WORKSPACE_GENERATE_CODE_TO_CLIPBOARD') }}
+            </ButtonComponent>
+            <ButtonComponent i="fa-terminal" @click="ws.generateCodeToConsole(); closeMobileMenu()">
+              {{ $t('WORKSPACE_GENERATE_CODE_TO_CONSOLE') }}
+            </ButtonComponent>
+          </div>
+        </div>
+      </div>
+    </Teleport>
     <dialog ref="selectWorkspace" class="select_workspace_dialog">
       <CardComponent class="workspace_card" :title="{ name: $t('WORKSPACE_SELECT'), icon: 'fa-layer-group' }">
         <template #titleAction>
@@ -210,5 +305,141 @@ dialog[open] {
   color: var(--text-secondary);
   font-size: 13px;
   padding: 16px 0;
+}
+
+/* 汉堡菜单按钮 */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.hamburger:hover {
+  background: var(--bg-primary);
+}
+
+/* 移动端抽屉样式 */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  animation: fadeIn 0.2s ease;
+}
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  max-width: 85vw;
+  height: 100vh;
+  background: var(--bg-secondary);
+  z-index: 9999;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: var(--bg-primary);
+}
+
+.mobile-menu-content {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mobile-menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-menu-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mobile-menu-section h4 i {
+  color: var(--accent-primary);
+  width: 16px;
+}
+
+.mobile-menu-section .btn {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.btn-link {
+  text-decoration: none;
+}
+
+/* 媒体查询 - 移动端适配 */
+@media (max-width: 768px) {
+  .desktop-toolbar {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .header {
+    padding: 0 16px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 </style>

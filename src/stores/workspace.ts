@@ -21,6 +21,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   const _code = ref('')
   const _grid = ref(true)
   const _state = ref('')
+  const _toolbox = ref(true)
 
   updateWorkspaceNames()
 
@@ -82,6 +83,20 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     } else {
       workspace.getGrid()?.setLength(22)
       _grid.value = true
+    }
+  }
+
+  function toggleToolbox() {
+    const workspace = getWorkspace() as Blockly.WorkspaceSvg
+    const toolbox = workspace.getToolbox()
+    if (toolbox) {
+      if (_toolbox.value) {
+        toolbox.setVisible(false)
+        _toolbox.value = false
+      } else {
+        toolbox.setVisible(true)
+        _toolbox.value = true
+      }
     }
   }
 
@@ -358,6 +373,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     blockCount,
     state: readonly(_state),
     grid: readonly(_grid),
+    toolbox: readonly(_toolbox),
     setWorkspace,
     saveWorkspaceToBrowser,
     loadWorkspaceFromBrowser,
@@ -374,6 +390,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     copyCodeToClipboard,
     newWorkspace,
     toggleGrid,
+    toggleToolbox,
     getWorkspace,
   }
 })
