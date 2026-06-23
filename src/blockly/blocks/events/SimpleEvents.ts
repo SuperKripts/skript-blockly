@@ -1,147 +1,124 @@
-import * as Blockly from 'blockly/core'
-import type { EventSyntax } from '@/skript/SyntaxRegistry'
-import CodeGenerator from '@/blockly/generators/skript'
-import { createEventCodeGenerator, createEventDefinition, generateEventBlockKey } from '@/blockly/blocks/events/EventBlock'
+'skript syntax'
 
-// Vault Display Item 和 Villager Career Change 居然没文档
-export const SkriptSimpleEvents: string[] = [
-  'chunk_generate',
+import * as Blockly from 'blockly/core'
+
+type SimpleEventInfo =
+  | {
+      name: string
+      code: string
+    }
+  | string
+
+const SimpleEventInfos: SimpleEventInfo[] = [
+  'can build check',
+  'block damage',
+  'flow',
   'ignition',
-  'creeper_power',
+  'physics',
+  'piston extend',
+  'piston retract',
+  'redstone',
   'spread',
-  'zombie_break_door',
+  'chunk load',
+  'chunk generate',
+  'chunk unload',
+  'creeper power',
+  'zombie break door',
   'combust',
   'explode',
-  'slime_split',
-  'bucket_fill',
-  'leaves_decay',
-  'piston_extend',
-  'piston_retract',
+  'portal enter',
   'tame',
-  'redstone',
-  'lightning_strike',
-  'quit',
-  'vehicle_create',
-  'shoot',
-  'vehicle_damage',
-  'vehicle_enter',
-  'spawn_change',
-  'inventory_close',
-  'resurrect_attempt',
-  'vehicle_exit',
-  'inventory_open',
-  'player_world_change',
-  'sneak_toggle',
-  'bed_leave',
-  'connect',
-  'jump',
-  'entity_dismount',
-  'hand_item_swap',
-  'chunk_unload',
-  'item_damage',
-  'sponge_absorb',
-  'enchant',
-  'item_mend',
-  'block_fertilize',
-  'block_damage',
-  'chat',
-  'can_build_check',
-  'language_change',
-  'flight_toggle',
-  'gliding_state_change',
-  'entity_mount',
-  'hunger_meter_change',
+  'explosion prime',
+  'hunger meter change',
+  'leaves decay',
+  'lightning strike',
+  'pig zap',
+  'bed enter',
+  'bed leave',
+  'bucket empty',
+  'bucket fill',
+  'egg throw',
+  'item break', // 不支持直接使用名称的事件（对象形式）
+  'item damage',
+  'tool change',
   'join',
-  'sheep_regrow_wool',
-  'swim_toggle',
-  'projectile_collide',
-  'broadcast',
-  'piglin_barter',
-  'anvil_damage',
-  'chunk_load',
-  'anvil_prepare',
-  'arm_swing',
-  'bed_enter',
-  'aoe_cloud_effect',
-  'bucket_empty',
-  'flow',
-  'player_deep_sleep',
-  'player_trade',
-  'explosion_prime',
-  'physics',
-  'inventory_pickup',
-  'inventory_slot_change',
-  'inventory_drag',
+  'connect',
   'kick',
-  'horse_jump',
-  'entity_jump',
-  'vehicle_destroy',
-  'server_list_ping',
+  'quit',
   'respawn',
-  'sprint_toggle',
-  'tool_change',
+  'sneak toggle',
+  'sprint toggle',
+  'portal create',
+  'projectile hit',
+  'projectile collide',
+  'shoot',
+  'sign change',
+  'spawn change',
+  'vehicle create',
+  'vehicle damage',
+  'vehicle destroy',
+  'vehicle enter',
+  'vehicle exit',
+  'entity mount', //
+  'entity dismount', //
+  'gliding state change',
+  'aoe cloud effect', //
+  'sheep regrow wool',
+  'inventory open',
+  'inventory close',
+  'slime split',
+  'resurrect attempt',
+  'player world change',
+  'flight toggle',
+  'language change',
+  'jump',
+  'hand item swap', //
+  'server list ping',
+  'swim toggle',
   'riptide',
-  'projectile_hit',
-  'bat_toggle_sleep',
-  'egg_throw',
-  'player_pickup_arrow',
-  'portal_enter',
-  'ready_arrow',
-  'stop_using_item',
-  'bell_ring',
-  'beacon_change_effect',
-  'bell_resonate',
-  'portal_create',
-  'vehicle_move',
-  'elytra_boost',
-  'experience_cooldown_change',
-  'pig_zap',
-  'sign_change',
-  'enderman_enrage',
-  'item_break',
-  'world_border_bounds_change',
-  'world_border_bounds_finish_change',
-  'world_border_center_change',
-  'enchant_prepare',
-  'vault_display_item',
-  'villager_career_change',
-] as const
-
-// Player Chunk Enter
-export const OhterSimpleEvents = [
-  'first_join',
-  'loot_generate',
-  'book_edit',
-  'brewing_start',
-  'player_chunk_enter',
-  'experience_spawn',
-  'portal',
-  'entity_portal',
-  'throwing_of_an_egg',
-  'love_mode_enter',
-  'book_sign',
-  'send_command_list',
-  'inventory_item_move',
-] as const
-
-export const SimpleEvents = [...SkriptSimpleEvents, ...OhterSimpleEvents] as const
-
-export type SimpleEvent = (typeof SimpleEvents)[number]
-
-export const SimpleEventSyntax: Record<SimpleEvent, string> = {} as const
-export function generateCodeForSimpleEvent(event: SimpleEvent) {
-  return SimpleEventSyntax[event] ?? `on ${event.replace(/_/g, ' ')}`
-}
-
-export function registerSimpleEvent(key: SimpleEvent, syntax: EventSyntax): Blockly.utils.toolbox.BlockInfo {
-  const blockKey = generateEventBlockKey(syntax)
-  const definition = createEventDefinition(syntax)
-  const mixin = {
-    generateEventCode_() {
-      return generateCodeForSimpleEvent(key)
-    },
-  }
-  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-  CodeGenerator.forBlock[blockKey] = createEventCodeGenerator()
-  return { kind: 'block', type: blockKey }
+  'sponge absorb',
+  'enchant prepare',
+  'enchant',
+  'inventory pickup',
+  'horse jump',
+  'block fertilize',
+  'arm swing',
+  'item mend',
+  'anvil prepare',
+  'player trade',
+  'entity jump',
+  'anvil damage',
+  'stop using item',
+  'ready arrow',
+  'inventory slot change',
+  'player deep sleep',
+  'player pickup arrow',
+  'inventory drag',
+  'piglin barter',
+  'bell ring',
+  'bell resonate',
+  'enderman enrage',
+  'beacon change effect',
+  'broadcast',
+  'experience cooldown change',
+  'vehicle move',
+  'elytra boost',
+  'bat toggle sleep',
+  'world border bounds change',
+  'world border bounds finish change',
+  'world border center change',
+  'vault display item',
+  'villager career change',
+]
+export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
+  SimpleEventInfos.forEach((info) => {
+    let a = {}
+    if (typeof info === 'string') {
+      a = { name: info, code: info }
+    } else {
+      a = { name: info.name, code: info.code }
+    }
+    console.log(a)
+  })
+  return []
 }

@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly/core'
-import { EventToolbox } from '@/blockly/blocks/events'
+import { BlockInfos as EventToolbox } from '@/blockly/blocks/events'
 import { EffectToolbox } from '@/blockly/blocks/effects'
 import { TypeToolbox } from '@/blockly/blocks/types'
 

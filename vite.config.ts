@@ -5,12 +5,13 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { syntaxlistPlugin } from './syntaxlist-plugin'
 import { blocklyPrunePlugin } from './blockly-prune-plugin'
+import { syntaxMarkerPlugin } from './syntax-marker-plugin'
 import { resolve } from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/blockly',
-  plugins: [vue(), vueDevTools(), syntaxlistPlugin(), blocklyPrunePlugin()],
+  plugins: [vue(), vueDevTools(), syntaxlistPlugin(), blocklyPrunePlugin(), syntaxMarkerPlugin('./src/blockly/blocks')],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
