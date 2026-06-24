@@ -1,8 +1,19 @@
 import * as Blockly from 'blockly/core'
-import type { Syntax } from '@/skript/SyntaxRegistry'
 import { t } from '@/locales/i18n'
 
 export type SkriptBlockExtraState = Record<string, unknown>
+
+export const SupportedSyntaxTypes = ['event', 'condition', 'effect', 'expression', 'type', 'function', 'section', 'structure'] as const
+
+export type SyntaxType = (typeof SupportedSyntaxTypes)[number]
+
+export type Syntax = {
+  id: number
+  jsonId: string
+  title: string
+  syntaxType: SyntaxType
+  syntaxPattern: string
+}
 
 export type SkriptBlockDefinition = {
   init: (this: SkriptBlock) => void

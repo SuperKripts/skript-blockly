@@ -1,124 +1,142 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
+import CodeGenerator from '@/blockly/generators/skript'
+import { createEventCodeGenerator } from './EventBlock'
+import type { SkriptEventBlock } from './EventBlock'
+import { createSkriptDefinition } from '../SkriptBlock'
+import type { SkriptBlockDefinition, SkriptBlock } from '../SkriptBlock'
+import { appendEventPriorityInput } from './EventPriority'
 
-type SimpleEventInfo =
-  | {
-      name: string
-      code: string
-    }
-  | string
+type SimpleEventInfo = {
+  key: string
+  code?: string
+  event_values?: string[]
+  cancellable: boolean
+  docId?: number
+}
 
 const SimpleEventInfos: SimpleEventInfo[] = [
-  'can build check',
-  'block damage',
-  'flow',
-  'ignition',
-  'physics',
-  'piston extend',
-  'piston retract',
-  'redstone',
-  'spread',
-  'chunk load',
-  'chunk generate',
-  'chunk unload',
-  'creeper power',
-  'zombie break door',
-  'combust',
-  'explode',
-  'portal enter',
-  'tame',
-  'explosion prime',
-  'hunger meter change',
-  'leaves decay',
-  'lightning strike',
-  'pig zap',
-  'bed enter',
-  'bed leave',
-  'bucket empty',
-  'bucket fill',
-  'egg throw',
-  'item break', // 不支持直接使用名称的事件（对象形式）
-  'item damage',
-  'tool change',
-  'join',
-  'connect',
-  'kick',
-  'quit',
-  'respawn',
-  'sneak toggle',
-  'sprint toggle',
-  'portal create',
-  'projectile hit',
-  'projectile collide',
-  'shoot',
-  'sign change',
-  'spawn change',
-  'vehicle create',
-  'vehicle damage',
-  'vehicle destroy',
-  'vehicle enter',
-  'vehicle exit',
-  'entity mount', //
-  'entity dismount', //
-  'gliding state change',
-  'aoe cloud effect', //
-  'sheep regrow wool',
-  'inventory open',
-  'inventory close',
-  'slime split',
-  'resurrect attempt',
-  'player world change',
-  'flight toggle',
-  'language change',
-  'jump',
-  'hand item swap', //
-  'server list ping',
-  'swim toggle',
-  'riptide',
-  'sponge absorb',
-  'enchant prepare',
-  'enchant',
-  'inventory pickup',
-  'horse jump',
-  'block fertilize',
-  'arm swing',
-  'item mend',
-  'anvil prepare',
-  'player trade',
-  'entity jump',
-  'anvil damage',
-  'stop using item',
-  'ready arrow',
-  'inventory slot change',
-  'player deep sleep',
-  'player pickup arrow',
-  'inventory drag',
-  'piglin barter',
-  'bell ring',
-  'bell resonate',
-  'enderman enrage',
-  'beacon change effect',
-  'broadcast',
-  'experience cooldown change',
-  'vehicle move',
-  'elytra boost',
-  'bat toggle sleep',
-  'world border bounds change',
-  'world border bounds finish change',
-  'world border center change',
-  'vault display item',
-  'villager career change',
+  { key: 'can build check', event_values: [], cancellable: false },
+  { key: 'block damage', event_values: [], cancellable: false },
+  { key: 'flow', event_values: [], cancellable: false },
+  { key: 'ignition', event_values: [], cancellable: false },
+  { key: 'physics', event_values: [], cancellable: false },
+  { key: 'piston extend', event_values: [], cancellable: false },
+  { key: 'piston retract', event_values: [], cancellable: false },
+  { key: 'redstone', event_values: [], cancellable: false },
+  { key: 'spread', event_values: [], cancellable: false },
+  { key: 'chunk load', event_values: [], cancellable: false },
+  { key: 'chunk generate', event_values: [], cancellable: false },
+  { key: 'chunk unload', event_values: [], cancellable: false },
+  { key: 'creeper power', event_values: [], cancellable: false },
+  { key: 'zombie break door', event_values: [], cancellable: false },
+  { key: 'combust', event_values: [], cancellable: false },
+  { key: 'explode', event_values: [], cancellable: false },
+  { key: 'portal enter', event_values: [], cancellable: false },
+  { key: 'tame', event_values: [], cancellable: false },
+  { key: 'explosion prime', event_values: [], cancellable: false },
+  { key: 'hunger meter change', event_values: [], cancellable: false },
+  { key: 'leaves decay', event_values: [], cancellable: false },
+  { key: 'lightning strike', event_values: [], cancellable: false },
+  { key: 'pig zap', event_values: [], cancellable: false },
+  { key: 'bed enter', event_values: [], cancellable: false },
+  { key: 'bed leave', event_values: [], cancellable: false },
+  { key: 'bucket empty', event_values: [], cancellable: false },
+  { key: 'bucket fill', event_values: [], cancellable: false },
+  { key: 'egg throw', event_values: [], cancellable: false },
+  { key: 'item break', code: 'tool break', event_values: [], cancellable: false },
+  { key: 'item damage', event_values: [], cancellable: false },
+  { key: 'tool change', event_values: [], cancellable: false },
+  { key: 'join', event_values: [], cancellable: false },
+  { key: 'connect', event_values: [], cancellable: false },
+  { key: 'kick', event_values: [], cancellable: false },
+  { key: 'quit', event_values: [], cancellable: false },
+  { key: 'respawn', event_values: [], cancellable: false },
+  { key: 'sneak toggle', event_values: [], cancellable: false },
+  { key: 'sprint toggle', event_values: [], cancellable: false },
+  { key: 'portal create', event_values: [], cancellable: false },
+  { key: 'projectile hit', event_values: [], cancellable: false },
+  { key: 'projectile collide', event_values: [], cancellable: false },
+  { key: 'shoot', event_values: [], cancellable: false },
+  { key: 'sign change', event_values: [], cancellable: false },
+  { key: 'spawn change', event_values: [], cancellable: false },
+  { key: 'vehicle create', event_values: [], cancellable: false },
+  { key: 'vehicle damage', event_values: [], cancellable: false },
+  { key: 'vehicle destroy', event_values: [], cancellable: false },
+  { key: 'vehicle enter', event_values: [], cancellable: false },
+  { key: 'vehicle exit', event_values: [], cancellable: false },
+  { key: 'entity mount', code: 'mount', event_values: [], cancellable: false },
+  { key: 'entity dismount', code: 'dismount', event_values: [], cancellable: false },
+  { key: 'gliding state change', event_values: [], cancellable: false },
+  { key: 'aoe cloud effect', code: 'area cloud effect', event_values: [], cancellable: false },
+  { key: 'sheep regrow wool', event_values: [], cancellable: false },
+  { key: 'inventory open', event_values: [], cancellable: false },
+  { key: 'inventory close', event_values: [], cancellable: false },
+  { key: 'slime split', event_values: [], cancellable: false },
+  { key: 'resurrect attempt', event_values: [], cancellable: false },
+  { key: 'player world change', event_values: [], cancellable: false },
+  { key: 'flight toggle', event_values: [], cancellable: false },
+  { key: 'language change', event_values: [], cancellable: false },
+  { key: 'jump', event_values: [], cancellable: false },
+  { key: 'hand item swap', code: 'swap hand items', event_values: [], cancellable: false },
+  { key: 'server list ping', event_values: [], cancellable: false },
+  { key: 'swim toggle', event_values: [], cancellable: false },
+  { key: 'riptide', event_values: [], cancellable: false },
+  { key: 'sponge absorb', event_values: [], cancellable: false },
+  { key: 'enchant prepare', event_values: [], cancellable: false },
+  { key: 'enchant', event_values: [], cancellable: false },
+  { key: 'inventory pickup', event_values: [], cancellable: false },
+  { key: 'horse jump', event_values: [], cancellable: false },
+  { key: 'block fertilize', event_values: [], cancellable: false },
+  { key: 'arm swing', event_values: [], cancellable: false },
+  { key: 'item mend', event_values: [], cancellable: false },
+  { key: 'anvil prepare', event_values: [], cancellable: false },
+  { key: 'player trade', event_values: [], cancellable: false },
+  { key: 'entity jump', event_values: [], cancellable: false },
+  { key: 'anvil damage', event_values: [], cancellable: false },
+  { key: 'stop using item', event_values: [], cancellable: false },
+  { key: 'ready arrow', event_values: [], cancellable: false },
+  { key: 'inventory slot change', event_values: [], cancellable: false },
+  { key: 'player deep sleep', event_values: [], cancellable: false },
+  { key: 'player pickup arrow', event_values: [], cancellable: false },
+  { key: 'inventory drag', event_values: [], cancellable: false },
+  { key: 'piglin barter', event_values: [], cancellable: false },
+  { key: 'bell ring', event_values: [], cancellable: false },
+  { key: 'bell resonate', event_values: [], cancellable: false },
+  { key: 'enderman enrage', event_values: [], cancellable: false },
+  { key: 'beacon change effect', event_values: [], cancellable: false },
+  { key: 'broadcast', event_values: [], cancellable: false },
+  { key: 'experience cooldown change', event_values: [], cancellable: false },
+  { key: 'vehicle move', event_values: [], cancellable: false },
+  { key: 'elytra boost', event_values: [], cancellable: false },
+  { key: 'bat toggle sleep', event_values: [], cancellable: false },
+  { key: 'world border bounds change', event_values: [], cancellable: false },
+  { key: 'world border bounds finish change', event_values: [], cancellable: false },
+  { key: 'world border center change', event_values: [], cancellable: false },
+  { key: 'vault display item', event_values: [], cancellable: false },
+  { key: 'villager career change', event_values: [], cancellable: false },
 ]
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
-  SimpleEventInfos.forEach((info) => {
-    let a = {}
-    if (typeof info === 'string') {
-      a = { name: info, code: info }
-    } else {
-      a = { name: info.name, code: info.code }
+  return SimpleEventInfos.map((info) => {
+    const jsonId = info.key.replace(' ', '_')
+    const definition = createSkriptDefinition({ id: info.docId ?? 0, jsonId, title: info.key, syntaxType: 'event', syntaxPattern: info.code ?? info.key })
+    const mixin: Partial<SkriptBlockDefinition> & Partial<SkriptEventBlock> = {
+      eventValues_: info.event_values,
+      eventCancellable_: info.cancellable,
+      initStyle_(this: SkriptBlock) {
+        appendEventPriorityInput(this)
+        this.appendStatementInput('block')
+        this.setStyle('event')
+      },
+      generateEventCode_() {
+        return `on ${info.code ?? info.key}`
+      },
     }
-    console.log(a)
+
+    const blockKey = 'event_' + jsonId
+    Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+    CodeGenerator.forBlock[blockKey] = createEventCodeGenerator()
+    return { kind: 'block', type: blockKey }
   })
-  return []
 }
