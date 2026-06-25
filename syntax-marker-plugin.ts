@@ -1,14 +1,10 @@
-// syntax-marker-plugin.js
 import fs from 'node:fs'
 import path from 'node:path'
 import * as ts from 'typescript'
 
-const MARKER = 'skript syntax' // 固定标记
+const MARKER = 'skript syntax'
 
-/**
- * 解析单个 TS 文件，检查标记和导出
- */
-function parseFile(filePath) {
+function parseFile(filePath: string) {
   const content = fs.readFileSync(filePath, 'utf-8')
   const sourceFile = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true)
 
@@ -16,7 +12,6 @@ function parseFile(filePath) {
   let hasRegister = false
   let hasRegisterAll = false
 
-  // 检查首行是否为标记指令
   if (sourceFile.statements.length > 0) {
     const first = sourceFile.statements[0]
     if (ts.isExpressionStatement(first) && ts.isStringLiteral(first.expression) && first.expression.text === MARKER) {
@@ -24,22 +19,24 @@ function parseFile(filePath) {
     }
   }
 
-  // 遍历 AST，查找导出的 register / registerAll
-  function visit(node) {
-    if (node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) {
-      let name = null
-      if (ts.isFunctionDeclaration(node) && node.name) {
-        name = node.name.text
-      } else if (ts.isVariableStatement(node)) {
-        const decl = node.declarationList.declarations[0]
-        if (decl && ts.isIdentifier(decl.name)) {
-          name = decl.name.text
+  function visit(node: ts.Node) {
+    if (ts.canHaveModifiers(node)) {
+      const modifiers = ts.getModifiers(node)
+      if (modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) {
+        let name = null
+        if (ts.isFunctionDeclaration(node) && node.name) {
+          name = node.name.text
+        } else if (ts.isVariableStatement(node)) {
+          const decl = node.declarationList.declarations[0]
+          if (decl && ts.isIdentifier(decl.name)) {
+            name = decl.name.text
+          }
+        } else if (ts.isClassDeclaration(node) && node.name) {
+          name = node.name.text
         }
-      } else if (ts.isClassDeclaration(node) && node.name) {
-        name = node.name.text
+        if (name === 'register') hasRegister = true
+        if (name === 'registerAll') hasRegisterAll = true
       }
-      if (name === 'register') hasRegister = true
-      if (name === 'registerAll') hasRegisterAll = true
     }
 
     if (ts.isExportDeclaration(node)) {
@@ -60,10 +57,7 @@ function parseFile(filePath) {
   return { hasMarker, hasRegister, hasRegisterAll }
 }
 
-/**
- * 为单个目录生成 index.ts 内容
- */
-function generateIndexForDir(dirPath, fileNames) {
+function generateIndexForDir(dirPath: string, fileNames: string[]) {
   const imports = []
   const calls = []
 
@@ -72,12 +66,12 @@ function generateIndexForDir(dirPath, fileNames) {
     const { hasMarker, hasRegister, hasRegisterAll } = parseFile(fullPath)
 
     if (!hasMarker) continue
+
     if (!hasRegister && !hasRegisterAll) continue
 
     const baseName = path.basename(fileName, path.extname(fileName))
     const safeName = baseName.replace(/\W/g, '_')
     let funcName, alias
-    console.log(fileName)
 
     if (hasRegisterAll) {
       funcName = 'registerAll'
@@ -93,7 +87,7 @@ function generateIndexForDir(dirPath, fileNames) {
   }
 
   if (imports.length === 0) {
-    return null // 没有匹配文件，不生成 index.ts
+    return null
   }
 
   return `import * as Blockly from 'blockly/core'
@@ -109,10 +103,7 @@ register()
 `
 }
 
-/**
- * 处理单个目录：如果该目录下有符合条件的 TS 文件，则生成 index.ts
- */
-function processDirectory(dirPath) {
+function processDirectory(dirPath: string) {
   try {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true })
     const tsFiles = entries.filter((entry) => entry.isFile() && entry.name.endsWith('.ts') && entry.name !== 'index.ts').map((entry) => entry.name)
@@ -121,8 +112,6 @@ function processDirectory(dirPath) {
 
     const content = generateIndexForDir(dirPath, tsFiles)
     if (content === null) {
-      // 没有匹配文件，如果存在旧的 index.ts 可以删除（可选）
-      // 但为了避免误删，这里不处理，保留已有 index.ts 或留空
       return
     }
 
@@ -133,15 +122,13 @@ function processDirectory(dirPath) {
   }
 }
 
-/**
- * 递归遍历目录，处理每个子目录
- */
-function processAllDirectories(rootDir) {
+function processAllDirectories(rootDir: string) {
   if (!fs.existsSync(rootDir)) return
 
   const stack = [rootDir]
   while (stack.length > 0) {
     const current = stack.pop()
+    if (!current) continue
     const entries = fs.readdirSync(current, { withFileTypes: true })
     for (const entry of entries) {
       const fullPath = path.join(current, entry.name)
@@ -149,51 +136,38 @@ function processAllDirectories(rootDir) {
         stack.push(fullPath)
       }
     }
-    // 处理当前目录
     processDirectory(current)
   }
 }
 
-/**
- * Vite 插件
- * @param {string} scanDir - 要扫描的目录，例如 './src/blockly/blocks'
- */
-export function syntaxMarkerPlugin(scanDir) {
+export function syntaxMarkerPlugin(scanDir: string) {
   const resolvedScanDir = path.resolve(process.cwd(), scanDir)
 
   if (!fs.existsSync(resolvedScanDir)) {
     console.warn(`[syntax-marker-plugin] 目录不存在: ${scanDir}`)
   }
 
-  function regenerateAll() {
-    processAllDirectories(resolvedScanDir)
-  }
-
   return {
     name: 'syntax-marker-plugin',
 
     configResolved() {
-      regenerateAll()
+      processAllDirectories(resolvedScanDir)
     },
 
-    configureServer(server) {
-      // 监听整个扫描目录（包括子目录）
-      server.watcher.add(resolvedScanDir)
-      server.watcher.on('all', (event, changedPath) => {
-        // 只关注 .ts 文件变化，且忽略 index.ts 自身
-        if (changedPath.startsWith(resolvedScanDir) && changedPath.endsWith('.ts') && !changedPath.endsWith('index.ts')) {
-          // 处理该文件所在的目录
-          const dir = path.dirname(changedPath)
-          processDirectory(dir)
-        }
-      })
+    handleHotUpdate({ file, modules }: { file: string; modules: string[] }) {
+      if (file.endsWith('.ts')) {
+        const dir = path.dirname(file)
+        processDirectory(dir)
+      }
+
+      return modules
     },
 
-    transform(code, id) {
+    transform(code: string, id: string) {
       if (id.endsWith('.ts') && !id.endsWith('index.ts') && (code.includes(`'${MARKER}'`) || code.includes(`"${MARKER}"`))) {
         const isProd = process.env.NODE_ENV === 'production'
         if (isProd) {
-          const markerRegex = new RegExp(`^\\s*['"]${MARKER}['"]\\s*;?\\s*$`, 'm')
+          const markerRegex = new RegExp(String.raw`^\s*['"]${MARKER}['"]\s*;?\s*$`, 'm')
           return code.replace(markerRegex, '')
         }
       }
