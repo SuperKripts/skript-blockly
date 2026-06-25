@@ -132,3 +132,29 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
 }
 
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM, SearchToolboxCategory.SEARCH_CATEGORY_KIND, SearchToolboxCategory)
+
+const ctrlF = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.F, [Blockly.utils.KeyCodes.CTRL])
+const metaF = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.F, [Blockly.utils.KeyCodes.META])
+
+Blockly.ShortcutRegistry.registry.register(
+  {
+    name: 'ToolboxSearch',
+    keyCodes: [ctrlF, metaF],
+    callback(workspace: Blockly.WorkspaceSvg, e: Event, shortcut: Blockly.ShortcutRegistry.KeyboardShortcut, scope: Blockly.ContextMenuRegistry.Scope) {
+      e.preventDefault()
+      e.stopPropagation()
+
+      const toolbox = workspace.getToolbox() as Blockly.Toolbox
+      const item = toolbox?.getToolboxItems().find((e) => e instanceof SearchToolboxCategory)
+      if (!item) {
+        return false
+      }
+      toolbox.setSelectedItem(item)
+      workspace.refreshToolboxSelection()
+      Blockly.FocusManager.getFocusManager().focusNode(item)
+
+      return true
+    },
+  },
+  false,
+)
