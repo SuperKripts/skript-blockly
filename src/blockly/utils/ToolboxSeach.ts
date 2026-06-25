@@ -104,14 +104,6 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
 
   setSelected(isSelected: boolean): void {
     super.setSelected(isSelected)
-
-    if (isSelected) {
-      requestAnimationFrame(() => {
-        this._searchInput.focus()
-      })
-    } else {
-      this._searchInput.blur()
-    }
   }
 
   override onNodeFocus(): void {
