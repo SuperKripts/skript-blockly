@@ -2,9 +2,10 @@
 
 import * as Blockly from 'blockly/core'
 import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput } from './EventPriority'
+import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createFieldDropdown, Entities } from '../types/Types'
+import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 
 const key = 'attempt_attack'
 const title = 'Attempt Attack'
@@ -25,5 +26,11 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     updateShape_() {},
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
+    const entity = block.getFieldValue('entity')
+    const statementMembers = generate.statementToCode(block, 'block')
+    const code = SkriptCodeGenerator.codeJoin(entity === '' ? 'on attack attempt' : 'on attempt to attack', entity, generateCodeForEventPriority(block))
+    return `${code}: \n${statementMembers}`
+  }
   return { kind: 'block', type: blockKey }
 }

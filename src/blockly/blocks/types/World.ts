@@ -1,5 +1,6 @@
+import { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import FieldDefaultTextInput from '@/blockly/inputs/FieldDefaultTextInput'
-import { SimpleMutator } from '@/blockly/utils/SimpleMutator'
+import { SimpleMutator, type MutatorExtractValue } from '@/blockly/utils/SimpleMutator'
 import { t } from '@/locales/i18n'
 
 export class WorldMutator extends SimpleMutator<string> {
@@ -21,6 +22,13 @@ export function worldName(world: string) {
     return t('TYPE_ENVIRONMENT_THE_END')
   }
   return world
+}
+
+export function worldList(worlds: MutatorExtractValue<string>[]) {
+  return SkriptCodeGenerator.arrayJoin(
+    worlds.map((e) => e.value),
+    true,
+  )
 }
 
 const defaultWorldMutator = new WorldMutator()

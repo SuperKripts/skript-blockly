@@ -1,7 +1,6 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import CodeGenerator from '@/blockly/generators/skript'
 import { createSkriptDefinition, getSkriptHubDocUrl } from '../SkriptBlock'
 import type { SkriptBlockDefinition, SkriptBlock } from '../SkriptBlock'
 import { appendEventPriorityInput } from './EventPriority'
@@ -115,6 +114,7 @@ const SimpleEventInfos: SimpleEventInfo[] = [
   { key: 'vault display item', event_values: [], cancellable: false },
   { key: 'villager career change', event_values: [], cancellable: false },
 ]
+
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return SimpleEventInfos.map((info) => {
     const nk = info.key.replace(' ', '_')

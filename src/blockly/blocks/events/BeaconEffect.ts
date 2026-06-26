@@ -2,9 +2,10 @@
 
 import * as Blockly from 'blockly/core'
 import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput } from './EventPriority'
+import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createFieldDropdown, createTempFieldDropdown } from '../types/Types'
+import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 
 const key = 'beacon_effect'
 const title = 'Beacon Effect'
@@ -28,5 +29,12 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     updateShape_() {},
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
+    const primary = block.getFieldValue('primary')
+    const effect = block.getFieldValue('effect')
+    const statementMembers = generate.statementToCode(block, 'block')
+    const code = SkriptCodeGenerator.codeJoin('on', primary === 'default' ? '' : primary, 'beacon effect', ['of', effect], generateCodeForEventPriority(block))
+    return `${code}: \n${statementMembers}`
+  }
   return { kind: 'block', type: blockKey }
 }

@@ -70,6 +70,43 @@ export class SkriptCodeGenerator extends Blockly.Generator {
     }
     return comments + code
   }
+
+  // 输入 [a,b,c]
+  // 输出 a b c
+  // 输入 [a, b, [a, b]]
+  // 输出 a b a b
+  // 输入 [a, b, [a, b], c]
+  // 输出 a b a b c
+  // 内部数组中包含空字符串时
+  static codeJoin(...codes: (string | string[])[]): string {
+    return codes
+      .map((e) => {
+        if (typeof e === 'string') {
+          return e
+        }
+        return e.includes('') ? '' : e.join(' ')
+      })
+      .filter((e) => e !== '')
+      .join(' ')
+  }
+
+  static arrayJoin(codes: string[], quote = false): string {
+    if (codes.length == 0) {
+      return ''
+    }
+    if (codes.length == 1) {
+      return quote ? `"${codes[0]!}"` : codes[0]!
+    }
+
+    const lastIndex = codes.length - 1
+    const rest = codes.slice(0, lastIndex)
+    const lastElement = codes[lastIndex]
+
+    const restPart = quote ? rest.map((s) => `"${s}"`).join(', ') : rest.join(', ')
+    const lastPart = quote ? `"${lastElement}"` : lastElement
+
+    return `${restPart} and ${lastPart}`
+  }
 }
 
 export const generator = new SkriptCodeGenerator()
@@ -78,38 +115,4 @@ export default generator
 
 export const Order = {
   ATOMIC: 0,
-}
-
-/**
- * 代码拼接
- *
- * @param codes 代码
- * @returns 代码
- */
-export function codeJoin(...codes: string[]): string {
-  return codes.filter((str) => str !== '').join(' ')
-}
-
-/**
- * 数组拼接
- *
- * @param codes 代码
- * @returns 代码
- */
-export function arrayJoin(codes: string[], quote = false): string {
-  if (codes.length == 0) {
-    return quote ? '""' : ''
-  }
-  if (codes.length == 1) {
-    return quote ? `"${codes[0]!}"` : codes[0]!
-  }
-
-  const lastIndex = codes.length - 1
-  const rest = codes.slice(0, lastIndex)
-  const lastElement = codes[lastIndex]
-
-  const restPart = quote ? rest.map((s) => `"${s}"`).join(', ') : rest.join(', ')
-  const lastPart = quote ? `"${lastElement}"` : lastElement
-
-  return `${restPart} and ${lastPart}`
 }

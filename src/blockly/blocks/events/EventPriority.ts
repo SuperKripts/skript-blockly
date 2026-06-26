@@ -9,7 +9,7 @@ export function createEventPriorityFieldDropdown() {
 
 export function generateCodeForEventPriority(block: Blockly.Block) {
   const priority = block.getFieldValue('event-priority')
-  return priority === 'default' ? '' : ' with priority ' + priority
+  return priority === 'default' ? '' : 'with priority ' + priority
 }
 
 export function appendEventPriorityInput(block: Blockly.Block) {

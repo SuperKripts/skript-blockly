@@ -76,11 +76,11 @@ function generateIndexForDir(dirPath: string, fileNames: string[]) {
     if (hasRegisterAll) {
       funcName = 'registerAll'
       alias = `registerAll_${safeName}`
-      calls.push(`  BlockInfos.push(...${alias}());`)
+      calls.push(`    ...${alias}(),`)
     } else {
       funcName = 'register'
       alias = `register_${safeName}`
-      calls.push(`  BlockInfos.push(${alias}());`)
+      calls.push(`    ${alias}(),`)
     }
 
     imports.push(`import { ${funcName} as ${alias} } from './${fileName}'`)
@@ -96,7 +96,9 @@ ${imports.join('\n')}
 export const BlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
 
 function register() {
+  BlockInfos.push(
 ${calls.join('\n')}
+  )
 }
 
 register()

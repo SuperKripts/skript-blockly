@@ -1,7 +1,6 @@
 import { t } from '@/locales/i18n'
 import * as Blockly from 'blockly/core'
 import CodeGenerator from '@/blockly/generators/skript'
-import { type SkriptEventBlock } from '@/blockly/blocks/events/EventBlock'
 
 const event_cancelable = 'event_cancelable'
 
@@ -30,7 +29,7 @@ if (!Blockly.ContextMenuRegistry.registry.getItem(event_cancelable)) {
     preconditionFn: (scope: Blockly.ContextMenuRegistry.Scope) => {
       if (scope.block?.getStyleName() === 'event') {
         const eventBlock = scope.block as SkriptEventBlock
-        if (eventBlock.eventCancellable_) {
+        if (eventBlock.cancellable_) {
           return 'enabled'
         }
       }

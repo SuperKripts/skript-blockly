@@ -23,9 +23,6 @@ export type SkriptBlockDefinition = {
   initStyle_: (this: SkriptBlock) => void
   initShape_: (this: SkriptBlock) => void
   updateShape_: (this: SkriptBlock) => void
-  description_: (this: SkriptBlock) => string
-  generateDescriptionLangKey_: (this: SkriptBlock) => string
-  descriptionLangKey_?: string
 }
 
 export type SkriptBlock = Blockly.BlockSvg &
@@ -55,18 +52,7 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
     saveExtraState() {
       return this.extra_
     },
-    description_(this: SkriptBlock) {
-      if (!this.descriptionLangKey_) {
-        this.descriptionLangKey_ = this.generateDescriptionLangKey_()
-      }
-      return t(this.descriptionLangKey_)
-    },
-    generateDescriptionLangKey_() {
-      return (syntax.syntaxType + '_' + syntax.key + '_DESC').toUpperCase()
-    },
-    initShape_(this: SkriptBlock) {
-      this.appendDummyInput().appendField(this.description_())
-    },
+    initShape_(this: SkriptBlock) {},
     initStyle_(this: SkriptBlock) {
       this.setStyle(syntax.syntaxType)
       switch (syntax.syntaxType) {

@@ -2,11 +2,12 @@
 
 import * as Blockly from 'blockly/core'
 import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput } from './EventPriority'
+import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { FieldTime } from '@/blockly/inputs/FieldTime'
 import { pte } from '@/locales/i18n'
-import WorldMutator, { worldName } from '@/blockly/blocks/types/World'
+import WorldMutator, { worldList, worldName } from '@/blockly/blocks/types/World'
 import type { MutatorExtractValue } from '@/blockly/utils/SimpleMutator'
+import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 
 const key = 'at_time'
 const title = 'At Time'
@@ -46,6 +47,16 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
       return WorldMutator.createTopBlock(workspace, (this.extra_.worlds as MutatorExtractValue<string>[]) ?? [])
     },
   }
+
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
+    const skriptBlock = block as SkriptBlock
+    const time = block.getFieldValue('time')!
+    const worlds = skriptBlock.extra_.worlds as MutatorExtractValue<string>[]
+    const statementMembers = generate.statementToCode(block, 'block')
+    const code = SkriptCodeGenerator.codeJoin('at', time, ['in', worldList(worlds)], generateCodeForEventPriority(block))
+    return `${code}: \n${statementMembers}`
+  }
+
   return { kind: 'block', type: blockKey }
 }
