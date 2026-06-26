@@ -4,7 +4,7 @@ import * as Blockly from 'blockly/core'
 import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput } from './EventPriority'
 import { FieldTime } from '@/blockly/inputs/FieldTime'
-import { pte, t } from '@/locales/i18n'
+import { pte } from '@/locales/i18n'
 import WorldMutator, { worldName } from '@/blockly/blocks/types/World'
 import type { MutatorExtractValue } from '@/blockly/utils/SimpleMutator'
 
