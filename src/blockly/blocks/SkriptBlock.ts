@@ -8,17 +8,18 @@ export const SupportedSyntaxTypes = ['event', 'condition', 'effect', 'expression
 export type SyntaxType = (typeof SupportedSyntaxTypes)[number]
 
 export type Syntax = {
-  id: number
-  jsonId: string
+  key: string
   title: string
   syntaxType: SyntaxType
-  syntaxPattern: string
+  docUrl: string
 }
 
 export type SkriptBlockDefinition = {
   init: (this: SkriptBlock) => void
   saveExtraState: (this: SkriptBlock) => SkriptBlockExtraState
   loadExtraState: (this: SkriptBlock, state: SkriptBlockExtraState) => void
+  compose?: (this: SkriptBlock, topBlock: Blockly.Block) => void
+  decompose?: (this: SkriptBlock, workspace: Blockly.Workspace) => Blockly.Block
   initStyle_: (this: SkriptBlock) => void
   initShape_: (this: SkriptBlock) => void
   updateShape_: (this: SkriptBlock) => void
@@ -32,13 +33,18 @@ export type SkriptBlock = Blockly.BlockSvg &
     extra_: SkriptBlockExtraState
   }
 
+export function getSkriptHubDocUrl(id?: number): string {
+  return id ? 'https://skripthub.net/docs/' + id : 'https://skripthub.net/docs/?id=' + (id ?? 0)
+}
+
 export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
   return {
     init(this: SkriptBlock) {
+      this.extra_ = {}
       this.initShape_()
       this.initStyle_()
       this.setTooltip(syntax.title)
-      this.setHelpUrl('https://skripthub.net/docs/?id=' + syntax.id)
+      this.setHelpUrl(syntax.docUrl)
       this.updateShape_()
     },
     updateShape_: () => {},
@@ -56,13 +62,20 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
       return t(this.descriptionLangKey_)
     },
     generateDescriptionLangKey_() {
-      return (syntax.syntaxType + '_' + syntax.jsonId + '_DESC').toUpperCase()
+      return (syntax.syntaxType + '_' + syntax.key + '_DESC').toUpperCase()
     },
     initShape_(this: SkriptBlock) {
       this.appendDummyInput().appendField(this.description_())
     },
     initStyle_(this: SkriptBlock) {
       this.setStyle(syntax.syntaxType)
+      switch (syntax.syntaxType) {
+        case 'event':
+          this.appendStatementInput('block')
+          break
+        default:
+          break
+      }
     },
   }
 }

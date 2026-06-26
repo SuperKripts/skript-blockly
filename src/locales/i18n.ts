@@ -19,8 +19,26 @@ watch(i18n.global.locale, (locale) => {
 export default i18n
 export const { t, tm } = i18n.global
 export const pt = (msg: string): (string | number)[] => {
-  return msg
+  return t(msg)
     .split(/%(\d+)/)
     .filter((segment) => segment !== '')
     .map((segment, index) => (index % 2 === 1 ? Number.parseInt(segment) : segment))
+}
+
+type TemplateHandlers = {
+  [index: number]: () => void
+  default?: (i: { msg: string; index: number }) => void
+}
+
+export const pte = (msg: string, handlers: TemplateHandlers) => {
+  const parts = pt(msg)
+  parts.forEach((v, i) => {
+    if (typeof v === 'string') {
+      handlers.default?.({ msg: v, index: i })
+    } else if (v === 0) {
+      handlers[0]?.()
+    } else if (v === 1) {
+      handlers[1]?.()
+    }
+  })
 }

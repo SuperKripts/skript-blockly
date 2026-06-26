@@ -2,9 +2,7 @@
 
 import * as Blockly from 'blockly/core'
 import CodeGenerator from '@/blockly/generators/skript'
-import { createEventCodeGenerator } from './EventBlock'
-import type { SkriptEventBlock } from './EventBlock'
-import { createSkriptDefinition } from '../SkriptBlock'
+import { createSkriptDefinition, getSkriptHubDocUrl } from '../SkriptBlock'
 import type { SkriptBlockDefinition, SkriptBlock } from '../SkriptBlock'
 import { appendEventPriorityInput } from './EventPriority'
 
@@ -119,8 +117,8 @@ const SimpleEventInfos: SimpleEventInfo[] = [
 ]
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return SimpleEventInfos.map((info) => {
-    const jsonId = info.key.replace(' ', '_')
-    const definition = createSkriptDefinition({ id: info.docId ?? 0, jsonId, title: info.key, syntaxType: 'event', syntaxPattern: info.code ?? info.key })
+    const nk = info.key.replace(' ', '_')
+    const definition = createSkriptDefinition({ key: nk, title: info.key, syntaxType: 'event', docUrl: getSkriptHubDocUrl(info.docId) })
     const mixin: Partial<SkriptBlockDefinition> & Partial<SkriptEventBlock> = {
       eventValues_: info.event_values,
       eventCancellable_: info.cancellable,
@@ -134,9 +132,9 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
       },
     }
 
-    const blockKey = 'event_' + jsonId
+    const blockKey = 'event_' + nk
     Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-    CodeGenerator.forBlock[blockKey] = createEventCodeGenerator()
+    // CodeGenerator.forBlock[blockKey] = createEventCodeGenerator()
     return { kind: 'block', type: blockKey }
   })
 }

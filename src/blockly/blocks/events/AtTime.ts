@@ -1,84 +1,51 @@
+'skript syntax'
+
 import * as Blockly from 'blockly/core'
-import SkriptCodeGenerator, { arrayJoin } from '@/blockly/generators/skript'
-import WorldMutator from '@/blockly/blocks/types/World'
+import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { appendEventPriorityInput } from './EventPriority'
 import { FieldTime } from '@/blockly/inputs/FieldTime'
-import { pt } from '@/locales/i18n'
+import { pte, t } from '@/locales/i18n'
+import WorldMutator, { worldName } from '@/blockly/blocks/types/World'
+import type { MutatorExtractValue } from '@/blockly/utils/SimpleMutator'
 
-const key = 'skript_event_at_time'
-const desc = 'SKRIPT_EVENT_AT_TIME_DESC'
-const name = 'at time'
-const helpUrl = 'https://docs.skriptlang.org/events.html#at_time'
+const key = 'at_time'
+const title = 'At Time'
+const blockKey = 'event_at_time'
+const docId = 0
 
-type AtTimeBlockExtraState = {
-  worlds: { id: string; value: string }[]
-}
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  const definition = createSkriptDefinition({ key, title, syntaxType: 'event', docUrl: getSkriptHubDocUrl(docId) })
+  const mixin: Partial<SkriptBlockDefinition> = {
+    initShape_(this: SkriptBlock) {
+      const input = this.appendDummyInput()
+      pte('EVENT_AT_TIME_DESC', {
+        default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
+        0: () => input.appendField('', 'world'),
+        1: () => input.appendField<string>(new FieldTime(), 'time'),
+      })
+      appendEventPriorityInput(this)
 
-type AtTimeBlock = Blockly.BlockSvg & {
-  _ex_world: { id: string; value: string }[]
-  initState_: () => void
-  updateShape_: () => void
-}
-
-Blockly.Blocks[key] = {
-  init: function (this: AtTimeBlock) {
-    const input = this.appendDummyInput()
-    const parts = pt(desc)
-    parts.forEach((v, i) => {
-      if (typeof v === 'string') {
-        input.appendField(v, 'part-' + i)
+      this.setMutator(WorldMutator.createMutator(this))
+    },
+    updateShape_() {
+      const worlds = (this.extra_.worlds as MutatorExtractValue<string>[]) ?? []
+      if (worlds.length === 0) {
+        this.setFieldValue(worldName('world'), 'world')
+      } else if (worlds.length === 1) {
+        this.setFieldValue(worldName(worlds[0].value), 'world')
       } else {
-        input.appendField<string>(new FieldTime(), 'time')
+        this.setFieldValue('[' + worlds.map((world) => worldName(world.value)).join(', ') + ']', 'world')
       }
-    })
-    this.appendStatementInput('block')
-    this.setStyle('event')
-    this.setTooltip(name)
-    this.setHelpUrl(helpUrl)
-    this.initState_()
-    this.updateShape_()
-    this.setMutator(WorldMutator.createMutator(this))
-  },
-  initState_: function (this: AtTimeBlock) {
-    this._ex_world = []
-  },
-  updateShape_: function (this: AtTimeBlock) {
-    const parts = pt(desc, [this._ex_world.map((e) => e.value).join(', ')], this._ex_world.length + 1)
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i]
-      if (typeof part === 'string') {
-        this.setFieldValue(part, 'part-' + i)
-      }
-    }
-  },
-  compose: function (this: AtTimeBlock, topBlock: Blockly.Block) {
-    this._ex_world = WorldMutator.extractValues(topBlock)
-    this.updateShape_()
-  },
-  decompose: function (this: AtTimeBlock, workspace: Blockly.Workspace) {
-    return WorldMutator.createTopBlock(workspace, this._ex_world)
-  },
-  saveExtraState: function (this: AtTimeBlock): AtTimeBlockExtraState {
-    return { worlds: this._ex_world }
-  },
-  loadExtraState: function (this: AtTimeBlock, state: AtTimeBlockExtraState) {
-    this._ex_world = state.worlds ?? []
-    this.updateShape_()
-  },
-}
+    },
 
-SkriptCodeGenerator.forBlock[key] = function (block, generator) {
-  const atTimeBlock = block as AtTimeBlock
-  const time = ' ' + block.getFieldValue('time')!
-  const inWorld =
-    atTimeBlock._ex_world.length == 0
-      ? ''
-      : ' in ' +
-        arrayJoin(
-          atTimeBlock._ex_world.map((e) => e.value),
-          true,
-        )
-  const statementMembers = generator.statementToCode(block, 'block')
-  const eventPriority = block.getFieldValue('event-priority')
-  const code = `${name}${time}${inWorld}${eventPriority}:\n${statementMembers}`
-  return code
+    compose: function (this: SkriptBlock, topBlock: Blockly.Block) {
+      this.extra_.worlds = WorldMutator.extractValues(topBlock)
+      this.updateShape_()
+    },
+    decompose: function (this: SkriptBlock, workspace: Blockly.Workspace) {
+      return WorldMutator.createTopBlock(workspace, (this.extra_.worlds as MutatorExtractValue<string>[]) ?? [])
+    },
+  }
+  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+  return { kind: 'block', type: blockKey }
 }

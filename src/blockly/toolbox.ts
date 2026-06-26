@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 
 import '@/blockly/config'
-import { eventBlockInfos, effectBlockInfos, typeBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
+import { eventBlockInfos, typeBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSeach'
 import { t } from '@/locales/i18n'
 
@@ -60,7 +60,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         kind: 'category',
         name: t('SYNTAX_TYPE_EFFECT'),
         cssconfig: customCss('effect'),
-        contents: effectBlockInfos,
+        contents: [],
       },
       {
         kind: 'category',
@@ -109,28 +109,28 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         name: '测试',
         cssconfig: customCss('event'),
         contents: [
-          {
-            kind: 'block',
-            type: 'event_join',
-          },
+          // {
+          //   kind: 'block',
+          //   type: 'event_join',
+          // },
           {
             kind: 'category',
             name: '测试1',
             contents: [
-              {
-                kind: 'block',
-                type: 'event_join',
-              },
+              // {
+              //   kind: 'block',
+              //   type: 'event_join',
+              // },
             ],
           },
           {
             kind: 'category',
             name: '测试2',
             contents: [
-              {
-                kind: 'block',
-                type: 'event_join',
-              },
+              // {
+              //   kind: 'block',
+              //   type: 'event_join',
+              // },
             ],
           },
         ],
