@@ -1,23 +1,24 @@
 import * as Blockly from 'blockly/core'
+import { t } from '@/locales/i18n'
 
 type FieldDefaultTextInputState = {
-  defVal: string
+  defKey: string
   value: string | null
 }
 
 class FieldDefaultTextInput extends Blockly.FieldTextInput {
   SERIALIZABLE = true
-  private defVal_: string
+  private defKey_: string
 
-  constructor(defVal: string, value?: string) {
+  constructor(defKey: string, value?: string) {
     super(value)
-    this.defVal_ = defVal
+    this.defKey_ = defKey
   }
 
   protected getDisplayText_(): string {
     const value = this.getValue() as string
-    if (!value && value.trim() == '') {
-      return this.defVal_
+    if (!value || value.trim() === '') {
+      return t(this.defKey_)
     } else {
       return value
     }
@@ -25,14 +26,14 @@ class FieldDefaultTextInput extends Blockly.FieldTextInput {
 
   saveState(): FieldDefaultTextInputState {
     return {
-      defVal: this.defVal_,
+      defKey: this.defKey_,
       value: this.getValue(),
     }
   }
 
   loadState(state: FieldDefaultTextInputState): void {
     this.setValue(state.value)
-    this.defVal_ = state.defVal
+    this.defKey_ = state.defKey
   }
 }
 

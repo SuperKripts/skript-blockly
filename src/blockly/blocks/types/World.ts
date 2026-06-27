@@ -6,7 +6,7 @@ import { t } from '@/locales/i18n'
 export class WorldMutator extends SimpleMutator<string> {
   constructor() {
     super({ topBlockId: 'skript_type_world_mutator_top_block', topBlockDesc: 'TYPE_WORLD_MUTATOR_TOP_BLOCK_DESC', fieldName: 'world' })
-    this.registerInputPresetBlock('skript_type_world_mutator_default', 'TYPE_ENVIRONMENT_WORLD', () => new FieldDefaultTextInput(t('TYPE_ENVIRONMENT_CUSTOM', '')))
+    this.registerInputPresetBlock('skript_type_world_mutator_default', 'TYPE_ENVIRONMENT_WORLD', () => new FieldDefaultTextInput('TYPE_ENVIRONMENT_CUSTOM'))
     this.registerPresetBlock('skript_type_world_mutator_main_world', 'TYPE_ENVIRONMENT_NORMAL', 'world')
     this.registerPresetBlock('skript_type_world_mutator_nether_world', 'TYPE_ENVIRONMENT_NETHER', 'world_nether')
     this.registerPresetBlock('skript_type_world_mutator_theend_world', 'TYPE_ENVIRONMENT_THE_END', 'world_the_end')

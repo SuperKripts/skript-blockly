@@ -12,6 +12,7 @@ import { registerAll as registerAll_Entity } from './Entity.ts'
 import { registerAll as registerAll_EntityBlockChange } from './EntityBlockChange.ts'
 import { register as register_EntityShootBow } from './EntityShootBow.ts'
 import { register as register_EntityTarget } from './EntityTarget.ts'
+import { register as register_EntityTransform } from './EntityTransform.ts'
 import { registerAll as registerAll_SimpleEvents } from './SimpleEvents.ts'
 
 export const BlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
@@ -31,6 +32,7 @@ function register() {
     ...registerAll_EntityBlockChange(),
     register_EntityShootBow(),
     register_EntityTarget(),
+    register_EntityTransform(),
     ...registerAll_SimpleEvents(),
   )
 }
