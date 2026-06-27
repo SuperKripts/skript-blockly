@@ -1368,11 +1368,16 @@ export function createTempFieldDropdown(name: string, args: string[]): Blockly.F
 
 export function createFieldDropdown(type: SkriptType, withEmpty: boolean = false): Blockly.Field<string> {
   const options = withEmpty ? buildMenuOptionWithEmpty(type) : buildMenuOptions(type)
-  return options.length < 9 ? new Blockly.FieldDropdown(options) : new FieldSearchDropdown(options)
+  if (options.length < 9) {
+    return new Blockly.FieldDropdown(options)
+  } else if (options.length <= 30) {
+    return new FieldGridDropdown(options)
+  }
+  return createFieldSearchDropdown(type, withEmpty)
 }
 
 export function createFieldSearchDropdown(type: SkriptType, withEmpty: boolean = false): Blockly.Field<string> {
-  return new FieldSearchDropdown(withEmpty ? buildMenuOptionWithEmpty(type) : buildMenuOptions(type))
+  return new FieldSearchDropdown(withEmpty ? buildMenuOptionWithEmpty(type) : buildMenuOptions(type), undefined, { cacheKey: type.name })
 }
 
 export function buildMenuOptions(type: SkriptType): Blockly.MenuOption[] {
