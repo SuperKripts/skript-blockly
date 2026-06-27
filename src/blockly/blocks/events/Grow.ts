@@ -1,4 +1,4 @@
-'skript syntax'
+// 'skript syntax'
 
 import * as Blockly from 'blockly/core'
 import { type EventSyntax } from './SkriptEventBlock'

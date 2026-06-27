@@ -3,7 +3,7 @@
 import * as Blockly from 'blockly/core'
 import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
-import { pte, t } from '@/locales/i18n'
+import { pte } from '@/locales/i18n'
 import FieldDefaultTextInput from '@/blockly/inputs/FieldDefaultTextInput'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'

@@ -1,5 +1,6 @@
 import * as Blockly from 'blockly/core'
 import { FieldGridDropdown } from '@blockly/field-grid-dropdown'
+import { FieldSearchDropdown } from '@/blockly/inputs/FieldSearchDropdown'
 import { t } from '@/locales/i18n'
 
 export type SkriptType = {
@@ -1367,7 +1368,11 @@ export function createTempFieldDropdown(name: string, args: string[]): Blockly.F
 
 export function createFieldDropdown(type: SkriptType, withEmpty: boolean = false): Blockly.Field<string> {
   const options = withEmpty ? buildMenuOptionWithEmpty(type) : buildMenuOptions(type)
-  return options.length < 9 ? new Blockly.FieldDropdown(options) : new FieldGridDropdown(options)
+  return options.length < 9 ? new Blockly.FieldDropdown(options) : new FieldSearchDropdown(options)
+}
+
+export function createFieldSearchDropdown(type: SkriptType, withEmpty: boolean = false): Blockly.Field<string> {
+  return new FieldSearchDropdown(withEmpty ? buildMenuOptionWithEmpty(type) : buildMenuOptions(type))
 }
 
 export function buildMenuOptions(type: SkriptType): Blockly.MenuOption[] {

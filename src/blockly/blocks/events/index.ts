@@ -18,7 +18,6 @@ import { register as register_ExperienceSpawn } from './ExperienceSpawn.ts'
 import { register as register_FireworkExplode } from './FireworkExplode.ts'
 import { register as register_FirstJoin } from './FirstJoin.ts'
 import { register as register_GamemodeChange } from './GamemodeChange.ts'
-import { register as register_Grow } from './Grow.ts'
 import { registerAll as registerAll_SimpleEvents } from './SimpleEvents.ts'
 
 export const BlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
@@ -44,7 +43,6 @@ function register() {
     register_FireworkExplode(),
     register_FirstJoin(),
     register_GamemodeChange(),
-    register_Grow(),
     ...registerAll_SimpleEvents(),
   )
 }
