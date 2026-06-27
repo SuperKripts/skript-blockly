@@ -21,10 +21,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id: string) {
-          if (id.includes('node_modules/blockly/msg')) {
-            return 'lang/blockly'
-          }
-
           if (id.includes('node_modules/blockly') || id.includes('node_modules/@blockly')) {
             return 'blockly'
           }
