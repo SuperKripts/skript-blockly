@@ -6,7 +6,6 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { syntaxlistPlugin } from './syntaxlist-plugin'
 import { blocklyPrunePlugin } from './blockly-prune-plugin'
 import { syntaxMarkerPlugin } from './syntax-marker-plugin'
-import { resolve } from 'node:path'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -21,12 +20,26 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          blockly: ['blockly'],
-          vue: ['vue', 'vue-router', 'pinia', 'vue-i18n'],
-          shiki: ['shiki', resolve(__dirname, 'src/assets/skript-grammar.json')],
-          pinyin: ['pinyin-pro'],
-          // syntaxlist: [resolve(__dirname, 'src/blockly/blocks/syntaxlist.json')],
+        manualChunks(id: string) {
+          if (id.includes('node_modules/blockly/msg')) {
+            return 'lang/blockly'
+          }
+
+          if (id.includes('node_modules/blockly') || id.includes('node_modules/@blockly')) {
+            return 'blockly'
+          }
+
+          if (id.includes('node_modules/vue') || id.includes('node_modules/vue-router') || id.includes('node_modules/pinia') || id.includes('node_modules/vue-i18n')) {
+            return 'vue'
+          }
+
+          if (id.includes('node_modules/shiki') || id.includes('node_modules/@shiki') || id.includes('skript-grammar.json')) {
+            return 'shiki'
+          }
+
+          if (id.includes('node_modules/pinyin-pro')) {
+            return 'pinyin'
+          }
         },
         chunkFileNames(chunkInfo) {
           if (chunkInfo.facadeModuleId?.includes('/locales/')) {
