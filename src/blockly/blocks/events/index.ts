@@ -13,6 +13,12 @@ import { registerAll as registerAll_EntityBlockChange } from './EntityBlockChang
 import { register as register_EntityShootBow } from './EntityShootBow.ts'
 import { register as register_EntityTarget } from './EntityTarget.ts'
 import { register as register_EntityTransform } from './EntityTransform.ts'
+import { register as register_ExperienceChange } from './ExperienceChange.ts'
+import { register as register_ExperienceSpawn } from './ExperienceSpawn.ts'
+import { register as register_FireworkExplode } from './FireworkExplode.ts'
+import { register as register_FirstJoin } from './FirstJoin.ts'
+import { register as register_GamemodeChange } from './GamemodeChange.ts'
+import { register as register_Grow } from './Grow.ts'
 import { registerAll as registerAll_SimpleEvents } from './SimpleEvents.ts'
 
 export const BlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
@@ -33,6 +39,12 @@ function register() {
     register_EntityShootBow(),
     register_EntityTarget(),
     register_EntityTransform(),
+    register_ExperienceChange(),
+    register_ExperienceSpawn(),
+    register_FireworkExplode(),
+    register_FirstJoin(),
+    register_GamemodeChange(),
+    register_Grow(),
     ...registerAll_SimpleEvents(),
   )
 }
