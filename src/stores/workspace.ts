@@ -52,16 +52,6 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         _state.value = '就绪'
       }
     })
-    globalThis.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 's') {
-        e.preventDefault()
-        const ele = document.activeElement as HTMLTextAreaElement
-        if (ele?.classList.contains('blocklyCommentText')) {
-          ele.blur()
-        }
-        saveWorkspaceToBrowser()
-      }
-    })
 
     globalThis.addEventListener('beforeunload', (e) => !_isSaved.value && e.preventDefault())
     loadWorkspaceFromBrowser()
