@@ -71,20 +71,13 @@ export class SkriptCodeGenerator extends Blockly.Generator {
     return comments + code
   }
 
-  // 输入 [a,b,c]
-  // 输出 a b c
-  // 输入 [a, b, [a, b]]
-  // 输出 a b a b
-  // 输入 [a, b, [a, b], c]
-  // 输出 a b a b c
-  // 内部数组中包含空字符串时
-  static codeJoin(...codes: (string | string[])[]): string {
+  static codeJoin(...codes: (string | (string | undefined)[])[]): string {
     return codes
       .map((e) => {
         if (typeof e === 'string') {
           return e
         }
-        return e.includes('') ? '' : e.join(' ')
+        return e.includes(void 0) || e.includes('') ? '' : e.join(' ')
       })
       .filter((e) => e !== '')
       .join(' ')
