@@ -11,9 +11,9 @@ import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBloc
 const blockKey = 'event_beacon_toggle'
 const syntax: EventSyntax = {
   title: 'Beacon Toggle',
-  eventValues: [],
-  cancellable: true,
-  docId: 0,
+  eventValues: ['event-block', 'event-location', 'event-world'],
+  cancellable: false,
+  docId: 13319,
 }
 
 const toggleModes = ['toggle', 'activate', 'deactivate']

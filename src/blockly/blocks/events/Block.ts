@@ -1,29 +1,94 @@
 // 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptEventDefinition, type EventSyntax, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput } from './EventPriority'
 import { pte } from '@/locales/i18n'
+import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
 
 type BlockEventInfo = {
   key: string
-  title: string
   blockKey: string
-  docId?: number
+  syntax: EventSyntax
 }
 
 const BlockEventInfos: BlockEventInfo[] = [
-  { key: 'break', title: 'Break / Mine', blockKey: 'event_break' },
-  { key: 'burn', title: 'Burn', blockKey: 'event_burn' },
-  { key: 'place', title: 'Place', blockKey: 'event_place' },
-  { key: 'fade', title: 'Fade', blockKey: 'event_fade' },
-  { key: 'form', title: 'Form', blockKey: 'event_form' },
-  { key: 'block_drop', title: 'Block Drop', blockKey: 'event_block_drop' },
+  {
+    key: 'break',
+    blockKey: 'event_break',
+    syntax: {
+      title: 'On Break / Mine',
+      docId: 996,
+      eventValues: ['event-block', 'event-entity', 'event-entity', 'event-location', 'event-player', 'event-world', 'future event-block', 'past event-block'],
+      cancellable: true,
+    },
+  },
+  {
+    key: 'burn',
+    blockKey: 'event_burn',
+    syntax: {
+      title: 'On Burn',
+      docId: 997,
+      eventValues: ['event-block', 'event-location', 'event-world'],
+      cancellable: true,
+    },
+  },
+  {
+    key: 'place',
+    blockKey: 'event_place',
+    syntax: {
+      title: 'On Place',
+      docId: 998,
+      eventValues: [
+        'event-block',
+        'event-direction',
+        'event-entity',
+        'event-item stack',
+        'event-location',
+        'event-player',
+        'event-world',
+        'future event-item stack',
+        'past event-block',
+        'past event-item stack',
+      ],
+      cancellable: true,
+    },
+  },
+  {
+    key: 'fade',
+    blockKey: 'event_fade',
+    syntax: {
+      title: 'On Fade',
+      docId: 999,
+      eventValues: ['event-block', 'event-location', 'event-world', 'future event-block', 'past event-block'],
+      cancellable: true,
+    },
+  },
+  {
+    key: 'form',
+    blockKey: 'event_form',
+    syntax: {
+      title: 'On Form',
+      docId: 1000,
+      eventValues: ['event-block', 'event-location', 'event-world', 'past event-block'],
+      cancellable: true,
+    },
+  },
+  {
+    key: 'block_drop',
+    blockKey: 'event_block_drop',
+    syntax: {
+      title: 'On Block Drop',
+      docId: 12314,
+      eventValues: ['event-block', 'event-entities', 'event-item stacks', 'event-location', 'event-player', 'event-world', 'past event-block'],
+      cancellable: true,
+    },
+  },
 ]
 
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return BlockEventInfos.map((info) => {
-    const definition = createSkriptEventDefinition(info.title, info.docId)
+    const definition = createSkriptEventDefinition(info.syntax)
     const mixin: Partial<SkriptBlockDefinition> = {
       initShape_(this: SkriptBlock) {
         const input = this.appendDummyInput()

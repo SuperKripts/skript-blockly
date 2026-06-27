@@ -13,7 +13,7 @@ const syntax: EventSyntax = {
   title: 'Beacon Effect',
   eventValues: [],
   cancellable: true,
-  docId: 0,
+  docId: 13318,
 }
 
 const PotionEffectTypes = ['speed', 'haste', 'resistance', 'jump_boost', 'strength', 'regeneration']

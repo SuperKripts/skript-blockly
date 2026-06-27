@@ -11,9 +11,9 @@ import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBloc
 const blockKey = 'event_attempt_attack'
 const syntax: EventSyntax = {
   title: 'Attempt Attack',
-  eventValues: [],
-  cancellable: true,
-  docId: 0,
+  eventValues: ['event-player', 'event-world'],
+  cancellable: false,
+  docId: 14679,
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
