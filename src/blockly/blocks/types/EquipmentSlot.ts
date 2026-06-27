@@ -38,7 +38,7 @@ export class EquipmentSlotMutator extends SimpleMutator<string> {
   }
 
   getEquipmentSlotDesc(id: string) {
-    return this.presets.find((e) => e.id == id)!.desc
+    return this.presets.find((e) => e.id === id)?.desc ?? ''
   }
 }
 

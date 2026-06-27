@@ -5,7 +5,7 @@ import type { SkriptEventBlock } from './SkriptEventBlock'
 
 export const EVENT_VALUE_BLOCK_TYPE = 'expression_event_value'
 
-export const SuppertedEventValues = [
+export const SupportedEventValues = [
   'event-block',
   'event-location',
   'event-world',
@@ -82,13 +82,13 @@ export const SuppertedEventValues = [
   'event-heal reason',
 ] as const
 
-type EventValue = (typeof SuppertedEventValues)[number]
+type EventValue = (typeof SupportedEventValues)[number]
 
 export function generateEventValueLangKey(eventValue: EventValue) {
   return ('EVENT_VALUE_' + eventValue.replace(/ /g, '_').replace(/event-/g, '')).toUpperCase()
 }
 
-for (const eventValue of SuppertedEventValues) {
+for (const eventValue of SupportedEventValues) {
   if (!Blockly.ContextMenuRegistry.registry.getItem(eventValue)) {
     const eventValueLangKey = generateEventValueLangKey(eventValue)
     Blockly.ContextMenuRegistry.registry.register({

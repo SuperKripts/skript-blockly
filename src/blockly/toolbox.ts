@@ -2,7 +2,7 @@ import * as Blockly from 'blockly/core'
 
 import '@/blockly/config'
 import { eventBlockInfos, typeBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
-import '@/blockly/utils/ToolboxSeach'
+import '@/blockly/utils/ToolboxSearch'
 import { t } from '@/locales/i18n'
 
 function customCss(type: string): Blockly.ToolboxCategory.CssConfig {

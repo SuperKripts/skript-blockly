@@ -125,7 +125,7 @@ skript-blockly/
 │   │   │   └── skripthub.ts  # SkriptHub 风格主题
 │   │   ├── utils/            # 工具函数
 │   │   │   ├── SimpleMutator.ts    # 简单变更器
-│   │   │   └── ToolboxSeach.ts     # 工具箱搜索
+│   │   │   └── ToolboxSearch.ts     # 工具箱搜索
 │   │   ├── config.ts         # Blockly 配置
 │   │   └── toolbox.ts        # 工具箱定义
 │   ├── components/           # Vue 组件
