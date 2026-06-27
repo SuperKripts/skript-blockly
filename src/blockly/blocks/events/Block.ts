@@ -1,7 +1,7 @@
 // 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { createSkriptEventDefinition, type EventSyntax, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput } from './EventPriority'
 import { pte } from '@/locales/i18n'
 
@@ -23,7 +23,7 @@ const BlockEventInfos: BlockEventInfo[] = [
 
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return BlockEventInfos.map((info) => {
-    const definition = createSkriptDefinition({ key: info.key, title: info.title, syntaxType: 'event', docUrl: getSkriptHubDocUrl(info.docId) })
+    const definition = createSkriptEventDefinition(info.title, info.docId)
     const mixin: Partial<SkriptBlockDefinition> = {
       initShape_(this: SkriptBlock) {
         const input = this.appendDummyInput()

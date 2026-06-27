@@ -1,6 +1,7 @@
 import { t } from '@/locales/i18n'
 import * as Blockly from 'blockly/core'
 import CodeGenerator from '@/blockly/generators/skript'
+import type { SkriptEventBlock } from './SkriptEventBlock'
 
 export const EVENT_VALUE_BLOCK_TYPE = 'expression_event_value'
 

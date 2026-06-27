@@ -1,5 +1,4 @@
 import * as Blockly from 'blockly/core'
-import { t } from '@/locales/i18n'
 
 export type SkriptBlockExtraState = Record<string, unknown>
 
@@ -8,7 +7,6 @@ export const SupportedSyntaxTypes = ['event', 'condition', 'effect', 'expression
 export type SyntaxType = (typeof SupportedSyntaxTypes)[number]
 
 export type Syntax = {
-  key: string
   title: string
   syntaxType: SyntaxType
   docUrl: string

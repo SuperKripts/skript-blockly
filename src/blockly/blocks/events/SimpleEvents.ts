@@ -1,9 +1,7 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl } from '../SkriptBlock'
-import type { SkriptBlockDefinition, SkriptBlock } from '../SkriptBlock'
-import { appendEventPriorityInput } from './EventPriority'
+import { registerSimpleEvent } from './SkriptEventBlock'
 
 type SimpleEventInfo = {
   key: string
@@ -117,24 +115,14 @@ const SimpleEventInfos: SimpleEventInfo[] = [
 
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return SimpleEventInfos.map((info) => {
-    const nk = info.key.replace(' ', '_')
-    const definition = createSkriptDefinition({ key: nk, title: info.key, syntaxType: 'event', docUrl: getSkriptHubDocUrl(info.docId) })
-    const mixin: Partial<SkriptBlockDefinition> & Partial<SkriptEventBlock> = {
-      eventValues_: info.event_values,
-      eventCancellable_: info.cancellable,
-      initStyle_(this: SkriptBlock) {
-        appendEventPriorityInput(this)
-        this.appendStatementInput('block')
-        this.setStyle('event')
-      },
-      generateEventCode_() {
-        return `on ${info.code ?? info.key}`
-      },
-    }
-
-    const blockKey = 'event_' + nk
-    Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-    // CodeGenerator.forBlock[blockKey] = createEventCodeGenerator()
-    return { kind: 'block', type: blockKey }
+    return registerSimpleEvent({
+      title: info.key,
+      blockKey: 'event_' + info.key.replace(' ', '_'),
+      docId: info.docId ?? 0,
+      desc: 'EVENT_' + info.key + '_DESC',
+      code: info.code ?? 'on ' + info.key,
+      eventValues: info.event_values ?? [],
+      cancellable: info.cancellable,
+    })
   })
 }

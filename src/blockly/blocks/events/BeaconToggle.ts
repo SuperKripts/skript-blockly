@@ -1,21 +1,25 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createTempFieldDropdown } from '../types/Types'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
+import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
 
-const key = 'beacon_toggle'
-const title = 'Beacon Toggle'
 const blockKey = 'event_beacon_toggle'
-const docId = 0
+const syntax: EventSyntax = {
+  title: 'Beacon Toggle',
+  eventValues: [],
+  cancellable: true,
+  docId: 0,
+}
 
 const toggleModes = ['toggle', 'activate', 'deactivate']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ key, title, syntaxType: 'event', docUrl: getSkriptHubDocUrl(docId) })
+  const definition = createSkriptEventDefinition(syntax)
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_(this: SkriptBlock) {
       const input = this.appendDummyInput()

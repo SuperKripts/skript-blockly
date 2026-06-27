@@ -1,21 +1,25 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { FieldTime } from '@/blockly/inputs/FieldTime'
 import { pte } from '@/locales/i18n'
 import WorldMutator, { worldList, worldName } from '@/blockly/blocks/types/World'
 import type { MutatorExtractValue } from '@/blockly/utils/SimpleMutator'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
+import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
 
-const key = 'at_time'
-const title = 'At Time'
 const blockKey = 'event_at_time'
-const docId = 0
+const syntax: EventSyntax = {
+  title: 'At Time',
+  eventValues: ['event-world'],
+  cancellable: false,
+  docId: 1097,
+}
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ key, title, syntaxType: 'event', docUrl: getSkriptHubDocUrl(docId) })
+  const definition = createSkriptEventDefinition(syntax)
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_(this: SkriptBlock) {
       const input = this.appendDummyInput()

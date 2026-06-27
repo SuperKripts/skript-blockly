@@ -1,21 +1,25 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createFieldDropdown, createTempFieldDropdown } from '../types/Types'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
+import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
 
-const key = 'beacon_effect'
-const title = 'Beacon Effect'
 const blockKey = 'event_beacon_effect'
-const docId = 0
+const syntax: EventSyntax = {
+  title: 'Beacon Effect',
+  eventValues: [],
+  cancellable: true,
+  docId: 0,
+}
 
 const PotionEffectTypes = ['speed', 'haste', 'resistance', 'jump_boost', 'strength', 'regeneration']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ key, title, syntaxType: 'event', docUrl: getSkriptHubDocUrl(docId) })
+  const definition = createSkriptEventDefinition(syntax)
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_(this: SkriptBlock) {
       const input = this.appendDummyInput()
