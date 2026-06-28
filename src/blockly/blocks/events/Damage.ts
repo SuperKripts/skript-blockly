@@ -4,9 +4,10 @@ import * as Blockly from 'blockly/core'
 import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
-import { createFieldDropdown, Entities } from '../types/Types'
+import { createFieldDropdown } from '../types/Types'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
+import { Entities } from '../types/Entities'
 
 const blockKey = 'event_damage'
 const syntax: EventSyntax = {
