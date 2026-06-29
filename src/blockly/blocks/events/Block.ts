@@ -1,10 +1,12 @@
-// 'skript syntax'
+'skript syntax'
 
 import * as Blockly from 'blockly/core'
 import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
+import { createFieldSearchDropdown } from '../types/Types'
+import { BlockDatas } from '../types/Materials'
 
 type BlockEventInfo = {
   key: string
@@ -27,7 +29,7 @@ const BlockEventInfos: BlockEventInfo[] = [
     key: 'burn',
     blockKey: 'event_burn',
     syntax: {
-      title: 'On Burn',
+      title: 'Burn',
       docId: 997,
       eventValues: ['event-block', 'event-location', 'event-world'],
       cancellable: true,
@@ -37,7 +39,7 @@ const BlockEventInfos: BlockEventInfo[] = [
     key: 'place',
     blockKey: 'event_place',
     syntax: {
-      title: 'On Place',
+      title: 'Place',
       docId: 998,
       eventValues: [
         'event-block',
@@ -58,7 +60,7 @@ const BlockEventInfos: BlockEventInfo[] = [
     key: 'fade',
     blockKey: 'event_fade',
     syntax: {
-      title: 'On Fade',
+      title: 'Fade',
       docId: 999,
       eventValues: ['event-block', 'event-location', 'event-world', 'future event-block', 'past event-block'],
       cancellable: true,
@@ -68,7 +70,7 @@ const BlockEventInfos: BlockEventInfo[] = [
     key: 'form',
     blockKey: 'event_form',
     syntax: {
-      title: 'On Form',
+      title: 'Form',
       docId: 1000,
       eventValues: ['event-block', 'event-location', 'event-world', 'past event-block'],
       cancellable: true,
@@ -78,7 +80,7 @@ const BlockEventInfos: BlockEventInfo[] = [
     key: 'block_drop',
     blockKey: 'event_block_drop',
     syntax: {
-      title: 'On Block Drop',
+      title: 'Block Drop',
       docId: 12314,
       eventValues: ['event-block', 'event-entities', 'event-item stacks', 'event-location', 'event-player', 'event-world', 'past event-block'],
       cancellable: true,
@@ -92,8 +94,8 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
     const mixin: Partial<SkriptBlockDefinition> = {
       initShape_(this: SkriptBlock) {
         const input = this.appendDummyInput()
-        pte(info.key.toUpperCase() + '_DESC', {
-          // TODO 方块类型暂未实现
+        pte(info.blockKey.toUpperCase() + '_DESC', {
+          0: () => input.appendField(createFieldSearchDropdown(BlockDatas)),
           default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
         })
         appendEventPriorityInput(this)

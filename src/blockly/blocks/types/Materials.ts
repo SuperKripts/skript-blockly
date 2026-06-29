@@ -3107,3 +3107,5 @@ export const BlockDatas: SkriptType = {
     'zombie wall head',
   ],
 }
+
+export const ItemOrBlock: SkriptType[] = [ItemTypes, BlockDatas]

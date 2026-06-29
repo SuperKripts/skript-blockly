@@ -796,7 +796,13 @@ export function createFieldDropdown(type: SkriptType, withEmpty: boolean = false
   return createFieldSearchDropdown(type, withEmpty)
 }
 
-export function createFieldSearchDropdown(type: SkriptType, withEmpty: boolean = false): Blockly.Field<string> {
+export function createFieldSearchDropdown(type: SkriptType | SkriptType[], withEmpty: boolean = false): Blockly.Field<string> {
+  if (Array.isArray(type)) {
+    const name = type.map((e) => e.name).join('_')
+    const options = type.flatMap((e) => buildMenuOptions(e))
+    options.unshift([t(`TYPE_${name}_EMPTY`.toUpperCase()), ''])
+    return new FieldSearchDropdown(options, undefined, { cacheKey: name })
+  }
   return new FieldSearchDropdown(withEmpty ? buildMenuOptionWithEmpty(type) : buildMenuOptions(type), undefined, { cacheKey: type.name })
 }
 
@@ -805,5 +811,7 @@ export function buildMenuOptions(type: SkriptType): Blockly.MenuOption[] {
 }
 
 export function buildMenuOptionWithEmpty(type: SkriptType): Blockly.MenuOption[] {
-  return [[t(`TYPE_${type.name}_EMPTY`.toUpperCase()), ''], ...buildMenuOptions(type)]
+  const options = buildMenuOptions(type)
+  options.unshift([t(`TYPE_${type.name}_EMPTY`.toUpperCase()), ''])
+  return options
 }

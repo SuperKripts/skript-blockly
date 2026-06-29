@@ -3,6 +3,7 @@ import { register as register_AttemptAttack } from './AttemptAttack.ts'
 import { register as register_AtTime } from './AtTime.ts'
 import { register as register_BeaconEffect } from './BeaconEffect.ts'
 import { register as register_BeaconToggle } from './BeaconToggle.ts'
+import { registerAll as registerAll_Block } from './Block.ts'
 import { register as register_BookEdit } from './BookEdit.ts'
 import { register as register_BookSign } from './BookSign.ts'
 import { register as register_Click } from './Click.ts'
@@ -28,6 +29,7 @@ function register() {
     register_AtTime(),
     register_BeaconEffect(),
     register_BeaconToggle(),
+    ...registerAll_Block(),
     register_BookEdit(),
     register_BookSign(),
     register_Click(),
