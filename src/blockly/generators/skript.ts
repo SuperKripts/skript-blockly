@@ -77,7 +77,7 @@ export class SkriptCodeGenerator extends Blockly.Generator {
         if (typeof e === 'string') {
           return e
         }
-        return e.includes(void 0) || e.includes('') ? '' : e.join(' ')
+        return e.map((s) => s ?? '').includes('') ? '' : e.join(' ')
       })
       .filter((e) => e !== '')
       .join(' ')

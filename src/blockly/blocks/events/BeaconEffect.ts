@@ -30,7 +30,6 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
       })
       appendEventPriorityInput(this)
     },
-    updateShape_() {},
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
   CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {

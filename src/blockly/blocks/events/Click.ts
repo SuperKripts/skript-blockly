@@ -1,14 +1,14 @@
 'skript syntax'
 
-// TODO: 实现 Click 事件
-// 参考 Skript 官方注册:
-// - 事件类: PlayerInteractEvent, PlayerInteractEntityEvent, PlayerInteractAtEntityEvent
-// - 语法:
-//   - "[(right|left)(| |-)][mouse(| |-)]click[ing] [on %-entitydata/itemtype/blockdata%] [(with|using|holding) %-itemtype%]"
-//   - "[(right|left)(| |-)][mouse(| |-)]click[ing] (with|using|holding) %itemtype% on %entitydata/itemtype/blockdata%"
-
 import * as Blockly from 'blockly/core'
-import { registerSimpleEvent, type EventSyntax } from './SkriptEventBlock'
+import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
+import type { SkriptBlock, SkriptBlockDefinition } from '../SkriptBlock'
+import { createFieldDropdown, createTempFieldDropdown, createFieldSearchDropdown } from '../types/Types'
+import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
+import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
+import { pte } from '@/locales/i18n'
+import { BlockDatas, ItemTypes } from '../types/Materials'
+import { Entities } from '../types/Entities'
 
 const blockKey = 'event_click'
 const syntax: EventSyntax = {
@@ -19,5 +19,27 @@ const syntax: EventSyntax = {
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  return registerSimpleEvent({ blockKey, desc: 'EVENT_CLICK_DESC', code: 'on click', ...syntax })
+  const definition = createSkriptEventDefinition(syntax)
+  const mixin: Partial<SkriptBlockDefinition> = {
+    initShape_(this: SkriptBlock) {
+      const input = this.appendDummyInput()
+      pte('EVENT_CLICK_DESC', {
+        0: () => input.appendField(createTempFieldDropdown('click_type', ['', 'left', 'right']), 'click_type'),
+        1: () => input.appendField(createFieldSearchDropdown([Entities, ItemTypes, BlockDatas], true), 'click_target'),
+        2: () => input.appendField(createFieldDropdown(ItemTypes, true), 'used_item'),
+        default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
+      })
+      appendEventPriorityInput(this)
+    },
+  }
+  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
+    const clickType = block.getFieldValue('click_type')
+    const clickTarget = block.getFieldValue('click_target')
+    const usedItem = block.getFieldValue('used_item')
+    const statementMembers = generate.statementToCode(block, 'block')
+    const code = SkriptCodeGenerator.codeJoin('on', clickType, 'click', ['on', clickTarget], ['with', usedItem], generateCodeForEventPriority(block))
+    return `${code}: \n${statementMembers}`
+  }
+  return { kind: 'block', type: blockKey }
 }

@@ -35,10 +35,8 @@ export const pte = (msg: string, handlers: TemplateHandlers) => {
   parts.forEach((v, i) => {
     if (typeof v === 'string') {
       handlers.default?.({ msg: v, index: i })
-    } else if (v === 0) {
-      handlers[0]?.()
-    } else if (v === 1) {
-      handlers[1]?.()
+    } else {
+      handlers[v]?.()
     }
   })
 }

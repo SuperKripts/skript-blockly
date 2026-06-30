@@ -99,7 +99,6 @@ function registerEntityChangeBlock(): Blockly.utils.toolbox.BlockInfo {
       })
       appendEventPriorityInput(this)
     },
-    updateShape_() {},
   }
 
   Blockly.Blocks[blockKey_entity_change_block] = Object.assign(definition, mixin)

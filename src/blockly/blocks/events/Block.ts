@@ -2,22 +2,23 @@
 
 import * as Blockly from 'blockly/core'
 import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput } from './EventPriority'
+import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
-import { createFieldSearchDropdown } from '../types/Types'
+import { createFieldDropdown } from '../types/Types'
+import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { BlockDatas } from '../types/Materials'
 
 type BlockEventInfo = {
-  key: string
   blockKey: string
+  code: string
   syntax: EventSyntax
 }
 
 const BlockEventInfos: BlockEventInfo[] = [
   {
-    key: 'break',
     blockKey: 'event_break',
+    code: 'break',
     syntax: {
       title: 'On Break / Mine',
       docId: 996,
@@ -26,8 +27,8 @@ const BlockEventInfos: BlockEventInfo[] = [
     },
   },
   {
-    key: 'burn',
     blockKey: 'event_burn',
+    code: 'burn',
     syntax: {
       title: 'Burn',
       docId: 997,
@@ -36,8 +37,8 @@ const BlockEventInfos: BlockEventInfo[] = [
     },
   },
   {
-    key: 'place',
     blockKey: 'event_place',
+    code: 'place',
     syntax: {
       title: 'Place',
       docId: 998,
@@ -57,8 +58,8 @@ const BlockEventInfos: BlockEventInfo[] = [
     },
   },
   {
-    key: 'fade',
     blockKey: 'event_fade',
+    code: 'fade',
     syntax: {
       title: 'Fade',
       docId: 999,
@@ -67,8 +68,8 @@ const BlockEventInfos: BlockEventInfo[] = [
     },
   },
   {
-    key: 'form',
     blockKey: 'event_form',
+    code: 'form',
     syntax: {
       title: 'Form',
       docId: 1000,
@@ -77,8 +78,8 @@ const BlockEventInfos: BlockEventInfo[] = [
     },
   },
   {
-    key: 'block_drop',
     blockKey: 'event_block_drop',
+    code: 'block drop',
     syntax: {
       title: 'Block Drop',
       docId: 12314,
@@ -95,15 +96,19 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
       initShape_(this: SkriptBlock) {
         const input = this.appendDummyInput()
         pte(info.blockKey.toUpperCase() + '_DESC', {
-          0: () => input.appendField(createFieldSearchDropdown(BlockDatas)),
+          0: () => input.appendField(createFieldDropdown(BlockDatas, true), 'block'),
           default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
         })
         appendEventPriorityInput(this)
       },
-      updateShape_() {},
     }
 
     Blockly.Blocks[info.blockKey] = Object.assign(definition, mixin)
+    CodeGenerator.forBlock[info.blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
+      const statementMembers = generate.statementToCode(block, 'block')
+      const code = SkriptCodeGenerator.codeJoin('on', info.code, ['of', block.getFieldValue('block')], generateCodeForEventPriority(block))
+      return `${code}: \n${statementMembers}`
+    }
     return { kind: 'block', type: info.blockKey }
   })
 }

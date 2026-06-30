@@ -50,7 +50,6 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
         })
         appendEventPriorityInput(this)
       },
-      updateShape_() {},
     }
 
     Blockly.Blocks[info.blockKey] = Object.assign(definition, mixin)
