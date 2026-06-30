@@ -806,12 +806,23 @@ export function createFieldSearchDropdown(type: SkriptType | SkriptType[], withE
   return new FieldSearchDropdown(withEmpty ? buildMenuOptionWithEmpty(type) : buildMenuOptions(type), undefined, { cacheKey: type.name })
 }
 
+const cache = new Map<string, Blockly.MenuOption[]>()
+const cacheWithEmpty = new Map<string, Blockly.MenuOption[]>()
+
 export function buildMenuOptions(type: SkriptType): Blockly.MenuOption[] {
-  return type.options.map((e) => [t(`TYPE_${type.name}_${e.replace(/[ -]/g, '_')}`.toUpperCase()), e])
+  if (cache.has(type.name)) {
+    return cache.get(type.name)!
+  }
+  const options = type.options.map((e) => [t(`TYPE_${type.name}_${e.replace(/[ -]/g, '_')}`.toUpperCase()), e] as Blockly.MenuOption)
+  cache.set(type.name, options)
+  return options
 }
 
 export function buildMenuOptionWithEmpty(type: SkriptType): Blockly.MenuOption[] {
+  if (cacheWithEmpty.has(type.name)) {
+    return cacheWithEmpty.get(type.name)!
+  }
   const options = buildMenuOptions(type)
-  options.unshift([t(`TYPE_${type.name}_EMPTY`.toUpperCase()), ''])
+  cacheWithEmpty.set(type.name, [[t(`TYPE_${type.name}_EMPTY`.toUpperCase()), ''], ...options])
   return options
 }

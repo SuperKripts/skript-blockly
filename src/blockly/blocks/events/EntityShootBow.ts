@@ -23,7 +23,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     initShape_(this: SkriptBlock) {
       const input = this.appendDummyInput()
       pte('EVENT_ENTITY_SHOOT_BOW_DESC', {
-        0: () => input.appendField(createFieldDropdown(Entities), 'entity'),
+        0: () => input.appendField(createFieldDropdown(Entities, true), 'entity'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
       appendEventPriorityInput(this)

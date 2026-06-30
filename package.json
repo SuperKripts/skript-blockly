@@ -16,6 +16,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@blockly/continuous-toolbox": "^7.0.9",
     "@blockly/field-angle": "^6.0.9",
     "@blockly/field-bitmap": "^6.0.9",
     "@blockly/field-colour": "^6.0.12",
