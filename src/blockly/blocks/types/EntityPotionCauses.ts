@@ -1,0 +1,32 @@
+import type { SkriptType } from './Types'
+
+export const EntityPotionCauses: SkriptType = {
+  name: 'entity_potion_cause',
+  options: [
+    'area effect cloud',
+    'arrow',
+    'attack',
+    'axolotl',
+    'warden',
+    'beacon',
+    'command',
+    'conduit',
+    'conversion',
+    'death',
+    'dolphin',
+    'expiration',
+    'food',
+    'illusion',
+    'milk',
+    'plugin',
+    'potion drink',
+    'potion splash',
+    'spider spawn',
+    'totem',
+    'turtle helmet',
+    'unknown',
+    'villager trade',
+    'patrol captain',
+    'wither rose',
+  ],
+}
