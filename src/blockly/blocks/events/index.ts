@@ -26,6 +26,7 @@ import { register as register_Leash } from './Leash.ts'
 import { register as register_LevelChange } from './LevelChange.ts'
 import { register as register_Move } from './Move.ts'
 import { register as register_MoveOn } from './MoveOn.ts'
+import { register as register_Periodical } from './Periodical.ts'
 import { register as register_PlantGrowth } from './PlantGrowth.ts'
 import { register as register_PlayerArmorChange } from './PlayerArmorChange.ts'
 import { register as register_PlayerChunkEnter } from './PlayerChunkEnter.ts'
@@ -74,6 +75,7 @@ function register() {
     register_LevelChange(),
     register_Move(),
     register_MoveOn(),
+    register_Periodical(),
     register_PlantGrowth(),
     register_PlayerArmorChange(),
     register_PlayerChunkEnter(),
