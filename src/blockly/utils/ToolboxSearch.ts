@@ -141,7 +141,7 @@ Blockly.ShortcutRegistry.registry.register(
   {
     name: 'ToolboxSearch',
     keyCodes: [ctrlF, metaF],
-    callback(workspace: Blockly.WorkspaceSvg, e: Event, shortcut: Blockly.ShortcutRegistry.KeyboardShortcut, scope: Blockly.ContextMenuRegistry.Scope) {
+    callback(workspace: Blockly.WorkspaceSvg, e: Event, _shortcut: Blockly.ShortcutRegistry.KeyboardShortcut, _scope: Blockly.ContextMenuRegistry.Scope) {
       e.preventDefault()
       e.stopPropagation()
 
