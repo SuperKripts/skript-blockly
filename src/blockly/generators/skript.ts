@@ -88,7 +88,7 @@ export class SkriptCodeGenerator extends Blockly.Generator {
       return ''
     }
     if (codes.length == 1) {
-      return quote ? `"${codes[0]!}"` : codes[0]!
+      return quote ? `"${codes[0]}"` : codes[0]
     }
 
     const lastIndex = codes.length - 1

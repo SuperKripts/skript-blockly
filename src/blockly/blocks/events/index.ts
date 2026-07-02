@@ -24,9 +24,24 @@ import { register as register_Heal } from './Heal.ts'
 import { registerAll as registerAll_Item } from './Item.ts'
 import { register as register_Leash } from './Leash.ts'
 import { register as register_LevelChange } from './LevelChange.ts'
+import { register as register_Move } from './Move.ts'
 import { register as register_MoveOn } from './MoveOn.ts'
-import { register as register_MoveRotate } from './MoveRotate.ts'
+import { register as register_PlantGrowth } from './PlantGrowth.ts'
+import { register as register_PlayerArmorChange } from './PlayerArmorChange.ts'
+import { register as register_PlayerChunkEnter } from './PlayerChunkEnter.ts'
+import { register as register_PlayerCommandSend } from './PlayerCommandSend.ts'
+import { register as register_Portal } from './Portal.ts'
+import { register as register_PressurePlate } from './PressurePlate.ts'
+import { register as register_RealTime } from './RealTime.ts'
+import { register as register_ResourcePackResponse } from './ResourcePackResponse.ts'
+import { register as register_Script } from './Script.ts'
 import { registerAll as registerAll_SimpleEvents } from './SimpleEvents.ts'
+import { register as register_Skript } from './Skript.ts'
+import { register as register_Spectate } from './Spectate.ts'
+import { register as register_Teleport } from './Teleport.ts'
+import { register as register_VehicleCollision } from './VehicleCollision.ts'
+import { register as register_WeatherChange } from './WeatherChange.ts'
+import { registerAll as registerAll_World } from './World.ts'
 
 export const BlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
 
@@ -57,9 +72,24 @@ function register() {
     ...registerAll_Item(),
     register_Leash(),
     register_LevelChange(),
+    register_Move(),
     register_MoveOn(),
-    register_MoveRotate(),
+    register_PlantGrowth(),
+    register_PlayerArmorChange(),
+    register_PlayerChunkEnter(),
+    register_PlayerCommandSend(),
+    register_Portal(),
+    register_PressurePlate(),
+    register_RealTime(),
+    register_ResourcePackResponse(),
+    register_Script(),
     ...registerAll_SimpleEvents(),
+    register_Skript(),
+    register_Spectate(),
+    register_Teleport(),
+    register_VehicleCollision(),
+    register_WeatherChange(),
+    ...registerAll_World(),
   )
 }
 
