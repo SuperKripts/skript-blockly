@@ -19,6 +19,13 @@ import { register as register_ExperienceSpawn } from './ExperienceSpawn.ts'
 import { register as register_FireworkExplode } from './FireworkExplode.ts'
 import { register as register_FirstJoin } from './FirstJoin.ts'
 import { register as register_GamemodeChange } from './GamemodeChange.ts'
+import { register as register_HarvestBlock } from './HarvestBlock.ts'
+import { register as register_Heal } from './Heal.ts'
+import { registerAll as registerAll_Item } from './Item.ts'
+import { register as register_Leash } from './Leash.ts'
+import { register as register_LevelChange } from './LevelChange.ts'
+import { register as register_MoveOn } from './MoveOn.ts'
+import { register as register_MoveRotate } from './MoveRotate.ts'
 import { registerAll as registerAll_SimpleEvents } from './SimpleEvents.ts'
 
 export const BlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
@@ -45,6 +52,13 @@ function register() {
     register_FireworkExplode(),
     register_FirstJoin(),
     register_GamemodeChange(),
+    register_HarvestBlock(),
+    register_Heal(),
+    ...registerAll_Item(),
+    register_Leash(),
+    register_LevelChange(),
+    register_MoveOn(),
+    register_MoveRotate(),
     ...registerAll_SimpleEvents(),
   )
 }
