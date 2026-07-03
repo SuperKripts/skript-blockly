@@ -171,7 +171,7 @@ export const Types: SkriptType = {
 }
 
 export function createTempFieldDropdown(name: string, args: string[]): Blockly.Field<string> {
-  const options = args.map((e): Blockly.MenuOption => [t(`FIELD_OPTION_${name}_${e == '' ? 'DEFAULT' : e.replace(/[ -]/g, '_')}`.toUpperCase()), e])
+  const options = args.map((e): Blockly.MenuOption => [t(`FIELD_OPTION_${name}_${e == '' ? 'DEFAULT' : e.replace(/[ '-]/g, '_')}`.toUpperCase()), e])
   return args.length < 9 ? new Blockly.FieldDropdown(options) : new FieldGridDropdown(options)
 }
 
@@ -198,11 +198,13 @@ class DropdownCache {
   }
 
   private getLangKey(name: string, value: string) {
-    return `TYPE_${name}_${value.replace(/[ -]/g, '_')}`.toUpperCase()
+    return `TYPE_${name}_${value.replace(/[ '-]/g, '_')}`.toUpperCase()
   }
 
   private buildOption(name: string, value: string): Blockly.MenuOption {
-    return [t(this.getLangKey(name, value)), value]
+    const langKey = this.getLangKey(name, value)
+    const translated = t(langKey)
+    return [translated, value]
   }
 
   private buildOptions(type: SkriptType | SkriptTypes): Blockly.MenuOption[] {

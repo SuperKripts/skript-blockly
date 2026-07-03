@@ -136,7 +136,10 @@ Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM, SearchToolboxCateg
 const ctrlF = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.F, [Blockly.utils.KeyCodes.CTRL])
 const metaF = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.F, [Blockly.utils.KeyCodes.META])
 
-Blockly.ShortcutRegistry.registry.unregister('ToolboxSearch')
+if (Blockly.ShortcutRegistry.registry.getKeyCodesByShortcutName('ToolboxSearch').length > 0) {
+  Blockly.ShortcutRegistry.registry.unregister('ToolboxSearch')
+}
+
 Blockly.ShortcutRegistry.registry.register(
   {
     name: 'ToolboxSearch',

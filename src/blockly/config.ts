@@ -11,7 +11,10 @@ if (!Blockly.ContextMenuRegistry.registry.getItem('commentDuplicate')) {
 const ctrlS = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.S, [Blockly.utils.KeyCodes.CTRL])
 const metaS = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.S, [Blockly.utils.KeyCodes.META])
 
-Blockly.ShortcutRegistry.registry.unregister('SaveToBrowser')
+if (Blockly.ShortcutRegistry.registry.getKeyCodesByShortcutName('SaveToBrowser').length > 0) {
+  Blockly.ShortcutRegistry.registry.unregister('SaveToBrowser')
+}
+
 Blockly.ShortcutRegistry.registry.register(
   {
     name: 'SaveToBrowser',
