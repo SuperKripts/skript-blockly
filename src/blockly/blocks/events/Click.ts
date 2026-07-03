@@ -3,12 +3,11 @@
 import * as Blockly from 'blockly/core'
 import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
 import type { SkriptBlock, SkriptBlockDefinition } from '../SkriptBlock'
-import { createFieldDropdown, createTempFieldDropdown, createFieldSearchDropdown } from '../types/Types'
+import { createFieldDropdown, createTempFieldDropdown, createFieldSearchDropdown, EntitiesItemBlock } from '../types/Types'
 import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { pte } from '@/locales/i18n'
-import { BlockDatas, ItemTypes } from '../types/Materials'
-import { Entities } from '../types/Entities'
+import { ItemTypes } from '../types/Materials'
 
 const blockKey = 'event_click'
 const syntax: EventSyntax = {
@@ -25,7 +24,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
       const input = this.appendDummyInput()
       pte('EVENT_CLICK_DESC', {
         0: () => input.appendField(createTempFieldDropdown('click_type', ['', 'left', 'right']), 'click_type'),
-        1: () => input.appendField(createFieldSearchDropdown([Entities, ItemTypes, BlockDatas], true), 'click_target'),
+        1: () => input.appendField(createFieldSearchDropdown(EntitiesItemBlock, true), 'click_target'),
         2: () => input.appendField(createFieldDropdown(ItemTypes, true), 'used_item'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
