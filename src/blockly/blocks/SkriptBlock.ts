@@ -37,6 +37,7 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
     init(this: SkriptBlock) {
       this.extra_ = {}
       this.initShape_()
+      this.setStyle(syntax.syntaxType)
       this.initStyle_()
       this.setTooltip(syntax.title)
       this.setHelpUrl(syntax.docUrl)
@@ -52,7 +53,6 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
     },
     initShape_(this: SkriptBlock) {},
     initStyle_(this: SkriptBlock) {
-      this.setStyle(syntax.syntaxType)
       switch (syntax.syntaxType) {
         case 'event':
           this.appendStatementInput('block')

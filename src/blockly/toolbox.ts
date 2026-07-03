@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 
 import '@/blockly/config'
-import { eventBlockInfos, typeBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
+import { eventBlockInfos, structureBlockInfos, typeBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSearch'
 import { t } from '@/locales/i18n'
 
@@ -90,7 +90,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         kind: 'category',
         name: t('SYNTAX_TYPE_STRUCTURE'),
         cssconfig: customCss('structure'),
-        contents: [],
+        contents: structureBlockInfos,
       },
       // {
       //   kind: 'category',

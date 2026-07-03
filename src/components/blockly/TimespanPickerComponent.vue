@@ -82,7 +82,6 @@ function parseValue(value: string) {
 
 parseValue(props.value)
 
-// 计算显示值：数量1显示"a"，>1显示数字，forever显示"forever"
 const displayValue = computed(() => {
   if (isForever.value) return 'forever'
   const parts: string[] = []
