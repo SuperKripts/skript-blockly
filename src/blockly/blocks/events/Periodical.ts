@@ -56,9 +56,9 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
     const skriptBlock = block as SkriptBlock
     const timespan = block.getFieldValue('timespan')
-    const worlds = skriptBlock.extra_.worlds as MutatorExtractValue<string>[]
+    const worlds = (skriptBlock.extra_.worlds as MutatorExtractValue<string>[]) ?? []
     const statementMembers = generate.statementToCode(block, 'block')
-    const code = SkriptCodeGenerator.codeJoin('every', timespan, worlds.length > 0 ? ['in', worldList(worlds)] : '', generateCodeForEventPriority(block))
+    const code = SkriptCodeGenerator.codeJoin('every', timespan, ['in', worldList(worlds)], generateCodeForEventPriority(block))
     return `${code}: \n${statementMembers}`
   }
 
