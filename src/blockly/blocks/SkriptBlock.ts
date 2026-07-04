@@ -57,6 +57,13 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
         case 'event':
           this.appendStatementInput('block')
           break
+        case 'effect':
+          this.setPreviousStatement(true, null)
+          this.setNextStatement(true, null)
+          break
+        case 'type':
+          this.setOutput(true, null)
+          break
         default:
           break
       }

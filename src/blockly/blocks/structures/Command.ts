@@ -1,6 +1,9 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-export function register(): Blockly.utils.toolbox.BlockInfo {
-  return { type: 'block', kind: 'command' }
+
+const blockKey = 'structure_command'
+
+function register(): Blockly.utils.toolbox.BlockInfo {
+  return { kind: 'block', type: blockKey }
 }

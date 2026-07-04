@@ -347,6 +347,9 @@ export const EVENT_VALUE_PAST_INPUT_KEYS = '事件中变更前的玩家输入按
 export const EVENT_VALUE_EQUIPMENT_SLOT = '事件中的装备槽'
 export const EVENT_VALUE_HEAL_REASON = '事件中的生命恢复原因'
 
+// Effect Description
+export const EFFECT_DELAY_DESC = '等待 %0'
+
 // Field Option
 export const FIELD_OPTION_EVENT_SERVER_STARTSTOP_START = '启动'
 export const FIELD_OPTION_EVENT_SERVER_STARTSTOP_STOP = '停止'
