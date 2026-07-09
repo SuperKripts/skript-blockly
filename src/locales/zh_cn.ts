@@ -349,6 +349,7 @@ export const EVENT_VALUE_HEAL_REASON = '事件中的生命恢复原因'
 
 // Effect Description
 export const EFFECT_DELAY_DESC = '等待 %0'
+export const EFFECT_APPLY_BONE_MEAL_DESC = '对 %1 施用 %0 骨粉'
 
 // Field Option
 export const FIELD_OPTION_EVENT_SERVER_STARTSTOP_START = '启动'

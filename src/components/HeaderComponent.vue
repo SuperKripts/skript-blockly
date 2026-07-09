@@ -4,18 +4,16 @@ import SelectComponent from '@/components/controls/SelectComponent.vue'
 import ButtonComponent from '@/components/controls/ButtonComponent.vue'
 import ContentMenuComponent from '@/components/controls/ContentMenuComponent.vue'
 import CardComponent from '@/components/controls/CardComponent.vue'
+import CodePreviewComponent from '@/components/controls/CodePreviewComponent.vue'
 import { useWorkspaceStore } from '@/stores/workspace'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import highlight from '@/skript/highlight'
-import { useThemeStore } from '@/stores/theme'
 
 const selectWorkspace = ref<HTMLDialogElement>()
 const generateCode = ref<HTMLDialogElement>()
 const mobileMenu = ref<HTMLDivElement>()
 const mobileMenuOpen = ref(false)
 const ws = useWorkspaceStore()
-const ts = useThemeStore()
 const { t } = useI18n()
 
 const saveMenu = ref<InstanceType<typeof ContentMenuComponent>>()
@@ -204,9 +202,7 @@ function closeMobileMenu() {
           </ButtonComponent>
         </template>
         <template #default>
-          <div class="code_view"
-            v-html="highlight.codeToHtml(ws.code, { lang: 'Skript', theme: ts.isDark ? 'github-dark-default' : 'github-light-default' })">
-          </div>
+          <CodePreviewComponent />
         </template>
       </CardComponent>
     </dialog>
@@ -261,10 +257,6 @@ dialog[open] {
   width: 70%;
 }
 
-.code_view {
-  height: 80vh;
-}
-
 .select_workspace_dialog :deep(.card) {
   width: 500px;
 }
@@ -307,7 +299,6 @@ dialog[open] {
   padding: 16px 0;
 }
 
-/* 汉堡菜单按钮 */
 .hamburger {
   display: none;
   background: none;
@@ -324,7 +315,6 @@ dialog[open] {
   background: var(--bg-primary);
 }
 
-/* 移动端抽屉样式 */
 .mobile-overlay {
   position: fixed;
   top: 0;
@@ -418,7 +408,6 @@ dialog[open] {
   text-decoration: none;
 }
 
-/* 媒体查询 - 移动端适配 */
 @media (max-width: 768px) {
   .desktop-toolbar {
     display: none;

@@ -1,4 +1,4 @@
-import { createHighlighterCore, type LanguageRegistration } from 'shiki/core'
+import { createHighlighterCore, type LanguageRegistration, type ShikiTransformer } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import SkriptGrammar from '@/assets/skript-grammar.json'
 import Theme from 'shiki/themes/github-light-default.mjs'
@@ -10,6 +10,16 @@ async function highlighter() {
     themes: [Theme, DarkTheme],
     engine: createJavaScriptRegexEngine(),
   })
+}
+
+export function lineNumbersTransformer(): ShikiTransformer {
+  return {
+    name: 'line-numbers',
+    line(node, line) {
+      node.properties = node.properties || {}
+      node.properties['data-line'] = String(line)
+    },
+  }
 }
 
 export default await highlighter()

@@ -2,8 +2,6 @@ import * as Blockly from 'blockly/core'
 import { FieldGridDropdown } from '@blockly/field-grid-dropdown'
 import { FieldSearchDropdown } from '@/blockly/inputs/FieldSearchDropdown'
 import { t } from '@/locales/i18n'
-import { Entities } from './Entities'
-import { BlockDatas, ItemTypes } from './Materials'
 
 export type SkriptType = {
   name: string
@@ -22,11 +20,6 @@ export function isSkriptTypes(type: SkriptType | SkriptTypes): type is SkriptTyp
 export const VisualEffects: SkriptType = {
   name: 'visual_effect',
   options: ['area expression', 'effect', 'entityeffect', 'particle'],
-}
-
-export const EntitiesItemBlock: SkriptTypes = {
-  name: 'entities_item_block',
-  types: [Entities, ItemTypes, BlockDatas],
 }
 
 export const Types: SkriptType = {
