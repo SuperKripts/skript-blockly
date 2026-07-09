@@ -67,14 +67,13 @@ function registerBooleanType(blockKey: string, title: string, fieldName: string)
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return [
     registerNumberType('type_number', 'Number', 'number', 0),
-    registerNumberType('type_integer', 'Integer', 'integer', 0),
-    registerNumberType('type_long', 'Long', 'long', 0),
-    registerNumberType('type_short', 'Short', 'short', 0),
-    registerNumberType('type_byte', 'Byte', 'byte', 0),
-    registerNumberType('type_double', 'Double', 'double', 0),
-    registerNumberType('type_float', 'Float', 'float', 0),
+    // registerNumberType('type_integer', 'Integer', 'integer', 0),
+    // registerNumberType('type_long', 'Long', 'long', 0),
+    // registerNumberType('type_short', 'Short', 'short', 0),
+    // registerNumberType('type_byte', 'Byte', 'byte', 0),
+    // registerNumberType('type_double', 'Double', 'double', 0),
+    // registerNumberType('type_float', 'Float', 'float', 0),
     registerStringType('type_string', 'String', 'string', ''),
-    registerStringType('type_object', 'Object', 'object', ''),
     registerBooleanType('type_boolean', 'Boolean', 'boolean'),
   ]
 }

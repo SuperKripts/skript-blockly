@@ -18,26 +18,3 @@ const ts = useThemeStore()
   height: 80vh;
 }
 </style>
-
-<style>
-.code_view pre {
-  counter-reset: line;
-}
-
-.code_view .line {
-  position: relative;
-  padding-left: 3.5em;
-  min-height: 1.2em;
-}
-
-.code_view .line::before {
-  content: attr(data-line);
-  position: absolute;
-  left: 0.5em;
-  color: var(--text-secondary, #888);
-  user-select: none;
-  text-align: right;
-  width: 2em;
-  font-size: 10px;
-}
-</style>
