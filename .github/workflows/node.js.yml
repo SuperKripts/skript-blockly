@@ -19,10 +19,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - run: npm install #
+      - run: npm install
       - run: npm run build
 
       - name: Publish
+        if: github.event_name == 'push'
         env:
           TARGET_REPO_URL: https://x-access-token:${{ secrets.MSG_DW_TOKEN }}@github.com/SuperKripts/superkripts.github.io.git
           TARGET_BRANCH: master
