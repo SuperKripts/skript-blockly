@@ -1,4 +1,4 @@
-import { type SkriptType } from './Types.ts'
+import { type SkriptType, type SkriptTypes } from './Types'
 
 export const ItemTypes: SkriptType = {
   name: 'item',
@@ -3108,4 +3108,7 @@ export const BlockDatas: SkriptType = {
   ],
 }
 
-export const ItemOrBlock: SkriptType[] = [ItemTypes, BlockDatas]
+export const ItemOrBlock: SkriptTypes = {
+  name: 'item_or_block',
+  types: [ItemTypes, BlockDatas],
+}

@@ -48,7 +48,7 @@ export const SyntaxRegistry = {
 }
 
 async function registerSyntax() {
-  const syntaxlistData = await import('@/assets/syntaxlist.json').then((e) => e.default as SyntaxList)
+  const syntaxlistData = await import('@/assets/syntaxlist.json').then((e) => e.default as unknown as SyntaxList)
   // console.log(syntaxlistData.keyMap)
   // console.log(syntaxlistData.syntaxlist)
   // console.log(syntaxlistData.addonMap)
