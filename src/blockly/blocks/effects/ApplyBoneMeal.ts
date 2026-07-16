@@ -30,18 +30,6 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   }
   return {
     kind: 'block',
-    blockxml: `
-<block type="effect_apply_bone_meal">
-  <value name="amount">
-    <shadow type="type_number">
-      <field name="number">1</field>
-    </shadow>
-  </value>
-  <value name="blocks">
-    <shadow type="type_block">
-    </shadow>
-  </value>
-</block>
-`,
+    blockxml: `<block type="effect_apply_bone_meal"><value name="amount"><shadow type="type_number"><field name="number">1</field></shadow></value><value name="blocks"><shadow type="type_block"></shadow></value></block>`,
   }
 }

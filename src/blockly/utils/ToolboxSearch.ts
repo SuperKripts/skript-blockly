@@ -17,18 +17,27 @@ export class BlockSearcher {
     const dataList: BlockData[] = []
     const tempWorkspace = new Blockly.Workspace()
     for (const blockInfo of blockInfos) {
-      const type = blockInfo.type
-      if (type) {
-        const block = tempWorkspace.newBlock(type)
-        const inputs: string[] = []
-        for (const input of block.inputList) {
-          for (const field of input.fieldRow) {
-            inputs.push(field.getText())
-          }
-        }
-        dataList.push({ type, inputs, inputsPinyin: inputs.map((s) => pinyin(s, { toneType: 'none', separator: '' })), blockInfo })
+      let block: Blockly.Block
+      const blockxml = blockInfo.blockxml
+      let type = blockInfo.type
+      if (blockxml) {
+        const xml = typeof blockxml === 'string' ? Blockly.utils.xml.textToDom(blockxml) : (blockxml as Element)
+        block = Blockly.Xml.domToBlockInternal(xml, tempWorkspace)
+        type = xml.getAttribute('type')!
+      } else if (type) {
+        block = tempWorkspace.newBlock(type)
+      } else {
+        continue
       }
+      const inputs: string[] = []
+      for (const input of block.inputList) {
+        for (const field of input.fieldRow) {
+          inputs.push(field.getText())
+        }
+      }
+      dataList.push({ type, inputs, inputsPinyin: inputs.map((s) => pinyin(s, { toneType: 'none', separator: '' })), blockInfo })
     }
+    tempWorkspace.dispose()
 
     this.fuse = new Fuse(dataList, {
       keys: ['type', 'inputs', 'inputsPinyin'],
@@ -58,7 +67,6 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
 
   constructor(categoryDef: Blockly.utils.toolbox.StaticCategoryInfo, parentToolbox: Blockly.IToolbox, opt_parent?: Blockly.ICollapsibleToolboxItem) {
     super(categoryDef, parentToolbox, opt_parent)
-
     this._searchInput = document.createElement('input')
     this._searchInput.id = SearchToolboxCategory.SEARCH_INPUT_ID
     this._searchInput.type = 'search'
@@ -67,7 +75,7 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
   override init(): void {
     super.init()
 
-    const seen = new Set<string>()
+    const seen = new Set<string | Node>()
     const items: Blockly.utils.toolbox.BlockInfo[] = []
 
     function _push(toolboxItemInfos?: Blockly.utils.toolbox.ToolboxItemInfo[]) {
@@ -75,17 +83,24 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
         if ('contents' in toolboxItemInfo) {
           _push(toolboxItemInfo.contents)
         } else if (toolboxItemInfo.kind.toLowerCase() === 'block') {
-          if ('type' in toolboxItemInfo && toolboxItemInfo.type) {
-            if (!seen.has(toolboxItemInfo.type)) {
-              seen.add(toolboxItemInfo.type)
-              items.push(toolboxItemInfo)
-            }
+          let seenValue
+          if ('blockxml' in toolboxItemInfo && toolboxItemInfo.blockxml) {
+            seenValue = toolboxItemInfo.blockxml
+          } else if ('type' in toolboxItemInfo && toolboxItemInfo.type) {
+            seenValue = toolboxItemInfo.type
+          } else {
+            continue
+          }
+          if (!seen.has(seenValue)) {
+            seen.add(seenValue)
+            items.push(toolboxItemInfo)
           }
         }
       }
     }
 
     _push(this.workspace_.options.languageTree?.contents)
+
     this._searcher = new BlockSearcher(items)
 
     this._searchInput.placeholder = this.name_ ?? 'Search'
