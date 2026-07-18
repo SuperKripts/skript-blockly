@@ -1,12 +1,30 @@
 <script setup lang="ts">
-const buildTime = __BUILD_TIME__
-const processEnv = __PROCESS_ENV__
-console.log(processEnv);
+const version = __VERSION__;
+const sha = __GITHUB_SHA__;
+const gitBranch = __GITHUB_REF_NAME__;
+const triggeringActor = __GITHUB_TRIGGERING_ACTOR__;
+const runNumber = __GITHUB_RUN_NUMBER__;
+const buildTime = __BUILD_TIME__;
+const repoUrl = __GITHUB_SERVER_URL__ + '/' + __GITHUB_REPOSITORY__;
 
+const formattedTime = new Date(buildTime).toLocaleString('zh-CN', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false,
+});
+
+const buildInfo = `${version} · ${sha} (${gitBranch})
+Triggered by: ${triggeringActor} · Run #${runNumber}
+Build At: ${formattedTime}
+Repository: ${repoUrl}`;
 </script>
 
 <template>
-  <div class="logo" :title="`Build: ${buildTime}, ${processEnv}`">
+  <div class="logo" :title="`Build: ${buildInfo}`">
     <div class="logo-icon">
       <i class="fas fa-cubes"></i>
     </div>

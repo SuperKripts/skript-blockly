@@ -1,3 +1,10 @@
 /// <reference types="vite/client" />
+declare const __VERSION__: string
 declare const __BUILD_TIME__: string
-declare const __PROCESS_ENV__: Record<string, string>
+declare const __GITHUB_SHA__: string
+declare const __GITHUB_RUN_NUMBER__: string
+declare const __GITHUB_RUN_ID__: string
+declare const __GITHUB_REF_NAME__: string
+declare const __GITHUB_TRIGGERING_ACTOR__: string
+declare const __GITHUB_SERVER_URL__: string
+declare const __GITHUB_REPOSITORY__: string
