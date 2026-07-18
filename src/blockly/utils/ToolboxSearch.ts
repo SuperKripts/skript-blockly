@@ -42,7 +42,7 @@ export class BlockSearcher {
       })
     tempWorkspace.dispose()
 
-    console.log(dataList)
+    // console.log(dataList)
 
     this.fuse = new Fuse(dataList, {
       keys: ['type', 'inputs', 'inputsPinyin'],

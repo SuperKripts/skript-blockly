@@ -17,14 +17,14 @@ const formattedTime = new Date(buildTime).toLocaleString('zh-CN', {
   hour12: false,
 });
 
-const buildInfo = `${version} · ${sha} (${gitBranch})
+const buildInfo = `Version: ${version} · ${sha} (${gitBranch})
 Triggered by: ${triggeringActor} · Run #${runNumber}
 Build At: ${formattedTime}
 Repository: ${repoUrl}`;
 </script>
 
 <template>
-  <div class="logo" :title="`Build: ${buildInfo}`">
+  <div class="logo" :title="buildInfo">
     <div class="logo-icon">
       <i class="fas fa-cubes"></i>
     </div>
