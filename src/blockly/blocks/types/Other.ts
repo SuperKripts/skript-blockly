@@ -17,7 +17,7 @@ function registerBlockType(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({
     title: 'Block',
     syntaxType: 'type',
-    docUrl: getSkriptHubDocUrl(0),
+    docUrl: getSkriptHubDocUrl(2134),
   })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {

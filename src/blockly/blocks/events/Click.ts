@@ -15,7 +15,7 @@ const syntax: EventSyntax = {
   title: 'Click',
   eventValues: [],
   cancellable: false,
-  docId: 0,
+  docId: 1094,
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {

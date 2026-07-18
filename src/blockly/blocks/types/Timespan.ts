@@ -17,7 +17,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({
     title: 'Timespan',
     syntaxType: 'type',
-    docUrl: getSkriptHubDocUrl(0),
+    docUrl: getSkriptHubDocUrl(2167),
   })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {

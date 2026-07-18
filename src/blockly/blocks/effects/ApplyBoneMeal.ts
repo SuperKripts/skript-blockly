@@ -9,7 +9,7 @@ const blockKey = 'effect_apply_bone_meal'
 const syntax: Syntax = {
   title: 'Apply Bone Meal',
   syntaxType: 'effect',
-  docUrl: getSkriptHubDocUrl(0),
+  docUrl: getSkriptHubDocUrl(10141),
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {

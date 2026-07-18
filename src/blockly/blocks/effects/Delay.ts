@@ -9,7 +9,7 @@ const blockKey = 'effect_delay'
 const syntax: Syntax = {
   title: 'Delay',
   syntaxType: 'effect',
-  docUrl: getSkriptHubDocUrl(0),
+  docUrl: getSkriptHubDocUrl(1102),
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {

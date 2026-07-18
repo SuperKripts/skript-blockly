@@ -8,7 +8,7 @@ function registerNumberType(blockKey: string, title: string, fieldName: string, 
   const definition = createSkriptDefinition({
     title,
     syntaxType: 'type',
-    docUrl: getSkriptHubDocUrl(0),
+    docUrl: getSkriptHubDocUrl(2157),
   })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
@@ -26,7 +26,7 @@ function registerStringType(blockKey: string, title: string, fieldName: string, 
   const definition = createSkriptDefinition({
     title,
     syntaxType: 'type',
-    docUrl: getSkriptHubDocUrl(0),
+    docUrl: getSkriptHubDocUrl(2164),
   })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
@@ -44,7 +44,7 @@ function registerBooleanType(blockKey: string, title: string, fieldName: string)
   const definition = createSkriptDefinition({
     title,
     syntaxType: 'type',
-    docUrl: getSkriptHubDocUrl(0),
+    docUrl: getSkriptHubDocUrl(2135),
   })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {

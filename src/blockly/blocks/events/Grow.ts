@@ -14,7 +14,7 @@ const syntax: EventSyntax = {
   title: 'Grow',
   eventValues: [],
   cancellable: false,
-  docId: 0,
+  docId: 1006,
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
