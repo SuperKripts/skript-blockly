@@ -55,9 +55,6 @@ export class SkriptCodeGenerator extends Blockly.Generator {
   }
 
   public scrub_(_block: Blockly.Block, code: string, _opt_thisOnly?: boolean | undefined): string {
-    const scrub = super.scrub_(_block, code, _opt_thisOnly)
-    console.log(scrub + ' -- ' + _opt_thisOnly)
-
     let comments = _block.getCommentText() ?? ''
     if (comments != '') {
       comments =

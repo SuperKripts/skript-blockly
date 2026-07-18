@@ -11,6 +11,10 @@ import { syntaxMarkerPlugin } from './syntax-marker-plugin'
 export default defineConfig({
   base: '/blockly',
   plugins: [vue(), vueDevTools(), syntaxlistPlugin(), blocklyPrunePlugin(), syntaxMarkerPlugin('./src/blockly/blocks')],
+  define: {
+    __PROCESS_ENV__: JSON.stringify(process.env),
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

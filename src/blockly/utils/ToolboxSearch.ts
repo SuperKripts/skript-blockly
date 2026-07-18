@@ -2,6 +2,7 @@ import Fuse from 'fuse.js'
 import * as Blockly from 'blockly/core'
 import { t } from '@/locales/i18n'
 import { pinyin } from 'pinyin-pro'
+import * as BlocklyRegistry from '@/blockly/blocks/BlocklyRegistry'
 
 export type BlockData = {
   type: string
@@ -13,31 +14,35 @@ export type BlockData = {
 export class BlockSearcher {
   private readonly fuse: Fuse<BlockData>
 
-  constructor(blockInfos: Blockly.utils.toolbox.BlockInfo[]) {
+  constructor() {
     const dataList: BlockData[] = []
     const tempWorkspace = new Blockly.Workspace()
-    for (const blockInfo of blockInfos) {
-      let block: Blockly.Block
-      const blockxml = blockInfo.blockxml
-      let type = blockInfo.type
-      if (blockxml) {
-        const xml = typeof blockxml === 'string' ? Blockly.utils.xml.textToDom(blockxml) : (blockxml as Element)
-        block = Blockly.Xml.domToBlockInternal(xml, tempWorkspace)
-        type = xml.getAttribute('type')!
-      } else if (type) {
-        block = tempWorkspace.newBlock(type)
-      } else {
-        continue
-      }
-      const inputs: string[] = []
-      for (const input of block.inputList) {
-        for (const field of input.fieldRow) {
-          inputs.push(field.getText())
+    Object.values(BlocklyRegistry)
+      .flat()
+      .forEach((blockInfo) => {
+        let block: Blockly.Block
+        const blockxml = blockInfo.blockxml
+        let type = blockInfo.type
+        if (blockxml) {
+          const xml = typeof blockxml === 'string' ? Blockly.utils.xml.textToDom(blockxml) : (blockxml as Element)
+          block = Blockly.Xml.domToBlockInternal(xml, tempWorkspace)
+          type = block.type
+        } else if (type) {
+          block = tempWorkspace.newBlock(type)
+        } else {
+          return
         }
-      }
-      dataList.push({ type, inputs, inputsPinyin: inputs.map((s) => pinyin(s, { toneType: 'none', separator: '' })), blockInfo })
-    }
+        const inputs: string[] = []
+        for (const input of block.inputList) {
+          for (const field of input.fieldRow) {
+            inputs.push(field.getText())
+          }
+        }
+        dataList.push({ type, inputs, inputsPinyin: inputs.map((s) => pinyin(s, { toneType: 'none', separator: '' })), blockInfo })
+      })
     tempWorkspace.dispose()
+
+    console.log(dataList)
 
     this.fuse = new Fuse(dataList, {
       keys: ['type', 'inputs', 'inputsPinyin'],
@@ -75,33 +80,7 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
   override init(): void {
     super.init()
 
-    const seen = new Set<string | Node>()
-    const items: Blockly.utils.toolbox.BlockInfo[] = []
-
-    function _push(toolboxItemInfos?: Blockly.utils.toolbox.ToolboxItemInfo[]) {
-      for (const toolboxItemInfo of toolboxItemInfos ?? []) {
-        if ('contents' in toolboxItemInfo) {
-          _push(toolboxItemInfo.contents)
-        } else if (toolboxItemInfo.kind.toLowerCase() === 'block') {
-          let seenValue
-          if ('blockxml' in toolboxItemInfo && toolboxItemInfo.blockxml) {
-            seenValue = toolboxItemInfo.blockxml
-          } else if ('type' in toolboxItemInfo && toolboxItemInfo.type) {
-            seenValue = toolboxItemInfo.type
-          } else {
-            continue
-          }
-          if (!seen.has(seenValue)) {
-            seen.add(seenValue)
-            items.push(toolboxItemInfo)
-          }
-        }
-      }
-    }
-
-    _push(this.workspace_.options.languageTree?.contents)
-
-    this._searcher = new BlockSearcher(items)
+    this._searcher = new BlockSearcher()
 
     this._searchInput.placeholder = this.name_ ?? 'Search'
     this._searchInput.addEventListener('input', () => this.searchBlock())

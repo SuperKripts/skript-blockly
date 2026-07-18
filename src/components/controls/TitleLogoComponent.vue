@@ -1,5 +1,12 @@
+<script setup lang="ts">
+const buildTime = __BUILD_TIME__
+const processEnv = __PROCESS_ENV__
+console.log(processEnv);
+
+</script>
+
 <template>
-  <div class="logo">
+  <div class="logo" :title="`Build: ${buildTime}, ${processEnv}`">
     <div class="logo-icon">
       <i class="fas fa-cubes"></i>
     </div>
