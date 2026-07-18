@@ -1,17 +1,19 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition, type Syntax } from '../SkriptBlock'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { pte } from '@/locales/i18n'
 
 const blockKey = 'effect_apply_bone_meal'
+const syntax: Syntax = {
+  title: 'Apply Bone Meal',
+  syntaxType: 'effect',
+  docUrl: getSkriptHubDocUrl(0),
+}
+
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({
-    title: 'Apply Bone Meal',
-    syntaxType: 'effect',
-    docUrl: getSkriptHubDocUrl(0),
-  })
+  const definition = createSkriptDefinition(syntax)
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_(this: SkriptBlock) {
       this.setInputsInline(true)
