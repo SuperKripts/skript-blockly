@@ -4,6 +4,9 @@ import { BlockInfos as TypeToolbox } from '@/blockly/blocks/types'
 import { BlockInfos as StructureToolbox } from '@/blockly/blocks/structures'
 import { BlockInfos as EffectToolbox } from '@/blockly/blocks/effects'
 
+import '@/blockly/blocks/events/EventValues'
+import '@/blockly/blocks/events/Cancellable'
+
 console.log(Blockly.Blocks)
 
 export const eventBlockInfos: Blockly.utils.toolbox.BlockInfo[] = EventToolbox
