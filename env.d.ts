@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 declare const __VERSION__: string
 declare const __BUILD_TIME__: string
+declare const __GIT_COMMENT_MSG__: string
 declare const __GITHUB_SHA__: string
 declare const __GITHUB_RUN_NUMBER__: string
 declare const __GITHUB_RUN_ID__: string

@@ -8,6 +8,7 @@ import { blocklyPrunePlugin } from './blockly-prune-plugin'
 import { syntaxMarkerPlugin } from './syntax-marker-plugin'
 
 const VERSION = process.env.npm_package_version || '0.0.0'
+const GIT_COMMENT_MSG = process.env.GIT_COMMENT_MSG || 'unknown'
 const GITHUB_SERVER_URL = process.env.GITHUB_SERVER_URL || 'https://github.com'
 const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SuperKripts/skript-blockly'
 const GITHUB_SHA = process.env.GITHUB_SHA || 'unknown'
@@ -23,6 +24,7 @@ export default defineConfig({
   define: {
     __VERSION__: JSON.stringify(VERSION),
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    __GIT_COMMENT_MSG__: JSON.stringify(GIT_COMMENT_MSG),
     __GITHUB_SHA__: JSON.stringify(GITHUB_SHA),
     __GITHUB_RUN_NUMBER__: JSON.stringify(GITHUB_RUN_NUMBER),
     __GITHUB_RUN_ID__: JSON.stringify(GITHUB_RUN_ID),

@@ -19,6 +19,7 @@ const formattedTime = new Date(buildTime).toLocaleString('zh-CN', {
 
 const buildInfo = `Version: ${version} · ${sha} (${gitBranch})
 Triggered by: ${triggeringActor} · Run #${runNumber}
+Last Commit Message: ${__GIT_COMMENT_MSG__}
 Build At: ${formattedTime}
 Repository: ${repoUrl}`;
 </script>
