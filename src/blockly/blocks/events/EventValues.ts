@@ -127,7 +127,7 @@ for (const eventValue of SupportedEventValues) {
   }
 }
 
-type EventValueBlock = Blockly.BlockSvg & {
+export type EventValueBlock = Blockly.BlockSvg & {
   eventValue_: EventValue
   updateShape_: () => void
 }

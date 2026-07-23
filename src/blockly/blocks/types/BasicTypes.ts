@@ -14,6 +14,9 @@ function registerNumberType(blockKey: string, title: string, fieldName: string, 
     initShape_() {
       this.appendDummyInput().appendField(new Blockly.FieldNumber(defaultValue), fieldName)
     },
+    initStyle_() {
+      this.setOutput(true, fieldName)
+    },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
   CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, _generate: SkriptCodeGenerator) => {
@@ -31,6 +34,9 @@ function registerStringType(blockKey: string, title: string, fieldName: string, 
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.appendDummyInput().appendField(new Blockly.FieldTextInput(defaultValue), fieldName)
+    },
+    initStyle_() {
+      this.setOutput(true, fieldName)
     },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
@@ -55,6 +61,9 @@ function registerBooleanType(blockKey: string, title: string, fieldName: string)
         ]),
         fieldName,
       )
+    },
+    initStyle_() {
+      this.setOutput(true, fieldName)
     },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)

@@ -3,6 +3,7 @@ import * as Blockly from 'blockly/core'
 import useToolbox from '@/blockly/toolbox'
 import * as SkriptHubTheme from '@/blockly/themes/skripthub'
 import { useWorkspaceStore } from '@/stores/workspace'
+import { pluginInfo as connectionCheckerPluginInfo } from '@/blockly/utils/SkriptConnectionChecker'
 
 if (!Blockly.ContextMenuRegistry.registry.getItem('commentDuplicate')) {
   Blockly.ContextMenuItems.registerCommentOptions()
@@ -50,4 +51,7 @@ export const config = {
   sounds: false,
   css: true,
   renderer: 'Thrasos',
+  plugins: {
+    ...connectionCheckerPluginInfo,
+  },
 }

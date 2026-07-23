@@ -15,6 +15,7 @@ export class BlockSearcher {
   private readonly fuse: Fuse<BlockData>
 
   constructor() {
+    // 到时候可能用浏览器缓存 搜索索引
     const dataList: BlockData[] = []
     const tempWorkspace = new Blockly.Workspace()
     Object.values(BlocklyRegistry)

@@ -23,6 +23,9 @@ function registerBlockType(): Blockly.utils.toolbox.BlockInfo {
     initShape_() {
       this.appendDummyInput().appendField(createFieldSearchDropdown(BlockDatas), 'block')
     },
+    initStyle_() {
+      this.setOutput(true, 'block')
+    },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
   CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, _generate: SkriptCodeGenerator) => {

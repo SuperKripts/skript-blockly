@@ -18,8 +18,8 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     initShape_(this: SkriptBlock) {
       this.setInputsInline(true)
       pte('EFFECT_APPLY_BONE_MEAL_DESC', {
-        0: () => this.appendValueInput('amount'),
-        1: () => this.appendValueInput('blocks'),
+        0: () => this.appendValueInput('amount').setCheck('number'),
+        1: () => this.appendValueInput('blocks').setCheck('block'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })
     },

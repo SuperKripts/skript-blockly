@@ -23,6 +23,9 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     initShape_() {
       this.appendDummyInput().appendField(new FieldTimespan(), 'timespan')
     },
+    initStyle_() {
+      this.setOutput(true, 'timespan')
+    },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
   CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, _generate: SkriptCodeGenerator) => {

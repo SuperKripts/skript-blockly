@@ -26,6 +26,10 @@ export type SkriptEventBlock = SkriptBlock & {
   eventValues_: string[]
 }
 
+export function isSkriptEventBlock(block: Blockly.Block): block is SkriptEventBlock {
+  return block.getStyleName() === 'event'
+}
+
 export function createSkriptEventDefinition(syntax: EventSyntax): SkriptBlockDefinition {
   const { title, docId, eventValues = [], cancellable = false } = syntax
   const definition = createSkriptDefinition({ title, syntaxType: 'event', docUrl: getSkriptHubDocUrl(docId) })

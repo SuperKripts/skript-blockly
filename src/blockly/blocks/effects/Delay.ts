@@ -18,7 +18,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     initShape_(this: SkriptBlock) {
       this.setInputsInline(true)
       pte('EFFECT_DELAY_DESC', {
-        0: () => this.appendValueInput('timespan'),
+        0: () => this.appendValueInput('timespan').setCheck('timespan'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })
     },
