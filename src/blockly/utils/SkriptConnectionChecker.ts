@@ -5,10 +5,6 @@ import type { EventValueBlock } from '../blocks/events/EventValues'
 export const registrationName = 'SkriptConnectionChecker'
 
 export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
-  doSafetyChecks(a: Blockly.Connection | null, b: Blockly.Connection | null): number {
-    return super.doSafetyChecks(a, b)
-  }
-
   doTypeChecks(a: Blockly.Connection, b: Blockly.Connection): boolean {
     return super.doTypeChecks(a, b)
   }
