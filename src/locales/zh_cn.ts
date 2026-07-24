@@ -5271,3 +5271,5 @@ export const TYPE_BLOCK_YELLOW_WALL_BANNER = 'yellow wall banner'
 export const TYPE_BLOCK_YELLOW_WOOL = '黄色羊毛'
 export const TYPE_BLOCK_ZOMBIE_HEAD = '僵尸头颅'
 export const TYPE_BLOCK_ZOMBIE_WALL_HEAD = 'zombie wall head'
+
+export const STRUCTURE_EXAMPLE_DESC = '示例'
