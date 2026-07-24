@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const EntityEffects: SkriptType = {
   name: 'entity_effect',
+  type: 'entityeffect',
   options: [
     'arrow particles',
     'rabbit jump',
@@ -83,4 +88,9 @@ export const EntityEffects: SkriptType = {
     'cat tame fail',
     'cat tame success',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(EntityEffects, 'EntityEffects', 0)
 }

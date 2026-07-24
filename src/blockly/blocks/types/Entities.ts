@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const Entities: SkriptType = {
   name: 'entity',
+  type: 'entity',
   options: [
     'axolotl',
     'lucy axolotl',
@@ -292,6 +297,7 @@ export const Entities: SkriptType = {
 
 export const BabyEntities: SkriptType = {
   name: 'baby_entity',
+  type: 'entity',
   options: [
     'baby axolotl',
     'baby lucy axolotl',
@@ -418,4 +424,9 @@ export const BabyEntities: SkriptType = {
     'baby chested horse',
     'baby any horse',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(Entities, 'Entities', 2145)
 }

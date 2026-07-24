@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const InventoryTypes: SkriptType = {
   name: 'inventory_type',
+  type: 'inventorytype',
   options: [
     'chest',
     'dispenser',
@@ -36,4 +41,9 @@ export const InventoryTypes: SkriptType = {
     'jukebox',
     'smithing new',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(InventoryTypes, 'Inventory', 2148)
 }

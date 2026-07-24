@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const VillagerProfessions: SkriptType = {
   name: 'villager_profession',
+  type: 'villagerprofession',
   options: [
     'leatherworker',
     'mason',
@@ -19,4 +24,9 @@ export const VillagerProfessions: SkriptType = {
     'none',
     'fisherman',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(VillagerProfessions, 'VillagerProfessions', 0)
 }

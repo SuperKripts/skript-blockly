@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const InventoryActions: SkriptType = {
   name: 'inventory_action',
+  type: 'inventoryaction',
   options: [
     'nothing',
     'pickup all',
@@ -29,4 +34,9 @@ export const InventoryActions: SkriptType = {
     'place all into bundle',
     'place some into bundle',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(InventoryActions, 'InventoryActions', 0)
 }

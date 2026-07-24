@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const AttributeTypes: SkriptType = {
   name: 'attribute_type',
+  type: 'attributetype',
   options: [
     'generic armor',
     'generic armor toughness',
@@ -71,4 +76,9 @@ export const AttributeTypes: SkriptType = {
     'waypoint transmit range',
     'waypoint receive range',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(AttributeTypes, 'Attribute', 0)
 }

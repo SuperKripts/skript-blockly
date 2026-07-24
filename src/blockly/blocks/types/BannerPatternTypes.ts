@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const BannerPatternTypes: SkriptType = {
   name: 'banner_pattern_type',
+  type: 'bannerpatterntype',
   options: [
     'base',
     'border',
@@ -54,4 +59,9 @@ export const BannerPatternTypes: SkriptType = {
     'half vertical mirror',
     'half horizontal mirror',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(BannerPatternTypes, 'BannerPattern', 9783)
 }

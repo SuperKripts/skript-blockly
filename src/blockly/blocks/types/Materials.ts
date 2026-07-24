@@ -1,7 +1,11 @@
-import { type SkriptType, type SkriptTypes } from './Types'
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
+import { type SkriptType, type SkriptTypes, createTypeBlock } from './Types'
 
 export const ItemTypes: SkriptType = {
   name: 'item',
+  type: 'itemtype',
   options: [
     'potion',
     'potion of water',
@@ -1931,6 +1935,7 @@ export const ItemTypes: SkriptType = {
 
 export const BlockDatas: SkriptType = {
   name: 'block',
+  type: 'blockdata',
   options: [
     'bricks',
     'nether bricks',
@@ -3111,4 +3116,8 @@ export const BlockDatas: SkriptType = {
 export const ItemOrBlock: SkriptTypes = {
   name: 'item_or_block',
   types: [ItemTypes, BlockDatas],
+}
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(ItemTypes, 'Materials', 2152)
 }

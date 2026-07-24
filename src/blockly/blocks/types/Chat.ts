@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const ChatColors: SkriptType = {
   name: 'color',
+  type: 'color',
   options: [
     'black',
     'dark grey',
@@ -24,6 +29,7 @@ export const ChatColors: SkriptType = {
 
 export const ChatStyles: SkriptType = {
   name: 'chat_style',
+  type: 'string',
   options: [
     'bold',
     'italic',
@@ -43,4 +49,8 @@ export const ChatStyles: SkriptType = {
     'translate',
     'keybind',
   ],
+}
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(ChatColors, 'Chat', 2138)
 }

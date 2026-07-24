@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const ParticleEffects: SkriptType = {
   name: 'particle_effect',
+  type: 'particle_effect',
   options: [
     'angry villager',
     'ash',
@@ -121,4 +126,9 @@ export const ParticleEffects: SkriptType = {
     'white smoke',
     'witch',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(ParticleEffects, 'ParticleEffects', 0)
 }

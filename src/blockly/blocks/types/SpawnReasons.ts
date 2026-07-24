@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const SpawnReasons: SkriptType = {
   name: 'spawn_reason',
+  type: 'spawnreason',
   options: [
     'bed',
     'beehive',
@@ -51,4 +56,9 @@ export const SpawnReasons: SkriptType = {
     'rehydration',
     'build coppergolem',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(SpawnReasons, 'SpawnReasons', 0)
 }

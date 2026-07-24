@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const DamageTypes: SkriptType = {
   name: 'damage_type',
+  type: 'damagetype',
   options: [
     'arrow',
     'bad respawn point',
@@ -54,4 +59,9 @@ export const DamageTypes: SkriptType = {
     'wither',
     'wither skull',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(DamageTypes, 'Damage', 0)
 }

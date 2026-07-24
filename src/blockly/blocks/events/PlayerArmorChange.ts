@@ -22,7 +22,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     initShape_(this: SkriptBlock) {
       const input = this.appendDummyInput()
       pte('EVENT_ARMOR_CHANGE_DESC', {
-        0: () => input.appendField(createFieldDropdown({ name: 'equipment_slot', options: ['head', 'chest', 'legs', 'feet'] }, true), 'slot'),
+        0: () => input.appendField(createFieldDropdown({ name: 'equipment_slot', type: 'equipmentslot', options: ['head', 'chest', 'legs', 'feet'] }, true), 'slot'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
       appendEventPriorityInput(this)

@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const TeleportFlags: SkriptType = {
   name: 'teleport_flag',
+  type: 'teleportflag',
   options: [
     'retain open inventory',
     'retain passengers',
@@ -14,4 +19,9 @@ export const TeleportFlags: SkriptType = {
     'retain y',
     'retain z',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(TeleportFlags, 'TeleportFlags', 0)
 }

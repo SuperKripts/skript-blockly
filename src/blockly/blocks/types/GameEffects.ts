@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const GameEffects: SkriptType = {
   name: 'game_effect',
+  type: 'gameeffect',
   options: [
     'click1',
     'click2',
@@ -109,4 +114,9 @@ export const GameEffects: SkriptType = {
     'trial spawner become ominous',
     'trial spawner spawn item',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(GameEffects, 'GameEffects', 0)
 }

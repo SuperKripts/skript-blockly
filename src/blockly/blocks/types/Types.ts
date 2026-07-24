@@ -2,9 +2,12 @@ import * as Blockly from 'blockly/core'
 import { FieldGridDropdown } from '@blockly/field-grid-dropdown'
 import { FieldSearchDropdown } from '@/blockly/inputs/FieldSearchDropdown'
 import { t } from '@/locales/i18n'
+import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition } from '../SkriptBlock'
+import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 
 export type SkriptType = {
   name: string
+  type: string
   options: string[]
 }
 
@@ -19,11 +22,13 @@ export function isSkriptTypes(type: SkriptType | SkriptTypes): type is SkriptTyp
 
 export const VisualEffects: SkriptType = {
   name: 'visual_effect',
+  type: 'visualeffect',
   options: ['area expression', 'effect', 'entityeffect', 'particle'],
 }
 
 export const Types: SkriptType = {
   name: 'type',
+  type: 'type',
   options: [
     'object',
     'number',
@@ -220,3 +225,25 @@ class DropdownCache {
 }
 
 export const dropdownCache = new DropdownCache()
+
+export function createTypeBlock(type: SkriptType, title: string, docId: number): Blockly.utils.toolbox.BlockInfo {
+  const blockKey = `type_${type.name}`
+  const definition = createSkriptDefinition({
+    title,
+    syntaxType: 'type',
+    docUrl: getSkriptHubDocUrl(docId),
+  })
+  const mixin: Partial<SkriptBlockDefinition> = {
+    initShape_() {
+      this.appendDummyInput().appendField(createFieldSearchDropdown(type), title)
+    },
+    initStyle_() {
+      this.setOutput(true, type.type)
+    },
+  }
+  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, _generate: SkriptCodeGenerator) => {
+    return [block.getFieldValue(title), 0]
+  }
+  return { kind: 'block', type: blockKey }
+}

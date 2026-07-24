@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const Enchantments: SkriptType = {
   name: 'enchantment',
+  type: 'enchantment',
   options: [
     'protection',
     'fire protection',
@@ -47,4 +52,9 @@ export const Enchantments: SkriptType = {
     'wind burst',
     'lunge',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(Enchantments, 'Enchantments', 2143)
 }

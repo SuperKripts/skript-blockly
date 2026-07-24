@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const TreeTypes: SkriptType = {
   name: 'tree_type',
+  type: 'tree_type',
   options: [
     'tree',
     'regular',
@@ -25,4 +30,9 @@ export const TreeTypes: SkriptType = {
     'red mushroom',
     'brown mushroom',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(TreeTypes, 'Tree', 0)
 }

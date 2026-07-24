@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const PotionEffectTypes: SkriptType = {
   name: 'potion_effect_type',
+  type: 'potioneffecttype',
   options: [
     'speed',
     'slowness',
@@ -48,5 +53,11 @@ export const PotionEffectTypes: SkriptType = {
 
 export const PotionEffectTypeCategories: SkriptType = {
   name: 'potion_effect_type_category',
+  type: 'potioneffecttypecategory',
   options: ['beneficial', 'harmful', 'neutral'],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(PotionEffectTypes, 'PotionEffect', 0)
 }

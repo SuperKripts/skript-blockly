@@ -1,7 +1,12 @@
+'skript syntax'
+
+import * as Blockly from 'blockly/core'
 import type { SkriptType } from './Types'
+import { createTypeBlock } from './Types'
 
 export const Biomes: SkriptType = {
   name: 'biome',
+  type: 'biome',
   options: [
     'swamp',
     'swamp hills',
@@ -110,4 +115,9 @@ export const Biomes: SkriptType = {
     'cherry grove',
     'pale garden',
   ],
+}
+
+
+export function register(): Blockly.utils.toolbox.BlockInfo {
+  return createTypeBlock(Biomes, 'Biomes', 2133)
 }

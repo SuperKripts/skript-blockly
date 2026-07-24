@@ -25,7 +25,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
       const input = this.appendDummyInput()
       pte('EVENT_BEACON_EFFECT_DESC', {
         0: () => input.appendField(createTempFieldDropdown('beacon_effect', ['default', 'primary', 'secondary']), 'primary'),
-        1: () => input.appendField(createFieldDropdown({ name: 'potion_effect_type', options: PotionEffectTypes }, true), 'effect'),
+        1: () => input.appendField(createFieldDropdown({ name: 'potion_effect_type', type: 'potioneffecttype', options: PotionEffectTypes }, true), 'effect'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
       appendEventPriorityInput(this)

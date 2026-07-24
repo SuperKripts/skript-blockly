@@ -46,33 +46,6 @@ function registerStringType(blockKey: string, title: string, fieldName: string, 
   return { kind: 'block', type: blockKey }
 }
 
-function registerBooleanType(blockKey: string, title: string, fieldName: string): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({
-    title,
-    syntaxType: 'type',
-    docUrl: getSkriptHubDocUrl(2135),
-  })
-  const mixin: Partial<SkriptBlockDefinition> = {
-    initShape_() {
-      this.appendDummyInput().appendField(
-        new Blockly.FieldDropdown([
-          ['true', 'true'],
-          ['false', 'false'],
-        ]),
-        fieldName,
-      )
-    },
-    initStyle_() {
-      this.setOutput(true, fieldName)
-    },
-  }
-  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, _generate: SkriptCodeGenerator) => {
-    return [block.getFieldValue(fieldName), 0]
-  }
-  return { kind: 'block', type: blockKey }
-}
-
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return [
     registerNumberType('type_number', 'Number', 'number', 0),
@@ -83,6 +56,5 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
     // registerNumberType('type_double', 'Double', 'double', 0),
     // registerNumberType('type_float', 'Float', 'float', 0),
     registerStringType('type_string', 'String', 'string', ''),
-    registerBooleanType('type_boolean', 'Boolean', 'boolean'),
   ]
 }

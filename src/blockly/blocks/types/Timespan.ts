@@ -8,6 +8,7 @@ import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 
 export const Timespan: SkriptType = {
   name: 'timespan',
+  type: 'timespan',
   options: ['millisecond', 'tick', 'second', 'minute', 'hour', 'day', 'week', 'month', 'year', 'real', 'minecraft', 'forever'],
 }
 
