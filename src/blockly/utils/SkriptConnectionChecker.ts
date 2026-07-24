@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly/core'
 import { isSkriptEventBlock } from '../blocks/events/SkriptEventBlock'
-import type { EventValueBlock } from '../blocks/events/EventValues'
+import type { SkriptBlock } from '../blocks/SkriptBlock'
 
 export const registrationName = 'SkriptConnectionChecker'
 
@@ -18,10 +18,10 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
     }
 
     if (a.getSourceBlock().type === 'expression_event_value') {
-      const eventBlock = a.getSourceBlock() as EventValueBlock
+      const eventBlock = a.getSourceBlock() as SkriptBlock
       const rootBlock = b.getSourceBlock().getRootBlock()
       if (isSkriptEventBlock(rootBlock)) {
-        return rootBlock.eventValues_.includes(eventBlock.eventValue_)
+        return rootBlock.eventValues_.includes(eventBlock.extra_.eventValue as string)
       }
     }
 

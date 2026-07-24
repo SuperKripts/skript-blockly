@@ -61,9 +61,6 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
           this.setPreviousStatement(true, null)
           this.setNextStatement(true, null)
           break
-        case 'type':
-          this.setOutput(true, null)
-          break
         default:
           break
       }
