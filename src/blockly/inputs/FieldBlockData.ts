@@ -3,6 +3,8 @@ import { createApp, type App } from 'vue'
 import BlockDataComponent from '@/components/blockly/BlockDataComponent.vue'
 import { blockOptions, type BlockDataState, formatBlockDataStateDisplay } from '@/blockly/blocks/types/BlockDataParams'
 import { t } from '@/locales/i18n'
+import { dropdownCache } from '../blocks/types/Types'
+import { BlockDatas } from '../blocks/types/Materials'
 
 export interface FieldBlockDataConfig extends Blockly.FieldConfig {
   allowAny?: boolean
@@ -45,7 +47,7 @@ export class FieldBlockData extends Blockly.Field<BlockDataState> {
 
     this.vueApp_ = createApp(BlockDataComponent, {
       state: this.getValue(),
-      options: this.options_,
+      options: dropdownCache.getOptions(BlockDatas),
       allowAny: this.allowAny_,
       onSelect: (newState: BlockDataState) => {
         this.setValue(newState)
