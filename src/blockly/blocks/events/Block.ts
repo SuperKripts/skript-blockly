@@ -5,9 +5,8 @@ import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
-import { createFieldDropdown } from '../types/Types'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
-import { BlockDatas } from '../types/Materials'
+import { FieldBlockData } from '@/blockly/inputs/FieldBlockData'
 
 type BlockEventInfo = {
   blockKey: string
@@ -96,7 +95,7 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
       initShape_(this: SkriptBlock) {
         const input = this.appendDummyInput()
         pte(info.blockKey.toUpperCase() + '_DESC', {
-          0: () => input.appendField(createFieldDropdown(BlockDatas, true), 'block'),
+          0: () => input.appendField(new FieldBlockData(void 0, void 0, { allowAny: true }), 'block'),
           default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
         })
         appendEventPriorityInput(this)
