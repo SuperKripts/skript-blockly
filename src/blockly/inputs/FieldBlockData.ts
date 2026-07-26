@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 import { createApp, type App } from 'vue'
 import BlockDataComponent from '@/components/blockly/BlockDataComponent.vue'
-import { blockOptions, type BlockDataState, formatBlockDataStateDisplay } from '@/blockly/blocks/types/BlockDataParams'
+import { type BlockDataState, formatBlockDataStateDisplay } from '@/blockly/blocks/types/BlockDataParams'
 import { t } from '@/locales/i18n'
 import { dropdownCache } from '../blocks/types/Types'
 import { BlockDatas } from '../blocks/types/Materials'
@@ -16,12 +16,10 @@ export class FieldBlockData extends Blockly.Field<BlockDataState> {
   SERIALIZABLE = true
   private vueApp_?: App
   private readonly allowAny_: boolean
-  private readonly options_: string[]
 
   constructor(value?: BlockDataState, validator?: Blockly.FieldValidator<BlockDataState>, config?: FieldBlockDataConfig) {
     super(value ?? Blockly.Field.SKIP_SETUP, validator, config)
     this.allowAny_ = config?.allowAny ?? false
-    this.options_ = blockOptions
   }
 
   static fromJson(options: FieldBlockDataFromJsonConfig): FieldBlockData {
