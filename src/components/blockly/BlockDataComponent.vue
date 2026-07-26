@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  (e: 'select', state: BlockDataState): void
+  (e: 'select', state: BlockDataState | null): void
   (e: 'close'): void
 }>()
 

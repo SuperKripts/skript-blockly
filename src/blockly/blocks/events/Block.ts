@@ -95,7 +95,7 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
       initShape_(this: SkriptBlock) {
         const input = this.appendDummyInput()
         pte(info.blockKey.toUpperCase() + '_DESC', {
-          0: () => input.appendField(new FieldBlockData(void 0, void 0, { allowAny: true }), 'block'),
+          0: () => input.appendField(new FieldBlockData(void 0, { allowAny: true }), 'block'),
           default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
         })
         appendEventPriorityInput(this)
@@ -105,7 +105,7 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
     Blockly.Blocks[info.blockKey] = Object.assign(definition, mixin)
     CodeGenerator.forBlock[info.blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
       const statementMembers = generate.statementToCode(block, 'block')
-      const code = SkriptCodeGenerator.codeJoin('on', info.code, ['of', block.getFieldValue('block')], generateCodeForEventPriority(block))
+      const code = SkriptCodeGenerator.codeJoin('on', info.code, ['of', block.getField('block')?.getText()], generateCodeForEventPriority(block))
       return `${code}: \n${statementMembers}`
     }
     return { kind: 'block', type: info.blockKey }

@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 import { createApp, type App } from 'vue'
 import BlockDataComponent from '@/components/blockly/BlockDataComponent.vue'
-import { type BlockDataState, formatBlockDataStateDisplay } from '@/blockly/blocks/types/BlockDataParams'
+import { type BlockDataState, formatBlockDataStateDisplay, formatBlockDataState } from '@/blockly/blocks/types/BlockDataParams'
 import { t } from '@/locales/i18n'
 import { dropdownCache } from '../blocks/types/Types'
 import { BlockDatas } from '../blocks/types/Materials'
@@ -17,21 +17,26 @@ export class FieldBlockData extends Blockly.Field<BlockDataState> {
   private vueApp_?: App
   private readonly allowAny_: boolean
 
-  constructor(value?: BlockDataState, validator?: Blockly.FieldValidator<BlockDataState>, config?: FieldBlockDataConfig) {
-    super(value ?? Blockly.Field.SKIP_SETUP, validator, config)
+  constructor(value?: BlockDataState, config?: FieldBlockDataConfig) {
+    super(value ?? Blockly.Field.SKIP_SETUP, null, config)
     this.allowAny_ = config?.allowAny ?? false
   }
 
   static fromJson(options: FieldBlockDataFromJsonConfig): FieldBlockData {
-    return new this(options.value, undefined, options)
+    return new this(options.value, options)
   }
 
   protected getDisplayText_(): string {
     const state = this.getValue()
-    if (state) {
+    if (state && state.blockName !== '') {
       return formatBlockDataStateDisplay(state)
     }
     return t('BLOCK_DATA_ANY_BLOCK')
+  }
+
+  getText(): string {
+    const state = this.getValue()
+    return state ? formatBlockDataState(state) : ''
   }
 
   protected showEditor_(_e?: Event): void {

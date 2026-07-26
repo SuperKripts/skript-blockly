@@ -814,7 +814,7 @@ export function formatBlockDataState(state: BlockDataState): string {
     .filter(([, v]) => v)
     .map(([k, v]) => `${k}=${v}`)
   if (entries.length === 0) return state.blockName
-  return `${state.blockName}[${entries.join('; ')}]`
+  return `${state.blockName}[${entries.join(';')}]`
 }
 
 export function formatBlockDataStateDisplay(state: BlockDataState): string {
