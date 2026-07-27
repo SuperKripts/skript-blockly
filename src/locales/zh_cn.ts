@@ -273,6 +273,18 @@ export const EVENT_VILLAGER_CAREER_CHANGE_DESC = '当村民职业变更时'
 
 // Expression
 export const EXPRASSION_AI_DESC = '%0 的AI'
+export const EXPRASSION_ARGB_DESC = '%0 的%1 值'
+export const EXPRASSION_ABSORBED_BLOCKS_DESC = '被吸收的方块'
+export const EXPRASSION_ACTIVE_ITEM_DESC = '%0 的使用中物品'
+export const EXPRASSION_AFFECTED_ENTITIES_DESC = '被影响的实体'
+export const EXPRASSION_AGE_DESC = '%0 的%1'
+
+export const FIELD_OPTION_EXPRASSION_ARGB_CHANNEL_ALPHA = '透明度'
+export const FIELD_OPTION_EXPRASSION_ARGB_CHANNEL_RED = '红色'
+export const FIELD_OPTION_EXPRASSION_ARGB_CHANNEL_GREEN = '绿色'
+export const FIELD_OPTION_EXPRASSION_ARGB_CHANNEL_BLUE = '蓝色'
+export const FIELD_OPTION_EXPRASSION_AGE_TYPE_AGE = '年龄'
+export const FIELD_OPTION_EXPRASSION_AGE_TYPE_MAXIMUM_AGE = '最大年龄'
 
 // Event Values
 export const EVENT_VALUE_BLOCK = '事件中的方块'

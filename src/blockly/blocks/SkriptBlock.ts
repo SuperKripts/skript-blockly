@@ -1,3 +1,4 @@
+import { t } from '@/locales/i18n'
 import * as Blockly from 'blockly/core'
 
 export type SkriptBlockExtraState = Record<string, unknown>
@@ -66,4 +67,39 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
       }
     },
   }
+}
+
+export function registerContentMenuGetOption(
+  id: string,
+  weight: number,
+  blockKey: string | ((workspace: Blockly.WorkspaceSvg) => void),
+  supportedBlock: string[] | ((block: Blockly.Block) => boolean),
+  displayTextKey: string,
+) {
+  Blockly.ContextMenuRegistry.registry.register({
+    id,
+    scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
+    weight,
+    callback: (scope: Blockly.ContextMenuRegistry.Scope) => {
+      const block = scope.block
+      if (block) {
+        const workspace = block.workspace.isFlyout ? block.workspace.targetWorkspace! : block.workspace
+        if (typeof blockKey === 'function') {
+          blockKey(workspace)
+        } else {
+          workspace.newBlock(blockKey)?.initSvg()
+        }
+      }
+    },
+    displayText: () => {
+      return t('MENU_OPTION_GET', [t(displayTextKey)])
+    },
+    preconditionFn: (scope: Blockly.ContextMenuRegistry.Scope) => {
+      const block = scope.block
+      if (block && (typeof supportedBlock === 'function' ? supportedBlock(block) : supportedBlock.includes(block.type))) {
+        return 'enabled'
+      }
+      return 'hidden'
+    },
+  })
 }

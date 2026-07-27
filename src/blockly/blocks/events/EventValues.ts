@@ -1,8 +1,8 @@
 import { t } from '@/locales/i18n'
 import * as Blockly from 'blockly/core'
 import CodeGenerator from '@/blockly/generators/skript'
-import type { SkriptEventBlock } from './SkriptEventBlock'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
+import { isSkriptEventBlock } from './SkriptEventBlock'
+import { createSkriptDefinition, getSkriptHubDocUrl, registerContentMenuGetOption, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
 
 export const EVENT_VALUE_BLOCK_TYPE = 'expression_event_value'
 
@@ -92,39 +92,18 @@ export function generateEventValueLangKey(eventValue: EventValue) {
 for (const eventValue of Object.keys(SupportedEventValues) as EventValue[]) {
   if (!Blockly.ContextMenuRegistry.registry.getItem(eventValue)) {
     const eventValueLangKey = generateEventValueLangKey(eventValue)
-    Blockly.ContextMenuRegistry.registry.register({
-      id: eventValue,
-      scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,
-      weight: 100,
-      callback: (scope: Blockly.ContextMenuRegistry.Scope) => {
-        const block = scope.block
-        if (block) {
-          if (block.workspace.isFlyout) {
-            const newBlock = block.workspace.targetWorkspace?.newBlock(EVENT_VALUE_BLOCK_TYPE) as SkriptBlock
-            newBlock.extra_ = { eventValue }
-            newBlock.updateShape_()
-            newBlock.initSvg()
-          } else {
-            const newBlock = block.workspace.newBlock(EVENT_VALUE_BLOCK_TYPE) as SkriptBlock
-            newBlock.extra_ = { eventValue }
-            newBlock.updateShape_()
-            newBlock.initSvg()
-          }
-        }
+    registerContentMenuGetOption(
+      eventValue,
+      100,
+      (workspace: Blockly.WorkspaceSvg) => {
+        const newBlock = workspace.newBlock(EVENT_VALUE_BLOCK_TYPE) as SkriptBlock
+        newBlock.extra_ = { eventValue }
+        newBlock.updateShape_()
+        newBlock.initSvg()
       },
-      displayText: () => {
-        return t('MENU_OPTION_GET', [t(eventValueLangKey)])
-      },
-      preconditionFn: (scope: Blockly.ContextMenuRegistry.Scope) => {
-        if (scope.block?.getStyleName() === 'event') {
-          const block = scope.block as SkriptEventBlock
-          if (block.eventValues_.includes(eventValue)) {
-            return 'enabled'
-          }
-        }
-        return 'hidden'
-      },
-    })
+      (block: Blockly.Block) => (isSkriptEventBlock(block) ? block.eventValues_.includes(eventValue) : false),
+      eventValueLangKey,
+    )
   }
 }
 
