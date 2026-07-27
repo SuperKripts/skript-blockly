@@ -1,29 +1,40 @@
 import * as Blockly from 'blockly/core'
-import { createApp, type App } from 'vue'
+import { type Component } from 'vue'
 import BlockDataComponent from '@/components/blockly/BlockDataComponent.vue'
 import { type BlockDataState, formatBlockDataStateDisplay, formatBlockDataState } from '@/blockly/blocks/types/BlockDataParams'
 import { t } from '@/locales/i18n'
 import { dropdownCache } from '../blocks/types/Types'
 import { BlockDatas } from '../blocks/types/Materials'
+import { FieldBase } from './FieldBase'
 
 export interface FieldBlockDataConfig extends Blockly.FieldConfig {
-  allowAny?: boolean
+  withEmpty?: boolean
 }
 
 type FieldBlockDataFromJsonConfig = FieldBlockDataConfig & { value?: BlockDataState }
 
-export class FieldBlockData extends Blockly.Field<BlockDataState> {
-  SERIALIZABLE = true
-  private vueApp_?: App
-  private readonly allowAny_: boolean
+export class FieldBlockData extends FieldBase<BlockDataState> {
+  private readonly withEmpty_: boolean
 
-  constructor(value?: BlockDataState, config?: FieldBlockDataConfig) {
-    super(value ?? Blockly.Field.SKIP_SETUP, null, config)
-    this.allowAny_ = config?.allowAny ?? false
+  constructor(value?: BlockDataState | null, config?: FieldBlockDataConfig) {
+    super(value, null, config)
+    this.withEmpty_ = config?.withEmpty ?? false
   }
 
   static fromJson(options: FieldBlockDataFromJsonConfig): FieldBlockData {
     return new this(options.value, options)
+  }
+
+  protected vueComponent_(): Component {
+    return BlockDataComponent
+  }
+
+  protected vueProps(): Record<string, unknown> {
+    return {
+      state: this.getValue(),
+      options: dropdownCache.getOptions(BlockDatas),
+      withEmpty: this.withEmpty_,
+    }
   }
 
   protected getDisplayText_(): string {
@@ -37,56 +48,6 @@ export class FieldBlockData extends Blockly.Field<BlockDataState> {
   getText(): string {
     const state = this.getValue()
     return state ? formatBlockDataState(state) : ''
-  }
-
-  protected showEditor_(_e?: Event): void {
-    if (this.vueApp_) {
-      this.vueApp_.unmount()
-      this.vueApp_ = undefined
-    }
-
-    Blockly.DropDownDiv.clearContent()
-    const contentDiv = Blockly.DropDownDiv.getContentDiv()
-
-    this.vueApp_ = createApp(BlockDataComponent, {
-      state: this.getValue(),
-      options: dropdownCache.getOptions(BlockDatas),
-      allowAny: this.allowAny_,
-      onSelect: (newState: BlockDataState) => {
-        this.setValue(newState)
-      },
-      onClose: () => {
-        Blockly.DropDownDiv.hideIfOwner(this)
-      },
-    })
-    this.vueApp_.mount(contentDiv)
-
-    const sourceBlock = this.getSourceBlock()
-    if (sourceBlock instanceof Blockly.BlockSvg) {
-      const bg = sourceBlock.getColour()
-      const border = sourceBlock.getColourTertiary()
-      Blockly.DropDownDiv.setColour(bg, border)
-    }
-
-    Blockly.DropDownDiv.showPositionedByField(this, () => {
-      this.dropdownDispose_()
-    })
-  }
-
-  private dropdownDispose_(): void {
-    if (this.vueApp_) {
-      this.vueApp_.unmount()
-      this.vueApp_ = undefined
-    }
-  }
-
-  dispose(): void {
-    this.dropdownDispose_()
-    super.dispose()
-  }
-
-  protected updateSize_(margin?: number): void {
-    super.updateSize_((margin ?? 0) + 20)
   }
 }
 

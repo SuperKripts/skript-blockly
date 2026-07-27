@@ -62,6 +62,7 @@ export class FieldSearchDropdown extends Blockly.FieldDropdown {
   protected override dropdownDispose_(): void {
     if (this.vueApp_) {
       this.vueApp_.unmount()
+      this.vueApp_ = undefined
     }
     super.dropdownDispose_()
   }

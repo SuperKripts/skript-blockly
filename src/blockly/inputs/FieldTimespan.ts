@@ -1,86 +1,34 @@
 import * as Blockly from 'blockly/core'
-import { createApp, type App } from 'vue'
+import { type Component } from 'vue'
 import TimespanPickerComponent from '@/components/blockly/TimespanPickerComponent.vue'
+import { FieldBase } from './FieldBase'
 
 export interface FieldTimespanConfig extends Blockly.FieldConfig {
-  timespan?: string
   showForever?: boolean
 }
 
-type FieldTimespanFromJsonConfig = FieldTimespanConfig
+type FieldTimespanFromJsonConfig = FieldTimespanConfig & {
+  timespan?: string
+}
 
-export class FieldTimespan extends Blockly.Field {
-  private vueApp_?: App
+export class FieldTimespan extends FieldBase<string> {
   private readonly showForever_: boolean
 
   constructor(value?: string, validator?: Blockly.FieldValidator<string>, config?: FieldTimespanConfig) {
     super(value, validator, config)
-    this.SERIALIZABLE = true
     this.showForever_ = config?.showForever ?? false
   }
 
   static fromJson(options: FieldTimespanFromJsonConfig): FieldTimespan {
-    const timespan = options.timespan
-    return new this(timespan, undefined, options)
+    return new this(options.timespan, undefined, options)
   }
 
-  protected doClassValidation_(newValue?: string): string | null {
-    if (!newValue) return null
-    return String(newValue)
+  protected vueComponent_(): Component {
+    return TimespanPickerComponent
   }
 
-  protected getText_(): string | null {
-    const val = this.getValue()
-    return val ? String(val) : null
-  }
-
-  protected showEditor_(_e?: Event): void {
-    if (this.vueApp_) {
-      this.vueApp_.unmount()
-      this.vueApp_ = undefined
-    }
-
-    Blockly.DropDownDiv.clearContent()
-    const contentDiv = Blockly.DropDownDiv.getContentDiv()
-
-    this.vueApp_ = createApp(TimespanPickerComponent, {
-      value: this.getValue(),
-      showForever: this.showForever_, // 传递配置
-      onSelect: (value: string) => {
-        this.setValue(value)
-      },
-      onClose: () => {
-        Blockly.DropDownDiv.hideIfOwner(this)
-      },
-    })
-    this.vueApp_.mount(contentDiv)
-
-    const sourceBlock = this.getSourceBlock()
-    if (sourceBlock instanceof Blockly.BlockSvg) {
-      const bg = sourceBlock.getColour()
-      const border = sourceBlock.getColourTertiary()
-      Blockly.DropDownDiv.setColour(bg, border)
-    }
-
-    Blockly.DropDownDiv.showPositionedByField(this, () => {
-      this.dropdownDispose_()
-    })
-  }
-
-  private dropdownDispose_(): void {
-    if (this.vueApp_) {
-      this.vueApp_.unmount()
-      this.vueApp_ = undefined
-    }
-  }
-
-  dispose(): void {
-    this.dropdownDispose_()
-    super.dispose()
-  }
-
-  protected updateSize_(margin?: number): void {
-    super.updateSize_((margin ?? 0) + 10)
+  protected vueProps(): Record<string, unknown> {
+    return { value: this.getValue(), showForever: this.showForever_ }
   }
 }
 

@@ -16,12 +16,13 @@ import type { MenuOption } from 'blockly/core'
 const props = withDefaults(defineProps<{
   state: BlockDataState
   options: MenuOption[]
-  allowAny?: boolean
+  withEmpty?: boolean
 }>(), {
-  allowAny: false
+  withEmpty: false
 })
 
 const emit = defineEmits<{
+  (e: 'resize'): void
   (e: 'select', state: BlockDataState | null): void
   (e: 'close'): void
 }>()
@@ -49,10 +50,11 @@ function selectBlock(value: string) {
   emit('select', currentState.value)
 }
 
-function selectAnyBlock() {
+function anyBlock(isSearch: boolean) {
   blockName.value = ''
   params.value = {}
-  emit('select', { blockName: '', params: {} })
+  emit('resize')
+  const _ = isSearch ? emit('select', { blockName: '', params: {} }) : emit('resize')
 }
 
 function setParam(key: string, value: string) {
@@ -90,10 +92,10 @@ watch(() => props.state, (newState) => {
       <div class="selected-block">
         <span class="block-name">{{ getBlockDisplayName(blockName) }}</span>
         <div class="button-group">
-          <button v-if="allowAny" class="reset-btn" type="button" @click="selectAnyBlock">
+          <button v-if="withEmpty" class="reset-btn" type="button" @click="anyBlock(true)">
             {{ t('BLOCK_DATA_RESET') }}
           </button>
-          <button class="change-btn" type="button" @click="blockName = ''; params = {}">
+          <button class="change-btn" type="button" @click="anyBlock(false)">
             {{ t('BLOCK_DATA_CHANGE_BLOCK') }}
           </button>
         </div>

@@ -95,7 +95,7 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
       initShape_(this: SkriptBlock) {
         const input = this.appendDummyInput()
         pte(info.blockKey.toUpperCase() + '_DESC', {
-          0: () => input.appendField(new FieldBlockData(void 0, { allowAny: true }), 'block'),
+          0: () => input.appendField(new FieldBlockData(null, { withEmpty: true }), 'block'),
           default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
         })
         appendEventPriorityInput(this)
