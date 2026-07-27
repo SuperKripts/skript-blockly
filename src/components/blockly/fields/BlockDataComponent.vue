@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   (e: 'resize'): void
-  (e: 'select', state: BlockDataState | null): void
+  (e: 'select', state: BlockDataState): void
   (e: 'close'): void
 }>()
 
@@ -192,12 +192,12 @@ watch(() => props.state, (newState) => {
 }
 
 .reset-btn {
-  background: rgba(100, 150, 255, 0.3);
-  color: rgba(180, 200, 255, 0.9);
+  background: rgba(100, 150, 255, 1);
+  color: white;
 }
 
 .reset-btn:hover {
-  background: rgba(100, 150, 255, 0.45);
+  background: rgba(100, 150, 255, 0.8);
 }
 
 .params-editor {

@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly/core'
 import { type Component } from 'vue'
-import TimespanPickerComponent from '@/components/blockly/TimespanPickerComponent.vue'
+import TimespanPickerComponent from '@/components/blockly/fields/TimespanPickerComponent.vue'
 import { FieldBase } from './FieldBase'
 
 export interface FieldTimespanConfig extends Blockly.FieldConfig {

@@ -149,7 +149,7 @@ onMounted(() => {
       <input ref="inputRef" v-model="amount" type="number" class="amount-input"
         :placeholder="t('TYPE_TIMESPAN_AMOUNT_PLACEHOLDER')" @input="onAmountChange" @keydown.enter.prevent="onEnter"
         :disabled="isForever" :aria-label="t('TYPE_TIMESPAN_AMOUNT_PLACEHOLDER')" />
-      <select class="unit-select" :value="unit" @change="onUnitChange">
+      <select class="unit-select" :value="unit" @change="onUnitChange" aria-label="timespan unit">
         <option v-for="u in timeUnits" :key="u" :value="u">
           {{ t('TYPE_TIME_' + u.toUpperCase()) }}
         </option>
@@ -157,7 +157,7 @@ onMounted(() => {
           {{ t('TYPE_TIME_FOREVER') }}
         </option>
       </select>
-      <select class="mode-select" :value="mode" @change="onModeChange" :disabled="isForever">
+      <select class="mode-select" :value="mode" @change="onModeChange" :disabled="isForever" aria-label="timespan mode">
         <option value="">{{ t('TYPE_TIMESPAN_MODE_ANY') }}</option>
         <option v-for="m in timeModes" :key="m" :value="m">
           {{ t('TYPE_TIME_' + m.toUpperCase()) }}

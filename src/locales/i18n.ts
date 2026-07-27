@@ -19,10 +19,11 @@ watch(i18n.global.locale, (locale) => {
 export default i18n
 export const { t, tm } = i18n.global
 export const pt = (msg: string): (string | number)[] => {
-  return t(msg)
-    .split(/%(\d+)/)
-    .filter((segment) => segment !== '')
-    .map((segment, index) => (index % 2 === 1 ? Number.parseInt(segment) : segment))
+  const match = t(msg).match(/%(\d+)|[^%]+|%/g)
+  if (match) {
+    return match.map((m) => (m.startsWith('%') && m.length > 1 ? Number(m.slice(1)) : m))
+  }
+  return []
 }
 
 type TemplateHandlers = {

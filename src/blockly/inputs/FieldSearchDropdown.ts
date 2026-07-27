@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 import SearchDropdownCache from '../utils/FieldSearchCache'
 import { createApp, type App } from 'vue'
-import SearchDropdownComponent from '@/components/blockly/SearchDropdownComponent.vue'
+import SearchDropdownComponent from '@/components/blockly/fields/SearchDropdownComponent.vue'
 
 export interface FieldSearchDropdownConfig extends Blockly.FieldDropdownConfig {
   cacheKey?: string

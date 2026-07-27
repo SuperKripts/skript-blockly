@@ -1,6 +1,6 @@
 import * as Blockly from 'blockly/core'
 import { type Component } from 'vue'
-import BlockDataComponent from '@/components/blockly/BlockDataComponent.vue'
+import BlockDataComponent from '@/components/blockly/fields/BlockDataComponent.vue'
 import { type BlockDataState, formatBlockDataStateDisplay, formatBlockDataState } from '@/blockly/blocks/types/BlockDataParams'
 import { t } from '@/locales/i18n'
 import { dropdownCache } from '../blocks/types/Types'

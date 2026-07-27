@@ -271,6 +271,9 @@ export const EVENT_BREWING_COMPLETE_DESC = '当酿造台完成药水酿造时'
 export const EVENT_VAULT_DISPLAY_ITEM_DESC = '当宝库展示物品时'
 export const EVENT_VILLAGER_CAREER_CHANGE_DESC = '当村民职业变更时'
 
+// Expression
+export const EXPRASSION_AI_DESC = '%0 的AI'
+
 // Event Values
 export const EVENT_VALUE_BLOCK = '事件中的方块'
 export const EVENT_VALUE_LOCATION = '事件中的位置'
