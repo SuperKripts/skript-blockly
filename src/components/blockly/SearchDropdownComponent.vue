@@ -112,8 +112,9 @@ onMounted(() => {
 
 <template>
   <div class="search-dropdown-container">
-    <input ref="inputRef" v-model="searchQuery" type="search" class="search-input" :placeholder="t('BLOCKLY_SEARCH')"
-      @input="onInput" @keydown="handleInputKeydown" />
+    <input id="search-input" ref="inputRef" v-model="searchQuery" type="search" class="search-input"
+      :placeholder="t('BLOCKLY_SEARCH')" @input="onInput" @keydown="handleInputKeydown"
+      :aria-label="t('BLOCKLY_SEARCH')" />
     <div class="list-container" ref="listRef">
       <button v-for="(opt, index) in displayedOptions" :key="opt.value" class="list-item"
         :class="{ highlighted: highlightedIndex === index }" :data-value="opt.value" @click="selectOption(opt.value)"

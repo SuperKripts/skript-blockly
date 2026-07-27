@@ -148,7 +148,7 @@ onMounted(() => {
     <div class="picker-controls">
       <input ref="inputRef" v-model="amount" type="number" class="amount-input"
         :placeholder="t('TYPE_TIMESPAN_AMOUNT_PLACEHOLDER')" @input="onAmountChange" @keydown.enter.prevent="onEnter"
-        :disabled="isForever" />
+        :disabled="isForever" :aria-label="t('TYPE_TIMESPAN_AMOUNT_PLACEHOLDER')" />
       <select class="unit-select" :value="unit" @change="onUnitChange">
         <option v-for="u in timeUnits" :key="u" :value="u">
           {{ t('TYPE_TIME_' + u.toUpperCase()) }}
