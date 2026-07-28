@@ -9,7 +9,7 @@ const blockKey = 'exprassion_affected_entities'
 const supportedEvents = ['event_aoe_cloud_effect']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Affected Entities', docUrl: getSkriptHubDocUrl(0) })
+  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Affected Entities', docUrl: getSkriptHubDocUrl(3734) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.mixin({ supportedEvents_: supportedEvents })

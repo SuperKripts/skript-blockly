@@ -11,7 +11,7 @@ const blockKey = 'exprassion_argb'
 const ARGB_CHANNELS = ['alpha', 'red', 'green', 'blue']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'ARGB Color Value', docUrl: getSkriptHubDocUrl(0) })
+  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'ARGB Color Value', docUrl: getSkriptHubDocUrl(12812) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)

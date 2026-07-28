@@ -22,13 +22,13 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
     return false
   }
 
-  private getInputConnection(a: Blockly.Connection, b: Blockly.Connection): Blockly.Connection | null {
+  private getInputConnection<T extends Blockly.Connection>(a: T, b: T): T | null {
     if (a.type === Blockly.ConnectionType.INPUT_VALUE) return a
     if (b.type === Blockly.ConnectionType.INPUT_VALUE) return b
     return null
   }
 
-  private getOutputConnection(a: Blockly.Connection, b: Blockly.Connection): Blockly.Connection | null {
+  private getOutputConnection<T extends Blockly.Connection>(a: T, b: T): T | null {
     if (a.type === Blockly.ConnectionType.OUTPUT_VALUE) return a
     if (b.type === Blockly.ConnectionType.OUTPUT_VALUE) return b
     return null
@@ -46,6 +46,8 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
   }
 
   doDragChecks(a: Blockly.RenderedConnection, b: Blockly.RenderedConnection, distance: number): boolean {
+    console.log(a.type)
+
     if (a.getSourceBlock().type === 'effect_cancel_event') {
       const rootBlock = b.getSourceBlock().getRootBlock()
       if (isSkriptEventBlock(rootBlock)) {

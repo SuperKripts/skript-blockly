@@ -6,31 +6,30 @@ import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 import { createTempFieldDropdown } from '../types/Types'
 
-const blockKey = 'exprassion_age'
+const blockKey = 'exprassion_all_banned_entries'
 
-const AGE_TYPES = ['age', 'maximum age']
+const BANNED_TYPES = ['players', 'ips']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Age', docUrl: getSkriptHubDocUrl(9480) })
+  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'All Banned Entries', docUrl: getSkriptHubDocUrl(9481) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_AGE_DESC', {
-        0: () => this.appendValueInput('target').setCheck(['block', 'entity']),
-        1: () => this.appendDummyInput().appendField(createTempFieldDropdown('exprassion_age_type', AGE_TYPES), 'ageType'),
+      pte('EXPRASSION_ALL_BANNED_ENTRIES_DESC', {
+        0: () => this.appendDummyInput().appendField(createTempFieldDropdown('exprassion_all_banned_entries_type', BANNED_TYPES), 'type'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })
     },
     initStyle_() {
-      this.setOutput(true, 'number')
+      // TODO 动态输出类型
+      this.setOutput(true, 'offlineplayer')
     },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
 
-  generator.forBlock[blockKey] = function (block, generator) {
-    const target = generator.valueToCode(block, 'target', Order.ATOMIC) || 'target'
-    const ageType = block.getFieldValue('ageType')
-    return [`${ageType} of ${target}`, Order.ATOMIC]
+  generator.forBlock[blockKey] = function (block) {
+    const type = block.getFieldValue('type')
+    return [`all banned ${type}`, Order.ATOMIC]
   }
 
   return { kind: 'block', type: blockKey }

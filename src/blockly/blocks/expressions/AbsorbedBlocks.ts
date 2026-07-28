@@ -9,7 +9,7 @@ const blockKey = 'exprassion_absorbed_blocks'
 const supportedEvents = ['event_sponge_absorb']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Absorbed Blocks', docUrl: getSkriptHubDocUrl(0) })
+  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Absorbed Blocks', docUrl: getSkriptHubDocUrl(4183) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.mixin({ supportedEvents_: supportedEvents })

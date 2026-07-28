@@ -5,27 +5,27 @@ import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition 
 import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 
-const blockKey = 'exprassion_active_item'
+const blockKey = 'exprassion_allay_jukebox'
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Active Item', docUrl: getSkriptHubDocUrl(10149) })
+  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Allay Target Jukebox', docUrl: getSkriptHubDocUrl(13367) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_ACTIVE_ITEM_DESC', {
+      pte('EXPRASSION_ALLAY_JUKEBOX_DESC', {
         0: () => this.appendValueInput('entity').setCheck('livingentity'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })
     },
     initStyle_() {
-      this.setOutput(true, 'itemstack')
+      this.setOutput(true, 'location')
     },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
 
   generator.forBlock[blockKey] = function (block, generator) {
     const entity = generator.valueToCode(block, 'entity', Order.ATOMIC) || 'entity'
-    return [`active item of ${entity}`, Order.ATOMIC]
+    return [`target jukebox of ${entity}`, Order.ATOMIC]
   }
 
   return { kind: 'block', type: blockKey }
