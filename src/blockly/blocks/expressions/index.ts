@@ -8,6 +8,8 @@ import { register as register_AllayJukebox } from './AllayJukebox.ts'
 import { register as register_AllBannedEntries } from './AllBannedEntries.ts'
 import { register as register_AllCommands } from './AllCommands.ts'
 import { register as register_AlphabetList } from './AlphabetList.ts'
+import { register as register_Altitude } from './Altitude.ts'
+import { register as register_Amount } from './Amount.ts'
 import { register as register_ARGB } from './ARGB.ts'
 
 export const BlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
@@ -23,6 +25,8 @@ function register() {
     register_AllBannedEntries(),
     register_AllCommands(),
     register_AlphabetList(),
+    register_Altitude(),
+    register_Amount(),
     register_ARGB(),
   )
 }
