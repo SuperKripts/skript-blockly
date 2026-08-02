@@ -168,9 +168,9 @@ export const Types: SkriptType = {
   ],
 }
 
-export function createTempFieldDropdown(name: string, args: string[]): Blockly.Field<string> {
+export function createTempFieldDropdown(name: string, args: string[], validator?: Blockly.FieldValidator<string>): Blockly.Field<string> {
   const options = args.map((e): Blockly.MenuOption => [t(`FIELD_OPTION_${name}_${e == '' ? 'DEFAULT' : e.replace(/[ '-]/g, '_')}`.toUpperCase()), e])
-  return args.length < 9 ? new Blockly.FieldDropdown(options) : new FieldGridDropdown(options)
+  return args.length < 9 ? new Blockly.FieldDropdown(options, validator) : new FieldGridDropdown(options, validator)
 }
 
 export function createFieldDropdown(type: SkriptType, withEmpty: boolean = false): Blockly.Field<string> {

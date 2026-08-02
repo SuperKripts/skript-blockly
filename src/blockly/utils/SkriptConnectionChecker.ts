@@ -5,12 +5,12 @@ import type { SkriptBlock } from '../blocks/SkriptBlock'
 export const registrationName = 'SkriptConnectionChecker'
 
 const OUTPUT_COMPATIBILITY: Record<string, string[]> = {
-  livingentity: ['livingentity', 'entity'],
+  livingentity: ['livingentity', 'entity', 'player'],
 }
 
 export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
-  private isCompatible(outputChecks?: string[] | null, inputChecks?: string[] | null): boolean {
-    if (!outputChecks || !inputChecks) {
+  private isCompatible(inputChecks?: string[] | null, outputChecks?: string[] | null): boolean {
+    if (!inputChecks || !outputChecks) {
       return false
     }
     for (const outType of outputChecks) {

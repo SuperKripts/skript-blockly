@@ -3,6 +3,7 @@
 import * as Blockly from 'blockly/core'
 import CodeGenerator, { Order, SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { createSkriptDefinition, type SkriptBlock } from '../SkriptBlock'
+import { createTempFieldDropdown } from '../types/Types'
 
 const blockKey = 'condition_wrapper'
 
@@ -21,8 +22,14 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
   CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
     const condition = generate.valueToCode(block, 'condition', Order.ATOMIC)
-    return [condition, Order.ATOMIC]
+    return condition
   }
 
   return { kind: 'block', type: blockKey }
+}
+
+const HAS_MODE = ['has', "don't have"]
+
+export function createConditionDropdown() {
+  return createTempFieldDropdown('condition_has_mode', HAS_MODE)
 }
