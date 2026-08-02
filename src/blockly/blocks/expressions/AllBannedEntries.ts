@@ -1,3 +1,5 @@
+'skript syntax'
+
 import * as Blockly from 'blockly/core'
 import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition } from '../SkriptBlock'
 import { pte } from '@/locales/i18n'

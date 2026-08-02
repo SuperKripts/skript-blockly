@@ -5,6 +5,7 @@ import { register as register_AffectedEntities } from './AffectedEntities.ts'
 import { register as register_Age } from './Age.ts'
 import { register as register_AI } from './AI.ts'
 import { register as register_AllayJukebox } from './AllayJukebox.ts'
+import { register as register_AllBannedEntries } from './AllBannedEntries.ts'
 import { register as register_AllCommands } from './AllCommands.ts'
 import { register as register_AlphabetList } from './AlphabetList.ts'
 import { register as register_Altitude } from './Altitude.ts'
@@ -21,6 +22,7 @@ function register() {
     register_Age(),
     register_AI(),
     register_AllayJukebox(),
+    register_AllBannedEntries(),
     register_AllCommands(),
     register_AlphabetList(),
     register_Altitude(),
