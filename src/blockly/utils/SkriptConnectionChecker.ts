@@ -46,8 +46,6 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
   }
 
   doDragChecks(a: Blockly.RenderedConnection, b: Blockly.RenderedConnection, distance: number): boolean {
-    console.log(a.type)
-
     if (a.getSourceBlock().type === 'effect_cancel_event') {
       const rootBlock = b.getSourceBlock().getRootBlock()
       if (isSkriptEventBlock(rootBlock)) {

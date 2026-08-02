@@ -24,7 +24,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
 
   generator.forBlock[blockKey] = function (block, generator) {
-    const target = generator.valueToCode(block, 'target', Order.ATOMIC) || 'target'
+    const target = generator.valueToCode(block, 'target', Order.ATOMIC)
     return [`amount of ${target}`, Order.ATOMIC]
   }
 

@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 
 import '@/blockly/config'
-import { effectBlockInfos, eventBlockInfos, structureBlockInfos, typeBlockInfos, expressionBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
+import { effectBlockInfos, eventBlockInfos, structureBlockInfos, typeBlockInfos, expressionBlockInfos, conditionBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSearch'
 import { t } from '@/locales/i18n'
 
@@ -41,20 +41,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         kind: 'category',
         name: t('SYNTAX_TYPE_CONDITION'),
         cssconfig: customCss('condition'),
-        // contents: [
-        //   {
-        //     kind: 'category',
-        //     name: t('SYNTAX_TYPE_CONDITION'),
-        //     colour: '120',
-        //     contents: [],
-        //   },
-        //   {
-        //     kind: 'category',
-        //     name: t('SYNTAX_TYPE_CONDITION'),
-        //     colour: '120',
-        //     contents: [],
-        //   },
-        // ],
+        contents: conditionBlockInfos,
       },
       {
         kind: 'category',

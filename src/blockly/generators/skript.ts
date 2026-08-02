@@ -107,4 +107,8 @@ export default generator
 
 export const Order = {
   ATOMIC: 0,
+  TYPE: 0,
+  EXPRESSION: 1,
+  EFFECT: 2,
+  NONE: 99,
 }
