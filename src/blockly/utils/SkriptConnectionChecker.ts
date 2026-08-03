@@ -23,14 +23,14 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
   }
 
   private getInputConnection<T extends Blockly.Connection>(a: T, b: T): T | null {
-    if (a.type === Blockly.ConnectionType.INPUT_VALUE) return a
-    if (b.type === Blockly.ConnectionType.INPUT_VALUE) return b
+    if (a.type === Blockly.ConnectionType.INPUT_VALUE || a.type === Blockly.ConnectionType.NEXT_STATEMENT) return a
+    if (b.type === Blockly.ConnectionType.INPUT_VALUE || b.type === Blockly.ConnectionType.NEXT_STATEMENT) return b
     return null
   }
 
   private getOutputConnection<T extends Blockly.Connection>(a: T, b: T): T | null {
-    if (a.type === Blockly.ConnectionType.OUTPUT_VALUE) return a
-    if (b.type === Blockly.ConnectionType.OUTPUT_VALUE) return b
+    if (a.type === Blockly.ConnectionType.OUTPUT_VALUE || a.type === Blockly.ConnectionType.PREVIOUS_STATEMENT) return a
+    if (b.type === Blockly.ConnectionType.OUTPUT_VALUE || b.type === Blockly.ConnectionType.PREVIOUS_STATEMENT) return b
     return null
   }
 
@@ -38,6 +38,9 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
     const inputConn = this.getInputConnection(a, b)
     const outputConn = this.getOutputConnection(a, b)
     if (inputConn && outputConn) {
+      if (outputConn.getCheck()?.includes('event')) {
+        return inputConn.getCheck()?.includes('event') ?? false
+      }
       if (this.isCompatible(outputConn.getCheck(), inputConn.getCheck())) {
         return true
       }

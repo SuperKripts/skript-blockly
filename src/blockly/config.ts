@@ -55,3 +55,18 @@ export const config = {
     ...connectionCheckerPluginInfo,
   },
 }
+
+export function injectBlockly(element: Element): Blockly.WorkspaceSvg {
+  const workspace = Blockly.inject(element, config)
+  workspace.addChangeListener(disableOrphans)
+  return workspace
+}
+
+function disableOrphans(e: Blockly.Events.Abstract) {
+  if ('blockId' in e && e.blockId) {
+    const block = e.getEventWorkspace_().getBlockById(e.blockId as string)
+    if (block?.getStyleName() !== 'event') {
+      Blockly.Events.disableOrphans(e)
+    }
+  }
+}
