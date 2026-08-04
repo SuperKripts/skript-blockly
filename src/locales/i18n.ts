@@ -26,7 +26,7 @@ export const pt = (msg: string): (string | number)[] => {
   return []
 }
 
-type TemplateHandlers = {
+export type TemplateHandlers = {
   [index: number]: () => void
   default?: (i: { msg: string; index: number }) => void
 }

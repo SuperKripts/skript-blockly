@@ -1,12 +1,9 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createTempFieldDropdown } from '../types/Types'
-import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
-import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
+import { registerEasyEvent, type EventSyntax } from './SkriptEventBlock'
 
 const blockKey = 'event_experience_change'
 const syntax: EventSyntax = {
@@ -19,23 +16,20 @@ const syntax: EventSyntax = {
 const changeModes = ['change', 'increase', 'decrease']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptEventDefinition(syntax)
-  const mixin: Partial<SkriptBlockDefinition> = {
-    initShape_(this: SkriptBlock) {
-      const input = this.appendDummyInput()
+  return registerEasyEvent({
+    ...syntax,
+    blockKey,
+    desc: (input) => {
       pte('EVENT_EXPERIENCE_CHANGE_DESC', {
         0: () => input.appendField(createTempFieldDropdown('event_experience_change', changeModes), 'mode'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
-      appendEventPriorityInput(this)
     },
-  }
-  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
-    const mode = block.getFieldValue('mode')
-    const statementMembers = generate.statementToCode(block, 'block')
-    const code = SkriptCodeGenerator.codeJoin('on experience', mode, generateCodeForEventPriority(block))
-    return `${code}: \n${statementMembers}`
-  }
-  return { kind: 'block', type: blockKey }
+    code: (block, generate) => {
+      const mode = block.getFieldValue('mode')
+      const statementMembers = generate.statementToCode(block, 'block')
+      const code = generate.codeJoin('on experience', mode)
+      return `${code}: \n${statementMembers}`
+    },
+  })
 }

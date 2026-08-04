@@ -99,6 +99,14 @@ export class SkriptCodeGenerator extends Blockly.Generator {
 
     return `${restPart} and ${lastPart}`
   }
+
+  codeJoin(...codes: (string | (string | undefined)[])[]): string {
+    return SkriptCodeGenerator.codeJoin(...codes)
+  }
+
+  arrayJoin(codes: string[], quote = false): string {
+    return SkriptCodeGenerator.arrayJoin(codes, quote)
+  }
 }
 
 export const generator = new SkriptCodeGenerator()

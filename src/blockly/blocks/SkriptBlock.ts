@@ -69,6 +69,8 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
   }
 }
 
+export function registerSimpleEvent() {}
+
 export function registerContentMenuGetOption(
   id: string,
   weight: number,
@@ -76,6 +78,10 @@ export function registerContentMenuGetOption(
   supportedBlock: string[] | ((block: Blockly.Block) => boolean),
   displayTextKey: string,
 ) {
+  const item = Blockly.ContextMenuRegistry.registry.getItem(id)
+  if (item) {
+    Blockly.ContextMenuRegistry.registry.unregister(id)
+  }
   Blockly.ContextMenuRegistry.registry.register({
     id,
     scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK,

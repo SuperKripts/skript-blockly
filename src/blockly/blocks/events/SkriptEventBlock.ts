@@ -1,6 +1,5 @@
 import * as Blockly from 'blockly/core'
 import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { t } from '@/locales/i18n'
 
@@ -11,14 +10,16 @@ export type EventSyntax = {
   cancellable?: boolean
 }
 
-export type SimpleEventOptions = {
+export type SimpleEventOptions = EventSyntax & {
   blockKey: string
-  title: string
-  docId: number
   desc: string
   code: string
-  eventValues?: string[]
-  cancellable?: boolean
+}
+
+export type EasyEventOptions = EventSyntax & {
+  blockKey: string
+  desc: string | ((input: Blockly.Input) => void)
+  code: string | ((block: SkriptEventBlock, generate: SkriptCodeGenerator) => [string, number] | string | null)
 }
 
 export type SkriptEventBlock = SkriptBlock & {
@@ -36,8 +37,37 @@ export function createSkriptEventDefinition(syntax: EventSyntax): SkriptBlockDef
   const mixin: Partial<SkriptEventBlock> = {
     cancellable_: cancellable,
     eventValues_: eventValues,
+    initStyle_() {
+      this.setPreviousStatement(true, 'event')
+      this.appendStatementInput('block')
+    },
   }
   return Object.assign(definition, mixin)
+}
+
+export function registerEasyEvent(option: EasyEventOptions): Blockly.utils.toolbox.BlockInfo {
+  const { blockKey, desc } = option
+  const definition = createSkriptEventDefinition(option)
+  const mixin: Partial<SkriptEventBlock> = {
+    initShape_(this: SkriptBlock) {
+      const descInput = this.appendDummyInput()
+      if (typeof desc === 'string') {
+        descInput.appendField(t(desc))
+      } else {
+        desc(descInput)
+      }
+    },
+  }
+  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
+  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
+    if (typeof option.code === 'string') {
+      return option.code
+    } else if (isSkriptEventBlock(block)) {
+      return option.code(block, generate)
+    }
+    return null
+  }
+  return { kind: 'block', type: blockKey }
 }
 
 export function registerSimpleEvent(option: SimpleEventOptions): Blockly.utils.toolbox.BlockInfo {
@@ -46,13 +76,12 @@ export function registerSimpleEvent(option: SimpleEventOptions): Blockly.utils.t
   const mixin: Partial<SkriptEventBlock> = {
     initShape_(this: SkriptBlock) {
       this.appendDummyInput().appendField(t(desc))
-      appendEventPriorityInput(this)
     },
   }
 
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
   CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
-    const code = SkriptCodeGenerator.codeJoin(option.code, generateCodeForEventPriority(block))
+    const code = SkriptCodeGenerator.codeJoin(option.code)
     return `${code}: \n${generate.statementToCode(block, 'block')}`
   }
   return { kind: 'block', type: blockKey }

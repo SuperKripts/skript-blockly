@@ -1,13 +1,10 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createFieldSearchDropdown } from '../types/Types'
-import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
-import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { ItemTypes } from '../types/Materials'
+import { registerEasyEvent, type EventSyntax } from './SkriptEventBlock'
 
 const blockKey = 'event_move_on'
 const syntax: EventSyntax = {
@@ -18,22 +15,19 @@ const syntax: EventSyntax = {
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptEventDefinition(syntax)
-  const mixin: Partial<SkriptBlockDefinition> = {
-    initShape_(this: SkriptBlock) {
-      const input = this.appendDummyInput()
+  return registerEasyEvent({
+    ...syntax,
+    blockKey,
+    desc: (input) => {
       pte('EVENT_MOVE_ON_DESC', {
         0: () => input.appendField(createFieldSearchDropdown(ItemTypes, false), 'block'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
-      appendEventPriorityInput(this)
     },
-  }
-  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
-    const statementMembers = generate.statementToCode(block, 'block')
-    const code = SkriptCodeGenerator.codeJoin('on walking on', block.getFieldValue('block'), generateCodeForEventPriority(block))
-    return `${code}: \n${statementMembers}`
-  }
-  return { kind: 'block', type: blockKey }
+    code: (block, generate) => {
+      const statementMembers = generate.statementToCode(block, 'block')
+      const code = generate.codeJoin('on walking on', block.getFieldValue('block'))
+      return `${code}: \n${statementMembers}`
+    },
+  })
 }

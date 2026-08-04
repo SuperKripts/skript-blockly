@@ -1,12 +1,9 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
-import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
-import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { FieldBlockData } from '@/blockly/inputs/FieldBlockData'
+import { registerEasyEvent, type EventSyntax } from './SkriptEventBlock'
 
 type BlockEventInfo = {
   blockKey: string
@@ -90,24 +87,20 @@ const BlockEventInfos: BlockEventInfo[] = [
 
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return BlockEventInfos.map((info) => {
-    const definition = createSkriptEventDefinition(info.syntax)
-    const mixin: Partial<SkriptBlockDefinition> = {
-      initShape_(this: SkriptBlock) {
-        const input = this.appendDummyInput()
+    return registerEasyEvent({
+      ...info.syntax,
+      blockKey: info.blockKey,
+      desc: (input) => {
         pte(info.blockKey.toUpperCase() + '_DESC', {
           0: () => input.appendField(new FieldBlockData(null, { withEmpty: true }), 'block'),
           default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
         })
-        appendEventPriorityInput(this)
       },
-    }
-
-    Blockly.Blocks[info.blockKey] = Object.assign(definition, mixin)
-    CodeGenerator.forBlock[info.blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
-      const statementMembers = generate.statementToCode(block, 'block')
-      const code = SkriptCodeGenerator.codeJoin('on', info.code, ['of', block.getField('block')?.getText()], generateCodeForEventPriority(block))
-      return `${code}: \n${statementMembers}`
-    }
-    return { kind: 'block', type: info.blockKey }
+      code: (block, generate) => {
+        const statementMembers = generate.statementToCode(block, 'block')
+        const code = generate.codeJoin('on', info.code, ['of', block.getField('block')?.getText()])
+        return `${code}: \n${statementMembers}`
+      },
+    })
   })
 }

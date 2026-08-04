@@ -2,7 +2,6 @@
 
 import * as Blockly from 'blockly/core'
 import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import WorldMutator, { worldList, worldName } from '../types/World'
 import type { MutatorExtractValue } from '@/blockly/utils/SimpleMutator'
@@ -68,8 +67,6 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
           0: () => input.appendField('', 'world'),
           default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
         })
-        appendEventPriorityInput(this)
-
         this.setMutator(WorldMutator.createMutator(this))
       },
       updateShape_() {
@@ -97,7 +94,7 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
       const skriptBlock = block as SkriptBlock
       const worlds = skriptBlock.extra_.worlds as MutatorExtractValue<string>[]
       const statementMembers = generate.statementToCode(block, 'block')
-      const code = SkriptCodeGenerator.codeJoin('on world', info.code, ['of', worldList(worlds)], generateCodeForEventPriority(block))
+      const code = SkriptCodeGenerator.codeJoin('on world', info.code, ['of', worldList(worlds)])
       return `${code}: \n${statementMembers}`
     }
     return { kind: 'block', type: info.blockKey }

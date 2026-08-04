@@ -1,13 +1,10 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createFieldSearchDropdown } from '../types/Types'
-import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
-import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { ItemTypes } from '../types/Materials'
+import { registerEasyEvent, type EventSyntax } from './SkriptEventBlock'
 
 type ItemEventInfo = {
   blockKey: string
@@ -175,10 +172,10 @@ const ItemEventInfos: ItemEventInfo[] = [
 
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
   return ItemEventInfos.map((info) => {
-    const definition = createSkriptEventDefinition(info.syntax)
-    const mixin: Partial<SkriptBlockDefinition> = {
-      initShape_(this: SkriptBlock) {
-        const input = this.appendDummyInput()
+    return registerEasyEvent({
+      ...info.syntax,
+      blockKey: info.blockKey,
+      desc: (input) => {
         if (info.hasItem) {
           pte(info.blockKey.toUpperCase() + '_DESC', {
             0: () => input.appendField(createFieldSearchDropdown(ItemTypes, true), 'item'),
@@ -189,19 +186,13 @@ export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {
             default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
           })
         }
-        appendEventPriorityInput(this)
       },
-    }
-
-    Blockly.Blocks[info.blockKey] = Object.assign(definition, mixin)
-    CodeGenerator.forBlock[info.blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
-      const statementMembers = generate.statementToCode(block, 'block')
-      const ofPrefix = info.ofPrefix ?? 'of'
-      const code = info.hasItem
-        ? SkriptCodeGenerator.codeJoin('on', info.code, [ofPrefix, block.getFieldValue('item')], generateCodeForEventPriority(block))
-        : SkriptCodeGenerator.codeJoin('on', info.code, generateCodeForEventPriority(block))
-      return `${code}: \n${statementMembers}`
-    }
-    return { kind: 'block', type: info.blockKey }
+      code: (block, generate) => {
+        const statementMembers = generate.statementToCode(block, 'block')
+        const ofPrefix = info.ofPrefix ?? 'of'
+        const code = info.hasItem ? generate.codeJoin('on', info.code, [ofPrefix, block.getFieldValue('item')]) : generate.codeJoin('on', info.code)
+        return `${code}: \n${statementMembers}`
+      },
+    })
   })
 }

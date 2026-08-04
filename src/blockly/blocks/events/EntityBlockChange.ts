@@ -1,13 +1,10 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createFieldDropdown } from '../types/Types'
 import { Entities } from '../types/Entities'
-import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
-import { registerSimpleEvent, createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
+import { registerEasyEvent, registerSimpleEvent, type EventSyntax } from './SkriptEventBlock'
 
 const eventValues = [
   'event-block',
@@ -89,26 +86,22 @@ const syntax_entity_change_block: EventSyntax = {
 }
 
 function registerEntityChangeBlock(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptEventDefinition(syntax_entity_change_block)
-  const mixin: Partial<SkriptBlockDefinition> = {
-    initShape_(this: SkriptBlock) {
-      const input = this.appendDummyInput()
+  return registerEasyEvent({
+    ...syntax_entity_change_block,
+    blockKey: blockKey_entity_change_block,
+    desc: (input) => {
       pte('EVENT_ENTITY_CHANGE_BLOCK_DESC', {
         0: () => input.appendField(createFieldDropdown(Entities, true), 'entity'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
-      appendEventPriorityInput(this)
     },
-  }
-
-  Blockly.Blocks[blockKey_entity_change_block] = Object.assign(definition, mixin)
-  CodeGenerator.forBlock[blockKey_entity_change_block] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
-    const entity = block.getFieldValue('entity')
-    const statementMembers = generate.statementToCode(block, 'block')
-    const code = SkriptCodeGenerator.codeJoin('on', entity === '' ? 'entity' : entity, 'change block', generateCodeForEventPriority(block))
-    return `${code}: \n${statementMembers}`
-  }
-  return { kind: 'block', type: blockKey_entity_change_block }
+    code: (block, generate) => {
+      const entity = block.getFieldValue('entity')
+      const statementMembers = generate.statementToCode(block, 'block')
+      const code = generate.codeJoin('on', entity === '' ? 'entity' : entity, 'change block')
+      return `${code}: \n${statementMembers}`
+    },
+  })
 }
 
 export function registerAll(): Blockly.utils.toolbox.BlockInfo[] {

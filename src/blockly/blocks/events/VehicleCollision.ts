@@ -1,13 +1,10 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { type SkriptBlock, type SkriptBlockDefinition } from '../SkriptBlock'
-import { appendEventPriorityInput, generateCodeForEventPriority } from './EventPriority'
 import { pte } from '@/locales/i18n'
 import { createFieldSearchDropdown, createTempFieldDropdown } from '../types/Types'
 import { EntitiesItemBlock } from '../types/Other'
-import { createSkriptEventDefinition, type EventSyntax } from './SkriptEventBlock'
-import CodeGenerator, { SkriptCodeGenerator } from '@/blockly/generators/skript'
+import { registerEasyEvent, type EventSyntax } from './SkriptEventBlock'
 
 const blockKey = 'event_vehicle_collision'
 const syntax: EventSyntax = {
@@ -26,25 +23,22 @@ const collisionModeCodeMap: Record<string, string> = {
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptEventDefinition(syntax)
-  const mixin: Partial<SkriptBlockDefinition> = {
-    initShape_(this: SkriptBlock) {
-      const input = this.appendDummyInput()
+  return registerEasyEvent({
+    ...syntax,
+    blockKey,
+    desc: (input) => {
       pte('EVENT_VEHICLE_COLLISION_DESC', {
         0: () => input.appendField(createTempFieldDropdown('event_vehicle_collision', collisionModes), 'mode'),
         1: () => input.appendField(createFieldSearchDropdown(EntitiesItemBlock, true), 'target'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
       })
-      appendEventPriorityInput(this)
     },
-  }
-  Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-  CodeGenerator.forBlock[blockKey] = (block: Blockly.Block, generate: SkriptCodeGenerator) => {
-    const statementMembers = generate.statementToCode(block, 'block')
-    const mode = block.getFieldValue('mode')
-    const target = block.getFieldValue('target')
-    const code = SkriptCodeGenerator.codeJoin('on', collisionModeCodeMap[mode], target ? ['with', target] : '', generateCodeForEventPriority(block))
-    return `${code}: \n${statementMembers}`
-  }
-  return { kind: 'block', type: blockKey }
+    code: (block, generate) => {
+      const statementMembers = generate.statementToCode(block, 'block')
+      const mode = block.getFieldValue('mode')
+      const target = block.getFieldValue('target')
+      const code = generate.codeJoin('on', collisionModeCodeMap[mode], target ? ['with', target] : '')
+      return `${code}: \n${statementMembers}`
+    },
+  })
 }
