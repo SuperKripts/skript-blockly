@@ -126,6 +126,9 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
   }
 }
 
+if (Blockly.registry.hasItem(Blockly.registry.Type.TOOLBOX_ITEM, SearchToolboxCategory.SEARCH_CATEGORY_KIND)) {
+  Blockly.registry.unregister(Blockly.registry.Type.TOOLBOX_ITEM, SearchToolboxCategory.SEARCH_CATEGORY_KIND)
+}
 Blockly.registry.register(Blockly.registry.Type.TOOLBOX_ITEM, SearchToolboxCategory.SEARCH_CATEGORY_KIND, SearchToolboxCategory)
 
 const ctrlF = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.F, [Blockly.utils.KeyCodes.CTRL])

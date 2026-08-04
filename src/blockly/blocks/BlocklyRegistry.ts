@@ -5,6 +5,7 @@ import { BlockInfos as StructureToolbox } from '@/blockly/blocks/structures'
 import { BlockInfos as EffectToolbox } from '@/blockly/blocks/effects'
 import { BlockInfos as ExpressionToolbox } from '@/blockly/blocks/expressions'
 import { BlockInfos as ConditionToolbox } from '@/blockly/blocks/conditions'
+import { BlockInfos as SectionToolbox } from '@/blockly/blocks/sections'
 
 import '@/blockly/blocks/events/EventValues'
 import '@/blockly/blocks/events/Cancellable'
@@ -17,3 +18,4 @@ export const structureBlockInfos: Blockly.utils.toolbox.BlockInfo[] = StructureT
 export const effectBlockInfos: Blockly.utils.toolbox.BlockInfo[] = EffectToolbox
 export const expressionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = ExpressionToolbox
 export const conditionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = ConditionToolbox
+export const sectionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = SectionToolbox

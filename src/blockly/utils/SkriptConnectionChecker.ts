@@ -85,6 +85,9 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
   }
 }
 
+if (Blockly.registry.hasItem(Blockly.registry.Type.CONNECTION_CHECKER, registrationName)) {
+  Blockly.registry.unregister(Blockly.registry.Type.CONNECTION_CHECKER, registrationName)
+}
 Blockly.registry.register(Blockly.registry.Type.CONNECTION_CHECKER, registrationName, SkriptConnectionChecker)
 
 export const pluginInfo = {

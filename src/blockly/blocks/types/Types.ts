@@ -168,8 +168,12 @@ export const Types: SkriptType = {
   ],
 }
 
+export function getTempLangKey(name: string, value: string) {
+  return `FIELD_OPTION_${name}_${value.replace(/[ '-]/g, '_')}`.toUpperCase()
+}
+
 export function createTempFieldDropdown(name: string, args: string[], validator?: Blockly.FieldValidator<string>): Blockly.Field<string> {
-  const options = args.map((e): Blockly.MenuOption => [t(`FIELD_OPTION_${name}_${e == '' ? 'DEFAULT' : e.replace(/[ '-]/g, '_')}`.toUpperCase()), e])
+  const options = args.map((e): Blockly.MenuOption => [t(getTempLangKey(name, e)), e])
   return args.length < 9 ? new Blockly.FieldDropdown(options, validator) : new FieldGridDropdown(options, validator)
 }
 

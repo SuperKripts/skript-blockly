@@ -69,8 +69,6 @@ export function createSkriptDefinition(syntax: Syntax): SkriptBlockDefinition {
   }
 }
 
-export function registerSimpleEvent() {}
-
 export function registerContentMenuGetOption(
   id: string,
   weight: number,

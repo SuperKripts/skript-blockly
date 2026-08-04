@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 
 import '@/blockly/config'
-import { effectBlockInfos, eventBlockInfos, structureBlockInfos, typeBlockInfos, expressionBlockInfos, conditionBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
+import * as BlocklyRegistry from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSearch'
 import { t } from '@/locales/i18n'
 
@@ -35,31 +35,31 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         kind: 'category',
         name: t('SYNTAX_TYPE_EVENT'),
         cssconfig: customCss('event'),
-        contents: eventBlockInfos,
+        contents: BlocklyRegistry.eventBlockInfos,
       },
       {
         kind: 'category',
         name: t('SYNTAX_TYPE_CONDITION'),
         cssconfig: customCss('condition'),
-        contents: conditionBlockInfos,
+        contents: BlocklyRegistry.conditionBlockInfos,
       },
       {
         kind: 'category',
         name: t('SYNTAX_TYPE_EFFECT'),
         cssconfig: customCss('effect'),
-        contents: effectBlockInfos,
+        contents: BlocklyRegistry.effectBlockInfos,
       },
       {
         kind: 'category',
         name: t('SYNTAX_TYPE_EXPRESSION'),
         cssconfig: customCss('expression'),
-        contents: expressionBlockInfos,
+        contents: BlocklyRegistry.expressionBlockInfos,
       },
       {
         kind: 'category',
         name: t('SYNTAX_TYPE_TYPE'),
         cssconfig: customCss('type'),
-        contents: typeBlockInfos,
+        contents: BlocklyRegistry.typeBlockInfos,
       },
       {
         kind: 'category',
@@ -71,13 +71,13 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
         kind: 'category',
         name: t('SYNTAX_TYPE_SECTION'),
         cssconfig: customCss('section'),
-        contents: [],
+        contents: BlocklyRegistry.sectionBlockInfos,
       },
       {
         kind: 'category',
         name: t('SYNTAX_TYPE_STRUCTURE'),
         cssconfig: customCss('structure'),
-        contents: structureBlockInfos,
+        contents: BlocklyRegistry.structureBlockInfos,
       },
       // {
       //   kind: 'category',
