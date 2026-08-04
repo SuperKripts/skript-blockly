@@ -4,6 +4,7 @@ import * as Blockly from 'blockly/core'
 import CodeGenerator, { Order, SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { createSkriptDefinition, type SkriptBlock } from '../SkriptBlock'
 import { createTempFieldDropdown } from '../types/Types'
+import { t } from '@/locales/i18n'
 
 const blockKey = 'condition_wrapper'
 
@@ -11,7 +12,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({ title: 'Condition', syntaxType: 'effect', docUrl: 'https://skriptlang.org/docs/conditions.html' })
   const mixin: Partial<SkriptBlock> = {
     initShape_() {
-      this.appendValueInput('condition').appendField('123').setCheck('condition')
+      this.appendValueInput('condition').appendField(t('CONDITION_WRAPPER_DESC')).setCheck('condition')
     },
     initStyle_() {
       this.setStyle('condition')

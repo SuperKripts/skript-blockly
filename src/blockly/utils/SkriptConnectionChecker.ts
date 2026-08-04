@@ -1,5 +1,5 @@
 import * as Blockly from 'blockly/core'
-import { isSkriptEventBlock } from '../blocks/events/SkriptEventBlock'
+import { isSkriptEventBlock, type SkriptEventBlock } from '../blocks/events/SkriptEventBlock'
 import type { SkriptBlock } from '../blocks/SkriptBlock'
 
 export const registrationName = 'SkriptConnectionChecker'
@@ -34,6 +34,20 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
     return null
   }
 
+  private getEventBlock(conn: Blockly.Connection): SkriptEventBlock | null {
+    const rootBlock = conn.getSourceBlock().getRootBlock()
+    if (isSkriptEventBlock(rootBlock)) {
+      return rootBlock
+    }
+    if (rootBlock.type === 'structure_event') {
+      const eventBlock = rootBlock.getInputTargetBlock('event')
+      if (isSkriptEventBlock(eventBlock)) {
+        return eventBlock
+      }
+    }
+    return null
+  }
+
   doTypeChecks(a: Blockly.Connection, b: Blockly.Connection): boolean {
     const inputConn = this.getInputConnection(a, b)
     const outputConn = this.getOutputConnection(a, b)
@@ -49,30 +63,22 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
   }
 
   doDragChecks(a: Blockly.RenderedConnection, b: Blockly.RenderedConnection, distance: number): boolean {
-    if (a.getSourceBlock().type === 'effect_cancel_event') {
-      const rootBlock = b.getSourceBlock().getRootBlock()
-      if (isSkriptEventBlock(rootBlock)) {
-        return rootBlock.cancellable_
+    const inputConn = this.getInputConnection(a, b)
+    const outputConn = this.getOutputConnection(a, b)
+    if (inputConn && outputConn) {
+      const outputBlock = outputConn.getSourceBlock() as SkriptBlock
+      if (outputBlock.type === 'effect_cancel_event') {
+        return this.getEventBlock(inputConn)?.cancellable_ ?? false
       }
-      return false
-    }
 
-    if (a.getSourceBlock().type === 'expression_event_value') {
-      const eventBlock = a.getSourceBlock() as SkriptBlock
-      const rootBlock = b.getSourceBlock().getRootBlock()
-      if (isSkriptEventBlock(rootBlock)) {
-        return rootBlock.eventValues_.includes(eventBlock.extra_.eventValue as string)
+      if (outputBlock.type === 'expression_event_value') {
+        return this.getEventBlock(inputConn)?.eventValues_.includes(outputBlock.extra_.eventValue as string) ?? false
       }
-      return false
-    }
 
-    const sourceBlock = a.getSourceBlock()
-    if ('supportedEvents_' in sourceBlock && Array.isArray(sourceBlock.supportedEvents_)) {
-      const rootBlock = b.getSourceBlock().getRootBlock()
-      if (isSkriptEventBlock(rootBlock)) {
-        return sourceBlock.supportedEvents_.includes(rootBlock.type)
+      if ('supportedEvents_' in outputBlock && Array.isArray(outputBlock.supportedEvents_)) {
+        const eventBlock = this.getEventBlock(inputConn)
+        return eventBlock ? outputBlock.supportedEvents_.includes(eventBlock.type) : false
       }
-      return false
     }
 
     return super.doDragChecks(a, b, distance)

@@ -72,6 +72,12 @@ export const EVENT_PRIORITY_HIGH = '较晚处理'
 export const EVENT_PRIORITY_HIGHEST = '最晚处理'
 export const EVENT_PRIORITY_MONITOR = '只看结果'
 
+// Event Behavior
+export const EVENT_BEHAVIOR = '事件行为'
+export const EVENT_BEHAVIOR_ANY = '任意'
+export const EVENT_BEHAVIOR_CANCELLED = '已取消'
+export const EVENT_BEHAVIOR_UNCANCELLED = '未取消'
+
 // Event Description
 export const EVENT_FORM_DESC = '当玩家与表单交互时'
 export const EVENT_GAMEMODE_CHANGE_DESC = '当玩家的游戏模式改变为 %0 时'
@@ -288,6 +294,7 @@ export const EXPRASSION_ALL_BANNED_ENTRIES_DESC = '所有被封禁的%0'
 export const EXPRASSION_ALL_COMMANDS_DESC = '所有%0'
 
 // CONDITION
+export const CONDITION_WRAPPER_DESC = '条件'
 export const CONDITION_AI_DESC = '%0 %1 AI'
 
 export const FIELD_OPTION_EXPRASSION_ARGB_CHANNEL_ALPHA = '透明度'
@@ -386,6 +393,9 @@ export const EFFECT_DELAY_DESC = '等待 %0'
 export const EFFECT_APPLY_BONE_MEAL_DESC = '对方块 %1 使用 %0 个骨粉'
 
 // Field Option
+export const FIELD_OPTION_CONDITION_HAS_MODE_HAS = '有'
+export const FIELD_OPTION_CONDITION_HAS_MODE_DON_T_HAVE = '没有'
+
 export const FIELD_OPTION_EVENT_SERVER_STARTSTOP_START = '启动'
 export const FIELD_OPTION_EVENT_SERVER_STARTSTOP_STOP = '停止'
 

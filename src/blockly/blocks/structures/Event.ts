@@ -47,7 +47,6 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     const colonPos = firstLine.lastIndexOf(':')
 
     let newFirstLine
-    console.log(code)
     if (firstLine.startsWith('on ')) {
       newFirstLine = `on ${behaviorCode}${firstLine.substring(3, colonPos)}${priorityCode}: `
     } else if (behavior === 'any') {
