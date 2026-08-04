@@ -48,6 +48,18 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
     return null
   }
 
+  private getEnclosingInput(conn: Blockly.Connection): Blockly.Input | null {
+    const input = conn.getParentInput()
+    if (input) {
+      return input
+    }
+    const prevConn = conn.getSourceBlock().previousConnection?.targetConnection
+    if (prevConn) {
+      return this.getEnclosingInput(prevConn)
+    }
+    return null
+  }
+
   doTypeChecks(a: Blockly.Connection, b: Blockly.Connection): boolean {
     const inputConn = this.getInputConnection(a, b)
     const outputConn = this.getOutputConnection(a, b)
@@ -67,6 +79,14 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
     const outputConn = this.getOutputConnection(a, b)
     if (inputConn && outputConn) {
       const outputBlock = outputConn.getSourceBlock() as SkriptBlock
+
+      const inputName = this.getEnclosingInput(inputConn)?.name
+      if (inputName === 'if_conditions' || (inputName?.startsWith('elseif_') && inputName.endsWith('_conditions'))) {
+        if (outputBlock.type !== 'condition_wrapper') {
+          return false
+        }
+      }
+
       if (outputBlock.type === 'effect_cancel_event') {
         return this.getEventBlock(inputConn)?.cancellable_ ?? false
       }

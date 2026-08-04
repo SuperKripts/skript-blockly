@@ -71,7 +71,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
         .filter((name) => name === 'if' || name === 'if_conditions' || name === 'then' || name.startsWith('elseif_') || name === 'else_stmt')
       const removeNames = new Set(dynamicNames)
       for (const name of dynamicNames) {
-        if (name !== 'if' && !name.match(/^elseif_\d+_cond$/)) {
+        if (name !== 'if' && !(name.startsWith('elseif_') && name.endsWith('_cond'))) {
           removeNames.add(name + '_label')
         }
       }
