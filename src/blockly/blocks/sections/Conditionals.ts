@@ -1,7 +1,6 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import 'blockly/blocks'
 import { createSkriptDefinition, type SkriptBlock } from '../SkriptBlock'
 import CodeGenerator, { Order, SkriptCodeGenerator } from '@/blockly/generators/skript'
 import { createTempFieldDropdown, getTempLangKey } from '../types/Types'

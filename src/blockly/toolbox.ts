@@ -3,6 +3,7 @@ import * as Blockly from 'blockly/core'
 import '@/blockly/config'
 import * as BlocklyRegistry from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSearch'
+import '@/blockly/blocks/variables/ToolboxVariable'
 import { t } from '@/locales/i18n'
 
 function customCss(type: string): Blockly.ToolboxCategory.CssConfig {
@@ -91,6 +92,11 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
       //   custom: 'VARIABLE',
       //   // cssconfig: customCss('variable_category',
       // },
+      {
+        kind: 'variables',
+        name: t('SYNTAX_TYPE_VARIABLE'),
+        cssconfig: customCss('variable'),
+      },
       {
         kind: 'category',
         name: '测试',
