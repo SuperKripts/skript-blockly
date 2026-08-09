@@ -7,21 +7,9 @@ export const registrationName = 'SkriptConnectionChecker'
 const OUTPUT_COMPATIBILITY: Record<string, string[]> = {
   livingentity: ['livingentity', 'entity', 'player'],
 }
+const EXACT_COMPATIBILITY = new Set(['event', 'condition'])
 
 export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
-  private isCompatible(inputChecks?: string[] | null, outputChecks?: string[] | null): boolean {
-    if (!inputChecks || !outputChecks) {
-      return false
-    }
-    for (const outType of outputChecks) {
-      const allowed = OUTPUT_COMPATIBILITY[outType] || [outType]
-      if (inputChecks.some((inType) => allowed.includes(inType))) {
-        return true
-      }
-    }
-    return false
-  }
-
   private getInputConnection<T extends Blockly.Connection>(a: T, b: T): T | null {
     if (a.type === Blockly.ConnectionType.INPUT_VALUE || a.type === Blockly.ConnectionType.NEXT_STATEMENT) return a
     if (b.type === Blockly.ConnectionType.INPUT_VALUE || b.type === Blockly.ConnectionType.NEXT_STATEMENT) return b
@@ -32,6 +20,18 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
     if (a.type === Blockly.ConnectionType.OUTPUT_VALUE || a.type === Blockly.ConnectionType.PREVIOUS_STATEMENT) return a
     if (b.type === Blockly.ConnectionType.OUTPUT_VALUE || b.type === Blockly.ConnectionType.PREVIOUS_STATEMENT) return b
     return null
+  }
+
+  private getConnection<T extends Blockly.Connection>(a: T, b: T): { inputConn: T | null; outputConn: T | null } {
+    return { inputConn: this.getInputConnection(a, b), outputConn: this.getOutputConnection(a, b) }
+  }
+
+  private isCompatible(inputChecks: string[] | null, outputChecks: string[] | null): boolean {
+    if (!inputChecks || !outputChecks) return false
+    return outputChecks.some((outType) => {
+      const allowed = OUTPUT_COMPATIBILITY[outType] || [outType]
+      return inputChecks.some((inType) => allowed.includes(inType))
+    })
   }
 
   private getEventBlock(conn: Blockly.Connection): SkriptEventBlock | null {
@@ -54,20 +54,19 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
       return input
     }
     const prevConn = conn.getSourceBlock().previousConnection?.targetConnection
-    if (prevConn) {
-      return this.getEnclosingInput(prevConn)
-    }
-    return null
+    return prevConn ? this.getEnclosingInput(prevConn) : null
   }
 
   doTypeChecks(a: Blockly.Connection, b: Blockly.Connection): boolean {
-    const inputConn = this.getInputConnection(a, b)
-    const outputConn = this.getOutputConnection(a, b)
+    const { inputConn, outputConn } = this.getConnection(a, b)
     if (inputConn && outputConn) {
-      if (outputConn.getCheck()?.includes('event')) {
-        return inputConn.getCheck()?.includes('event') ?? false
-      }
-      if (this.isCompatible(outputConn.getCheck(), inputConn.getCheck())) {
+      const inputChecks = inputConn.getCheck()
+      const outputChecks = outputConn.getCheck()
+
+      if (!inputChecks && outputChecks?.some((t) => EXACT_COMPATIBILITY.has(t))) return false
+      if (!outputChecks && inputChecks?.some((t) => EXACT_COMPATIBILITY.has(t))) return false
+
+      if (this.isCompatible(inputChecks, outputChecks)) {
         return true
       }
     }
@@ -75,8 +74,7 @@ export class SkriptConnectionChecker extends Blockly.ConnectionChecker {
   }
 
   doDragChecks(a: Blockly.RenderedConnection, b: Blockly.RenderedConnection, distance: number): boolean {
-    const inputConn = this.getInputConnection(a, b)
-    const outputConn = this.getOutputConnection(a, b)
+    const { inputConn, outputConn } = this.getConnection(a, b)
     if (inputConn && outputConn) {
       const outputBlock = outputConn.getSourceBlock() as SkriptBlock
 
