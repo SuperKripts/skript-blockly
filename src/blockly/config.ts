@@ -3,7 +3,21 @@ import * as Blockly from 'blockly/core'
 import useToolbox from '@/blockly/toolbox'
 import * as SkriptHubTheme from '@/blockly/themes/skripthub'
 import { useWorkspaceStore } from '@/stores/workspace'
+import { useDialogStore } from '@/stores/dialog'
 import { pluginInfo as connectionCheckerPluginInfo } from '@/blockly/utils/SkriptConnectionChecker'
+
+Blockly.dialog.setAlert((message, optCallback) => {
+  const promise = useDialogStore().$alert(message)
+  if (optCallback) {
+    promise.then(optCallback)
+  }
+})
+Blockly.dialog.setConfirm((message, callback) => {
+  useDialogStore().$confirm(message).then(callback)
+})
+Blockly.dialog.setPrompt((message, defaultValue, callback) => {
+  useDialogStore().$prompt(message, defaultValue).then(callback)
+})
 
 if (!Blockly.ContextMenuRegistry.registry.getItem('commentDuplicate')) {
   Blockly.ContextMenuItems.registerCommentOptions()

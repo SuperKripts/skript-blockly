@@ -3,6 +3,7 @@ import * as Blockly from 'blockly/core'
 import { ref, readonly, shallowRef, computed } from 'vue'
 import SkriptCodeGenerator from '@/blockly/generators/skript'
 import { t } from '@/locales/i18n'
+import { useDialogStore } from './dialog'
 
 type SkriptBlocklyContent = {
   skriptblockly: string
@@ -13,6 +14,8 @@ type SkriptBlocklyContent = {
 export const useWorkspaceStore = defineStore('workspace', () => {
   const INDEXED_DB_VERSION = 1
   const CURRENT_WORKSPACE_KEY = 'skriptblockly-current-workspace'
+
+  const dialog = useDialogStore()
 
   const _workspace = shallowRef<Blockly.Workspace | null>(null)
   const _workspaceNames = ref<string[]>([])
@@ -90,21 +93,23 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     }
   }
 
-  function loadWorkspace(content: SkriptBlocklyContent) {
+  async function loadWorkspace(content: SkriptBlocklyContent): Promise<boolean> {
     if (!content.skriptblockly && !content.data) {
-      alert('无效的SkriptBlock工作区文件')
-      return
+      await dialog.$alert('无效的SkriptBlock工作区文件')
+      return false
     }
-    if (!_isSaved.value && !confirm('当前工作区未保存, 确定要加载其它工作区么')) {
-      return
+    if (!_isSaved.value && !(await dialog.$confirm('当前工作区未保存, 确定要加载其它工作区么'))) {
+      return false
     }
     try {
       const workspace = getWorkspace()
       Blockly.serialization.workspaces.load(content.data, workspace)
       _workspaceName.value = content.skriptblockly
+      return true
     } catch (error) {
       console.error(error)
-      alert('无法加载工作区')
+      await dialog.$alert('无法加载工作区')
+      return false
     }
   }
 
@@ -119,15 +124,15 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   }
 
   async function newWorkspace(name?: string): Promise<boolean> {
-    const workspaceName = name ?? prompt('请输入新的工作区名称', t('WORKSPACE_DEFAULT_NAME'))
+    const workspaceName = name ?? (await dialog.$prompt('请输入新的工作区名称', t('WORKSPACE_DEFAULT_NAME')))
     if (!workspaceName) {
       return false
     }
     if (await getWorkspaceNamesFromBrowser().then((names) => names.includes(workspaceName))) {
-      alert('工作区名称已存在!')
+      await dialog.$alert('工作区名称已存在!')
       return false
     }
-    loadWorkspace({ skriptblockly: workspaceName, data: {} })
+    await loadWorkspace({ skriptblockly: workspaceName, data: {} })
 
     return true
   }
@@ -163,88 +168,82 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     })
   }
 
-  function removeWorkspaceFromBrowser(name: string) {
-    if (confirm('确定要删除这个工作区吗？')) {
-      openIndexedDB().then((db) => {
+  async function removeWorkspaceFromBrowser(name: string): Promise<void> {
+    if (!(await dialog.$confirm('确定要删除这个工作区吗？'))) {
+      return
+    }
+    try {
+      const db = await openIndexedDB()
+      await new Promise<void>((resolve, reject) => {
         const transaction = db.transaction('workspaces', 'readwrite')
         const objectStore = transaction.objectStore('workspaces')
         const request = objectStore.delete(name)
-        request.onsuccess = function () {
-          alert(`工作区 "${name}" 已删除`)
-          updateWorkspaceNames()
-        }
-        request.onerror = function () {
-          alert('删除工作区失败')
-        }
+        request.onsuccess = () => resolve()
+        request.onerror = () => reject(new Error('删除失败'))
       })
+      await dialog.$alert(`工作区 "${name}" 已删除`)
+      updateWorkspaceNames()
+    } catch (error) {
+      console.error(error)
+      await dialog.$alert('删除工作区失败')
     }
   }
 
-  function saveWorkspaceToBrowser() {
+  async function saveWorkspaceToBrowser(): Promise<void> {
     const content = saveWorkspace()
-    openIndexedDB().then((db) => {
-      const transaction = db.transaction('workspaces', 'readwrite')
-      const objectStore = transaction.objectStore('workspaces')
-      const request = objectStore.put(content, content.skriptblockly)
-      request.onsuccess = function () {
-        alert(`工作区 "${content.skriptblockly}" 已保存至浏览器`)
-        localStorage.setItem(CURRENT_WORKSPACE_KEY, content.skriptblockly)
-        _isSaved.value = true
-        updateWorkspaceNames()
-      }
-      request.onerror = function () {
-        alert('保存工作区失败')
-      }
-    })
+    try {
+      const db = await openIndexedDB()
+      await new Promise<void>((resolve, reject) => {
+        const transaction = db.transaction('workspaces', 'readwrite')
+        const objectStore = transaction.objectStore('workspaces')
+        const request = objectStore.put(content, content.skriptblockly)
+        request.onsuccess = () => resolve()
+        request.onerror = () => reject(new Error('保存失败'))
+      })
+      localStorage.setItem(CURRENT_WORKSPACE_KEY, content.skriptblockly)
+      _isSaved.value = true
+      updateWorkspaceNames()
+      await dialog.$alert(`工作区 "${content.skriptblockly}" 已保存至浏览器`)
+    } catch (error) {
+      console.error(error)
+      await dialog.$alert('保存工作区失败')
+    }
   }
 
-  function loadWorkspaceFromBrowser(name?: string) {
-    if (name) {
-      openIndexedDB().then((db) => {
-        const transaction = db.transaction('workspaces', 'readonly')
-        const objectStore = transaction.objectStore('workspaces')
-        const request = objectStore.get(name)
-        request.onsuccess = function () {
-          const content = request.result
-          if (content) {
-            loadWorkspace(content)
-            localStorage.setItem(CURRENT_WORKSPACE_KEY, name)
-            alert(`工作区 "${name}" 已从浏览器加载`)
-          } else {
-            alert(`工作区 "${name}" 不存在`)
-          }
-        }
-        request.onerror = function () {
-          alert('加载工作区失败')
-        }
-      })
-    } else {
-      const workspaceName = localStorage.getItem(CURRENT_WORKSPACE_KEY)
+  async function loadWorkspaceFromBrowser(name?: string): Promise<void> {
+    try {
+      const workspaceName = name ?? localStorage.getItem(CURRENT_WORKSPACE_KEY)
       if (!workspaceName) {
         return
       }
-      openIndexedDB().then((db) => {
+      const db = await openIndexedDB()
+      const content: SkriptBlocklyContent | undefined = await new Promise((resolve, reject) => {
         const transaction = db.transaction('workspaces', 'readonly')
         const objectStore = transaction.objectStore('workspaces')
         const request = objectStore.get(workspaceName)
-        request.onsuccess = function () {
-          const content = request.result
-          if (content) {
-            loadWorkspace(content)
-          } else {
-            alert(`工作区 "${workspaceName}" 不存在`)
-          }
-        }
-        request.onerror = function () {
-          alert('加载工作区失败')
-        }
+        request.onsuccess = () => resolve(request.result)
+        request.onerror = () => reject(new Error('加载失败'))
       })
+      if (content) {
+        const loaded = await loadWorkspace(content)
+        if (loaded && name) {
+          localStorage.setItem(CURRENT_WORKSPACE_KEY, name)
+          await dialog.$alert(`工作区 "${name}" 已从浏览器加载`)
+        }
+      } else if (name) {
+        await dialog.$alert(`工作区 "${name}" 不存在`)
+      }
+    } catch (error) {
+      console.error(error)
+      if (name) {
+        await dialog.$alert('加载工作区失败')
+      }
     }
   }
 
-  function saveWorkspaceToFile() {
+  async function saveWorkspaceToFile(): Promise<void> {
     const content = saveWorkspace()
-    const name = prompt('请输入文件名', content.skriptblockly + '.skriptblockly.json')
+    const name = await dialog.$prompt('请输入文件名', content.skriptblockly + '.skriptblockly.json')
     if (name) {
       const blob = new Blob([JSON.stringify(content, null, 2)], {
         type: 'application/json;charset=utf-8',
@@ -272,11 +271,13 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       try {
         const text = await file.text()
         const content: SkriptBlocklyContent = JSON.parse(text)
-        loadWorkspace(content)
-        alert('工作区已从文件中加载')
+        const loaded = await loadWorkspace(content)
+        if (loaded) {
+          await dialog.$alert('工作区已从文件中加载')
+        }
       } catch (error) {
         console.error(error)
-        alert('从文件加载工作区失败')
+        await dialog.$alert('从文件加载工作区失败')
       }
     }
 
@@ -289,10 +290,10 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const text = JSON.stringify(content, null, 2)
     try {
       await navigator.clipboard.writeText(text)
-      alert('工作区已复制到剪贴板')
+      await dialog.$alert('工作区已复制到剪贴板')
     } catch (error) {
       console.error(error)
-      alert('当前浏览器不支持写入剪切板')
+      await dialog.$alert('当前浏览器不支持写入剪切板')
     }
   }
 
@@ -300,11 +301,13 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     try {
       const text = await navigator.clipboard.readText()
       const content: SkriptBlocklyContent = JSON.parse(text)
-      loadWorkspace(content)
-      alert('工作区已从剪贴板加载')
+      const loaded = await loadWorkspace(content)
+      if (loaded) {
+        await dialog.$alert('工作区已从剪贴板加载')
+      }
     } catch (err) {
       console.error(err)
-      alert('当前浏览器不支持读取剪切板')
+      await dialog.$alert('当前浏览器不支持读取剪切板')
     }
   }
 
@@ -317,9 +320,9 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     _code.value = SkriptCodeGenerator.workspaceToCode(workspace)
   }
 
-  function generateCodeToFile() {
+  async function generateCodeToFile(): Promise<void> {
     generateCode()
-    const name = prompt('请输入文件名', `${_workspaceName.value}.sk`)
+    const name = await dialog.$prompt('请输入文件名', `${_workspaceName.value}.sk`)
     if (name) {
       const blob = new Blob([_code.value], { type: 'text/plain;charset=utf-8' })
       const url = URL.createObjectURL(blob)
@@ -341,10 +344,10 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   async function copyCodeToClipboard() {
     try {
       await navigator.clipboard.writeText(_code.value)
-      alert('代码已复制到剪贴板')
+      await dialog.$alert('代码已复制到剪贴板')
     } catch (error) {
       console.error(error)
-      alert('当前浏览器不支持写入剪切板')
+      await dialog.$alert('当前浏览器不支持写入剪切板')
     }
   }
 

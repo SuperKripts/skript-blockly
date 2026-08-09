@@ -4,6 +4,13 @@ export * from 'blockly/msg/zh-hans'
 export const TITLE = 'Skript Blockly'
 export const DESCRIPTION = '积木编程平台'
 
+// Dialog
+export const DIALOG_TITLE_ALERT = '提示'
+export const DIALOG_TITLE_CONFIRM = '确认'
+export const DIALOG_TITLE_PROMPT = '输入'
+export const DIALOG_BTN_OK = '确定'
+export const DIALOG_BTN_CANCEL = '取消'
+
 export const WORKSPACE = '工作区'
 export const WORKSPACE_CLEAR = '清空'
 export const WORKSPACE_UNDO = '撤销'

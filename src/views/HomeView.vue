@@ -2,6 +2,7 @@
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import MainComponent from '@/components/MainComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
+import ModalDialogComponent from '@/components/controls/ModalDialogComponent.vue'
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import FooterComponent from '@/components/FooterComponent.vue'
     <HeaderComponent />
     <MainComponent class="main" />
     <FooterComponent />
+    <ModalDialogComponent />
   </div>
 </template>
 
