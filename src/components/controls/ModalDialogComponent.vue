@@ -8,6 +8,7 @@ import ButtonComponent from './ButtonComponent.vue'
 const dialogStore = useDialogStore()
 const { t } = useI18n()
 const dialogRef = ref<HTMLDialogElement | null>(null)
+const inputRef = ref<HTMLInputElement | null>(null)
 
 const isPrompt = computed(() => dialogStore.kind === 'prompt')
 const isConfirm = computed(() => dialogStore.kind === 'confirm')
@@ -56,11 +57,10 @@ watch(
         el.showModal()
       }
       if (isPrompt.value) {
-        setTimeout(() => {
-          const input = el.querySelector<HTMLInputElement>('input.dialog_prompt_input')
-          input?.focus()
-          input?.select()
-        }, 10)
+        requestAnimationFrame(() => {
+          inputRef.value?.focus()
+          inputRef.value?.select()
+        })
       }
     } else if (el.open) {
       el.close()
@@ -82,7 +82,7 @@ onBeforeUnmount(() => {
       <div class="dialog_message">{{ dialogStore.message }}</div>
 
       <div v-if="isPrompt" class="dialog_prompt">
-        <input class="dialog_prompt_input" type="text" v-model="dialogStore.inputValue"
+        <input ref="inputRef" class="dialog_prompt_input" type="text" v-model="dialogStore.inputValue"
           @keydown.enter.prevent="dialogStore.ok" aria-label="dialog input" />
       </div>
 

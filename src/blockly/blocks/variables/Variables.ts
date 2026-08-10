@@ -1,6 +1,7 @@
 import * as Blockly from 'blockly/core'
 import { createSkriptDefinition, type SkriptBlock } from '../SkriptBlock'
 import CodeGenerator, { Order, SkriptCodeGenerator } from '@/blockly/generators/skript'
+import { t } from '@/locales/i18n'
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({
@@ -32,11 +33,11 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
       if (variable) {
         const varName = variable.getName()
         if (varName?.startsWith('_')) {
-          this.setFieldValue('局部变量', 'category')
+          this.setFieldValue(t('VARIABLE_TYPE_LOCAL'), 'category')
         } else if (varName?.startsWith('-')) {
-          this.setFieldValue('临时变量', 'category')
+          this.setFieldValue(t('VARIABLE_TYPE_TEMP'), 'category')
         } else {
-          this.setFieldValue('全局变量', 'category')
+          this.setFieldValue(t('VARIABLE_TYPE_GLOBAL'), 'category')
         }
       }
     },

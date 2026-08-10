@@ -99,7 +99,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
       },
       {
         kind: 'category',
-        name: '测试',
+        name: t('TOOLBOX_TEST'),
         cssconfig: customCss('event'),
         contents: [
           // {
@@ -108,7 +108,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
           // },
           {
             kind: 'category',
-            name: '测试1',
+            name: t('TOOLBOX_TEST_1'),
             contents: [
               // {
               //   kind: 'block',
@@ -118,7 +118,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
           },
           {
             kind: 'category',
-            name: '测试2',
+            name: t('TOOLBOX_TEST_2'),
             contents: [
               // {
               //   kind: 'block',

@@ -36,7 +36,6 @@ export const useDialogStore = defineStore('dialog', () => {
     current = dialog
   }
 
-  // 确认：prompt 返回输入值，confirm 返回 true，alert 返回 true（被忽略）
   const ok = () => {
     const pending = current
     current = null
@@ -45,7 +44,6 @@ export const useDialogStore = defineStore('dialog', () => {
     pending?.resolve(val)
   }
 
-  // 取消：confirm 返回 false，prompt 返回 null，alert 返回 null（被忽略）
   const cancel = () => {
     const pending = current
     current = null
