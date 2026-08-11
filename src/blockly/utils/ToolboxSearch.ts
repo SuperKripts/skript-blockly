@@ -123,6 +123,7 @@ export class SearchToolboxCategory extends Blockly.ToolboxCategory {
 
   override dispose(): void {
     this._searchInput.remove()
+    super.dispose()
   }
 }
 

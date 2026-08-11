@@ -77,8 +77,9 @@ export function injectBlockly(element: Element): Blockly.WorkspaceSvg {
 }
 
 function disableOrphans(e: Blockly.Events.Abstract) {
-  if ('blockId' in e && e.blockId) {
-    const block = e.getEventWorkspace_().getBlockById(e.blockId as string)
+  if ('blockId' in e && e.blockId && e.workspaceId) {
+    const workspace = Blockly.Workspace.getById(e.workspaceId)
+    const block = workspace?.getBlockById(e.blockId as string)
     if (block?.getStyleName() !== 'event') {
       Blockly.Events.disableOrphans(e)
     }

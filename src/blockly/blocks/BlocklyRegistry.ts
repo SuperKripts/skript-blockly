@@ -10,7 +10,9 @@ import { BlockInfos as SectionToolbox } from '@/blockly/blocks/sections'
 import '@/blockly/blocks/events/EventValues'
 import '@/blockly/blocks/events/Cancellable'
 
-console.log(Blockly.Blocks)
+if (import.meta.env.DEV) {
+  console.log(Blockly.Blocks)
+}
 
 export const eventBlockInfos: Blockly.utils.toolbox.BlockInfo[] = EventToolbox
 export const typeBlockInfos: Blockly.utils.toolbox.BlockInfo[] = TypeToolbox

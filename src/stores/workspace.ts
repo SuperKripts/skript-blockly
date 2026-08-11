@@ -41,15 +41,15 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         _isSaved.value = false
         // console.log(e)
       }
-      if (e.type == 'create') {
+      if (e.type === Blockly.Events.BLOCK_CREATE) {
         blockCount.value++
         _state.value = t('STATE_ADD_BLOCKLY')
       }
-      if (e.type == 'delete') {
+      if (e.type === Blockly.Events.BLOCK_DELETE) {
         blockCount.value--
         _state.value = t('STATE_REMOVE_BLOCKLY')
       }
-      if (e.type == 'finished_loading') {
+      if (e.type === Blockly.Events.FINISHED_LOADING) {
         blockCount.value = workspace.getAllBlocks().length
         _isSaved.value = true
         _state.value = t('WORKSPACE_STATUS_READY')
@@ -162,10 +162,10 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     const transaction = db.transaction('workspaces', 'readonly')
     const objectStore = transaction.objectStore('workspaces')
     const request = objectStore.getAllKeys()
-    return new Promise((resolve, reject) => {
+    return new Promise<string[]>((resolve, reject) => {
       request.onsuccess = () => resolve(request.result as string[])
       request.onerror = () => reject(new Error('Failed to fetch workspace list'))
-    })
+    }).finally(() => db.close())
   }
 
   async function removeWorkspaceFromBrowser(name: string): Promise<void> {
@@ -180,7 +180,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         const request = objectStore.delete(name)
         request.onsuccess = () => resolve()
         request.onerror = () => reject(new Error('Delete failed'))
-      })
+      }).finally(() => db.close())
       await dialog.$alert(t('WORKSPACE_DELETED', { name }))
       updateWorkspaceNames()
     } catch (error) {
@@ -199,7 +199,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         const request = objectStore.put(content, content.skriptblockly)
         request.onsuccess = () => resolve()
         request.onerror = () => reject(new Error('Save failed'))
-      })
+      }).finally(() => db.close())
       localStorage.setItem(CURRENT_WORKSPACE_KEY, content.skriptblockly)
       _isSaved.value = true
       updateWorkspaceNames()
@@ -217,13 +217,13 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         return
       }
       const db = await openIndexedDB()
-      const content: SkriptBlocklyContent | undefined = await new Promise((resolve, reject) => {
+      const content = await new Promise<SkriptBlocklyContent | undefined>((resolve, reject) => {
         const transaction = db.transaction('workspaces', 'readonly')
         const objectStore = transaction.objectStore('workspaces')
         const request = objectStore.get(workspaceName)
         request.onsuccess = () => resolve(request.result)
         request.onerror = () => reject(new Error('Load failed'))
-      })
+      }).finally(() => db.close())
       if (content) {
         const loaded = await loadWorkspace(content)
         if (loaded && name) {
