@@ -32,7 +32,7 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
       const syntaxType = type[0].slice(0, -10)
       toolboxContents.push({
         kind: 'category',
-        name: t(syntaxType),
+        name: t('SYNTAX_TYPE_' + syntaxType.toUpperCase()),
         cssconfig: customCss(syntaxType),
         contents: type[1],
       })
