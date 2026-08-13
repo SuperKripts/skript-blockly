@@ -21,126 +21,33 @@ function customCss(type: string): Blockly.ToolboxCategory.CssConfig {
 }
 
 function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
+  const toolboxContents: Blockly.utils.toolbox.ToolboxItemInfo[] = []
+  toolboxContents.push({
+    kind: 'search',
+    name: t('BLOCKLY_SEARCH'),
+  })
+
+  Object.entries(BlocklyRegistry).forEach((type) => {
+    if (type[0].endsWith('BlockInfos')) {
+      const syntaxType = type[0].slice(0, -10)
+      toolboxContents.push({
+        kind: 'category',
+        name: t(syntaxType),
+        cssconfig: customCss(syntaxType),
+        contents: type[1],
+      })
+    }
+  })
+
+  toolboxContents.push({
+    kind: 'variables',
+    name: t('SYNTAX_TYPE_VARIABLE'),
+    cssconfig: customCss('variable'),
+  })
+
   return {
     kind: 'categoryToolbox',
-    contents: [
-      {
-        kind: 'search',
-        name: t('BLOCKLY_SEARCH'),
-      },
-      // ...Object.values(SyntaxType),
-      // {
-      //   kind: 'sep',
-      // },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_EVENT'),
-        cssconfig: customCss('event'),
-        contents: BlocklyRegistry.eventBlockInfos,
-      },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_CONDITION'),
-        cssconfig: customCss('condition'),
-        contents: BlocklyRegistry.conditionBlockInfos,
-      },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_EFFECT'),
-        cssconfig: customCss('effect'),
-        contents: BlocklyRegistry.effectBlockInfos,
-      },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_EXPRESSION'),
-        cssconfig: customCss('expression'),
-        contents: BlocklyRegistry.expressionBlockInfos,
-      },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_TYPE'),
-        cssconfig: customCss('type'),
-        contents: BlocklyRegistry.typeBlockInfos,
-      },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_FUNCTION'),
-        cssconfig: customCss('function'),
-        contents: [],
-      },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_SECTION'),
-        cssconfig: customCss('section'),
-        contents: BlocklyRegistry.sectionBlockInfos,
-      },
-      {
-        kind: 'category',
-        name: t('SYNTAX_TYPE_STRUCTURE'),
-        cssconfig: customCss('structure'),
-        contents: BlocklyRegistry.structureBlockInfos,
-      },
-      // {
-      //   kind: 'category',
-      //   name: '函数',
-      //   custom: 'PROCEDURE',
-      //   // cssconfig: customCss('procedure_category',
-      // },
-      // {
-      //   kind: 'category',
-      //   name: '变量',
-      //   custom: 'VARIABLE',
-      //   // cssconfig: customCss('variable_category',
-      // },
-      {
-        kind: 'variables',
-        name: t('SYNTAX_TYPE_VARIABLE'),
-        cssconfig: customCss('variable'),
-      },
-      {
-        kind: 'category',
-        name: t('TOOLBOX_TEST'),
-        cssconfig: customCss('event'),
-        contents: [
-          // {
-          //   kind: 'block',
-          //   type: 'event_join',
-          // },
-          {
-            kind: 'category',
-            name: t('TOOLBOX_TEST_1'),
-            contents: [
-              // {
-              //   kind: 'block',
-              //   type: 'event_join',
-              // },
-            ],
-          },
-          {
-            kind: 'category',
-            name: t('TOOLBOX_TEST_2'),
-            contents: [
-              // {
-              //   kind: 'block',
-              //   type: 'event_join',
-              // },
-            ],
-          },
-        ],
-      },
-      // {
-      //   kind: 'category',
-      //   name: '最常使用 ',
-      //   custom: 'MOST_USED',
-      //   cssconfig: customCss('frequently_used_category'),
-      // },
-      // {
-      //   kind: 'category',
-      //   name: '最近使用',
-      //   custom: 'RECENTLY_USED',
-      //   cssconfig: customCss('recently_used_category'),
-      // },
-    ],
+    contents: toolboxContents,
   }
 }
 

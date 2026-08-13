@@ -5,14 +5,14 @@ import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition 
 import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 
-const blockKey = 'exprassion_amount'
+const blockKey = 'expression_amount'
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Amount', docUrl: getSkriptHubDocUrl(967) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_AMOUNT_DESC', {
+      pte('EXPRESSION_AMOUNT_DESC', {
         0: () => this.appendValueInput('target').setCheck(null),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })

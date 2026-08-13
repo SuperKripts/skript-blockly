@@ -6,7 +6,7 @@ import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 import { createTempFieldDropdown } from '../types/Types'
 
-const blockKey = 'exprassion_all_commands'
+const blockKey = 'expression_all_commands'
 
 const COMMAND_TYPES = ['commands', 'script commands']
 
@@ -15,8 +15,8 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_ALL_COMMANDS_DESC', {
-        0: () => this.appendDummyInput().appendField(createTempFieldDropdown('exprassion_all_commands_type', COMMAND_TYPES), 'type'),
+      pte('EXPRESSION_ALL_COMMANDS_DESC', {
+        0: () => this.appendDummyInput().appendField(createTempFieldDropdown('expression_all_commands_type', COMMAND_TYPES), 'type'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })
     },

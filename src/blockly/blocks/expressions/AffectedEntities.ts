@@ -5,7 +5,7 @@ import { createSkriptDefinition, getSkriptHubDocUrl, registerContentMenuGetOptio
 import { t } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 
-const blockKey = 'exprassion_affected_entities'
+const blockKey = 'expression_affected_entities'
 const supportedEvents = ['event_aoe_cloud_effect']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
@@ -14,14 +14,14 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     initShape_() {
       this.mixin({ supportedEvents_: supportedEvents })
       this.setInputsInline(true)
-      this.appendDummyInput().appendField(t('EXPRASSION_AFFECTED_ENTITIES_DESC'))
+      this.appendDummyInput().appendField(t('EXPRESSION_AFFECTED_ENTITIES_DESC'))
     },
     initStyle_() {
       this.setOutput(true, 'livingentity')
     },
   }
   Blockly.Blocks[blockKey] = Object.assign(definition, mixin)
-  registerContentMenuGetOption(blockKey, 1000, blockKey, supportedEvents, 'EXPRASSION_AFFECTED_ENTITIES_DESC')
+  registerContentMenuGetOption(blockKey, 1000, blockKey, supportedEvents, 'EXPRESSION_AFFECTED_ENTITIES_DESC')
 
   generator.forBlock[blockKey] = function () {
     return ['affected entities', Order.ATOMIC]

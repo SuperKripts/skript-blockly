@@ -21,3 +21,4 @@ export const effectBlockInfos: Blockly.utils.toolbox.BlockInfo[] = EffectToolbox
 export const expressionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = ExpressionToolbox
 export const conditionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = ConditionToolbox
 export const sectionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = SectionToolbox
+export const functionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = []

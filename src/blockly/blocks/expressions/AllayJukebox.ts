@@ -5,14 +5,14 @@ import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition 
 import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 
-const blockKey = 'exprassion_allay_jukebox'
+const blockKey = 'expression_allay_jukebox'
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Allay Target Jukebox', docUrl: getSkriptHubDocUrl(13367) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_ALLAY_JUKEBOX_DESC', {
+      pte('EXPRESSION_ALLAY_JUKEBOX_DESC', {
         0: () => this.appendValueInput('entity').setCheck('livingentity'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })

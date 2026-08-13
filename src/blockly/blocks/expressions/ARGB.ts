@@ -6,7 +6,7 @@ import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 import { createTempFieldDropdown } from '../types/Types'
 
-const blockKey = 'exprassion_argb'
+const blockKey = 'expression_argb'
 
 const ARGB_CHANNELS = ['alpha', 'red', 'green', 'blue']
 
@@ -15,9 +15,9 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_ARGB_DESC', {
+      pte('EXPRESSION_ARGB_DESC', {
         0: () => this.appendValueInput('color').setCheck('color'),
-        1: () => this.appendDummyInput().appendField(createTempFieldDropdown('exprassion_argb_channel', ARGB_CHANNELS), 'channel'),
+        1: () => this.appendDummyInput().appendField(createTempFieldDropdown('expression_argb_channel', ARGB_CHANNELS), 'channel'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })
     },

@@ -5,14 +5,14 @@ import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition 
 import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 
-const blockKey = 'exprassion_alphabet_list'
+const blockKey = 'expression_alphabet_list'
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Alphabetical Sort', docUrl: getSkriptHubDocUrl(906) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_ALPHABET_LIST_DESC', {
+      pte('EXPRESSION_ALPHABET_LIST_DESC', {
         0: () => this.appendValueInput('strings').setCheck('string'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })

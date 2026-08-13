@@ -5,14 +5,14 @@ import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition 
 import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 
-const blockKey = 'exprassion_active_item'
+const blockKey = 'expression_active_item'
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
   const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Active Item', docUrl: getSkriptHubDocUrl(10149) })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_ACTIVE_ITEM_DESC', {
+      pte('EXPRESSION_ACTIVE_ITEM_DESC', {
         0: () => this.appendValueInput('entity').setCheck('livingentity'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })

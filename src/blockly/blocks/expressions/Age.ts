@@ -6,7 +6,7 @@ import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 import { createTempFieldDropdown } from '../types/Types'
 
-const blockKey = 'exprassion_age'
+const blockKey = 'expression_age'
 
 const AGE_TYPES = ['age', 'maximum age']
 
@@ -15,9 +15,9 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
-      pte('EXPRASSION_AGE_DESC', {
+      pte('EXPRESSION_AGE_DESC', {
         0: () => this.appendValueInput('target').setCheck(['block', 'entity']),
-        1: () => this.appendDummyInput().appendField(createTempFieldDropdown('exprassion_age_type', AGE_TYPES), 'ageType'),
+        1: () => this.appendDummyInput().appendField(createTempFieldDropdown('expression_age_type', AGE_TYPES), 'ageType'),
         default: ({ msg, index }) => this.appendDummyInput().appendField(msg, 'part-' + index),
       })
     },
