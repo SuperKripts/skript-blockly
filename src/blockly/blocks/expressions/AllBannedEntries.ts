@@ -1,7 +1,8 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition } from '../SkriptBlock'
+import { createSkriptExpressionDefinition } from './ExpressionBlock'
+import type { SkriptBlockDefinition } from '../SkriptBlock'
 import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 import { createTempFieldDropdown } from '../types/Types'
@@ -16,7 +17,7 @@ const TYPE_OUTPUTS: Record<string, string> = {
 }
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'All Banned Entries', docUrl: getSkriptHubDocUrl(9481) })
+  const definition = createSkriptExpressionDefinition({ title: 'All Banned Entries', docId: 9481 })
 
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {

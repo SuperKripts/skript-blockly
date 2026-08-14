@@ -1,7 +1,8 @@
 'skript syntax'
 
 import * as Blockly from 'blockly/core'
-import { createSkriptDefinition, getSkriptHubDocUrl, type SkriptBlockDefinition } from '../SkriptBlock'
+import { createSkriptExpressionDefinition } from './ExpressionBlock'
+import type { SkriptBlockDefinition } from '../SkriptBlock'
 import { pte } from '@/locales/i18n'
 import { generator, Order } from '@/blockly/generators/skript'
 import { createTempFieldDropdown } from '../types/Types'
@@ -11,7 +12,7 @@ const blockKey = 'expression_age'
 const AGE_TYPES = ['age', 'maximum age']
 
 export function register(): Blockly.utils.toolbox.BlockInfo {
-  const definition = createSkriptDefinition({ syntaxType: 'expression', title: 'Age', docUrl: getSkriptHubDocUrl(9480) })
+  const definition = createSkriptExpressionDefinition({ title: 'Age', docId: 9480 })
   const mixin: Partial<SkriptBlockDefinition> = {
     initShape_() {
       this.setInputsInline(true)
