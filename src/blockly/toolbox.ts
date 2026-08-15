@@ -1,7 +1,7 @@
 import * as Blockly from 'blockly/core'
 
 import '@/blockly/config'
-import * as BlocklyRegistry from '@/blockly/blocks/BlocklyRegistry'
+import { allBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 import '@/blockly/utils/ToolboxSearch'
 import '@/blockly/blocks/variables/ToolboxVariable'
 import { t } from '@/locales/i18n'
@@ -27,16 +27,13 @@ function toolbox(): Blockly.utils.toolbox.ToolboxDefinition {
     name: t('BLOCKLY_SEARCH'),
   })
 
-  Object.entries(BlocklyRegistry).forEach((type) => {
-    if (type[0].endsWith('BlockInfos')) {
-      const syntaxType = type[0].slice(0, -10)
-      toolboxContents.push({
-        kind: 'category',
-        name: t('SYNTAX_TYPE_' + syntaxType.toUpperCase()),
-        cssconfig: customCss(syntaxType),
-        contents: type[1],
-      })
-    }
+  Object.entries(allBlockInfos).forEach((type) => {
+    toolboxContents.push({
+      kind: 'category',
+      name: t('SYNTAX_TYPE_' + type[0].toUpperCase()),
+      cssconfig: customCss(type[0]),
+      contents: type[1],
+    })
   })
 
   toolboxContents.push({

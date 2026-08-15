@@ -2,7 +2,7 @@ import Fuse from 'fuse.js'
 import * as Blockly from 'blockly/core'
 import { t } from '@/locales/i18n'
 import { pinyin } from 'pinyin-pro'
-import * as BlocklyRegistry from '@/blockly/blocks/BlocklyRegistry'
+import { allBlockInfos } from '@/blockly/blocks/BlocklyRegistry'
 
 export type BlockData = {
   type: string
@@ -18,7 +18,7 @@ export class BlockSearcher {
     // 到时候可能用浏览器缓存 搜索索引
     const dataList: BlockData[] = []
     const tempWorkspace = new Blockly.Workspace()
-    Object.values(BlocklyRegistry)
+    Object.values(allBlockInfos)
       .flat()
       .forEach((blockInfo) => {
         let block: Blockly.Block

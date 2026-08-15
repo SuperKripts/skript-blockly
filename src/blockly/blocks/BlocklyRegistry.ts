@@ -9,16 +9,19 @@ import { BlockInfos as SectionToolbox } from '@/blockly/blocks/sections'
 
 import '@/blockly/blocks/events/EventValues'
 import '@/blockly/blocks/events/Cancellable'
+import type { SyntaxType } from './SkriptBlock'
 
 if (import.meta.env.DEV) {
   console.log(Blockly.Blocks)
 }
 
-export const eventBlockInfos: Blockly.utils.toolbox.BlockInfo[] = EventToolbox
-export const typeBlockInfos: Blockly.utils.toolbox.BlockInfo[] = TypeToolbox
-export const structureBlockInfos: Blockly.utils.toolbox.BlockInfo[] = StructureToolbox
-export const effectBlockInfos: Blockly.utils.toolbox.BlockInfo[] = EffectToolbox
-export const expressionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = ExpressionToolbox
-export const conditionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = ConditionToolbox
-export const sectionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = SectionToolbox
-export const functionBlockInfos: Blockly.utils.toolbox.BlockInfo[] = []
+export const allBlockInfos: Record<SyntaxType, Blockly.utils.toolbox.BlockInfo[]> = {
+  event: EventToolbox,
+  condition: ConditionToolbox,
+  effect: EffectToolbox,
+  expression: ExpressionToolbox,
+  type: TypeToolbox,
+  function: [],
+  section: SectionToolbox,
+  structure: StructureToolbox,
+}
