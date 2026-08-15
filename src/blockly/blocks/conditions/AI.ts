@@ -11,7 +11,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     title: 'Has AI',
     docId: 4170,
     desc: 'CONDITION_AI_DESC',
-    input: ['entity'],
+    input: ['livingentity'],
     mode: 'have',
     code: 'ai',
   })
