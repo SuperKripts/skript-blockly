@@ -334,6 +334,8 @@ export const EXPRESSION_ALL_COMMANDS_DESC = '所有%0'
 // CONDITION
 export const CONDITION_WRAPPER_DESC = '条件'
 export const CONDITION_AI_DESC = '%0 %1 AI'
+export const CONDITION_ALLAY_CAN_DUPLICATE_DESC = '%0 %1 复制'
+export const CONDITION_ALPHANUMERIC_DESC = '%0 %1 字母数字'
 
 // Section Conditionals
 export const SECTION_CONDITIONALS_IF = '如果'
@@ -443,8 +445,14 @@ export const EFFECT_DELAY_DESC = '等待 %0'
 export const EFFECT_APPLY_BONE_MEAL_DESC = '对方块 %1 使用 %0 个骨粉'
 
 // Field Option
-export const FIELD_OPTION_CONDITION_HAS_MODE_HAS = '有'
-export const FIELD_OPTION_CONDITION_HAS_MODE_DON_T_HAVE = '没有'
+export const FIELD_OPTION_CONDITION_HAVE_MODE_HAS = '有'
+export const FIELD_OPTION_CONDITION_HAVE_MODE_DON_T_HAVE = '没有'
+export const FIELD_OPTION_CONDITION_BE_MODE_IS = '是'
+export const FIELD_OPTION_CONDITION_BE_MODE_IS_NOT = '不是'
+export const FIELD_OPTION_CONDITION_CAN_MODE_CAN = '可以'
+export const FIELD_OPTION_CONDITION_CAN_MODE_CAN_T = '不能'
+export const FIELD_OPTION_CONDITION_WILL_MODE_WILL = '将会'
+export const FIELD_OPTION_CONDITION_WILL_MODE_WILL_NOT = '不会'
 
 export const FIELD_OPTION_EVENT_SERVER_STARTSTOP_START = '启动'
 export const FIELD_OPTION_EVENT_SERVER_STARTSTOP_STOP = '停止'

@@ -3,16 +3,14 @@
 import * as Blockly from 'blockly/core'
 import { registerModeCondition } from './ConditionBlock'
 
-const blockKey = 'condition_ai'
-
 export function register(): Blockly.utils.toolbox.BlockInfo {
   return registerModeCondition({
-    blockKey,
-    title: 'Has AI',
-    docId: 4170,
-    desc: 'CONDITION_AI_DESC',
-    input: ['entity'],
-    mode: 'have',
-    code: 'ai',
+    title: 'Can Duplicate',
+    docId: 9017,
+    blockKey: 'condition_allay_can_duplicate',
+    desc: 'CONDITION_ALLAY_CAN_DUPLICATE_DESC',
+    input: ['livingentity'],
+    code: 'duplicate',
+    mode: 'can',
   })
 }

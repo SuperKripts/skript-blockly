@@ -21,7 +21,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
     blockKey,
     desc: (input) => {
       pte('EVENT_CLICK_DESC', {
-        0: () => input.appendField(createTempFieldDropdown('click_type', ['', 'left', 'right']), 'click_type'),
+        0: () => input.appendField(createTempFieldDropdown('click_type', ['default', 'left', 'right']), 'click_type'),
         1: () => input.appendField(createFieldSearchDropdown(EntitiesItemBlock, true), 'click_target'),
         2: () => input.appendField(createFieldDropdown(ItemTypes, true), 'used_item'),
         default: ({ msg, index }) => input.appendField(msg, 'part-' + index),
@@ -32,7 +32,7 @@ export function register(): Blockly.utils.toolbox.BlockInfo {
       const clickTarget = block.getFieldValue('click_target')
       const usedItem = block.getFieldValue('used_item')
       const statementMembers = generate.statementToCode(block, 'block')
-      const code = generate.codeJoin('on', clickType, 'click', ['on', clickTarget], ['with', usedItem])
+      const code = generate.codeJoin(clickType === 'default' ? 'on click' : `on ${clickType} click`, ['on', clickTarget], ['with', usedItem])
       return `${code}: \n${statementMembers}`
     },
   })
