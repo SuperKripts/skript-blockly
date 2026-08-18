@@ -13,6 +13,7 @@ import type { SyntaxType } from './SkriptBlock'
 
 if (import.meta.env.DEV) {
   console.log(Blockly.Blocks)
+  import('@/skript/SyntaxRegistry')
 }
 
 export const allBlockInfos: Record<SyntaxType, Blockly.utils.toolbox.BlockInfo[]> = {
