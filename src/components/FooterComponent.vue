@@ -39,9 +39,9 @@ const themeStore = useThemeStore()
     </div>
 
     <div class="status-actions">
-      <button class="status-btn" @click="themeStore.toggle">
+      <button class="status-btn" @click.left="themeStore.toggle" @contextmenu.prevent="themeStore.followSystem">
         <i class="fas" :class="themeStore.isDark ? 'fa-sun' : 'fa-moon'"></i>
-        <span class="btn-text">{{ themeStore.isDark ? $t('THEME_LIGHT') : $t('THEME_DARK') }}</span>
+        <span>{{ themeStore.isDark ? $t('THEME_LIGHT') : $t('THEME_DARK') }}</span>
       </button>
       <button class="status-btn" id="toggleGrid" @click="workspaceStore.toggleGrid">
         <i class="fas fa-th"></i>
@@ -51,13 +51,8 @@ const themeStore = useThemeStore()
         <i class="fas fa-question-circle"></i>
         <span class="btn-text">{{ $t('HELP') }}</span>
       </button>
-      <a
-        href="https://github.com/SuperKripts/superkripts.github.io/issues"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="status-btn"
-        style="text-decoration: none; color: inherit"
-      >
+      <a href="https://github.com/SuperKripts/superkripts.github.io/issues" target="_blank" rel="noopener noreferrer"
+        class="status-btn" style="text-decoration: none; color: inherit">
         <i class="fas fa-comment-dots"></i>
         <span class="btn-text">{{ $t('FEEDBACK') }}</span>
       </a>

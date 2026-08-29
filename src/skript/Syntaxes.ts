@@ -4,12 +4,7 @@ type SyntaxOrigin = {
   modules?: string[]
 }
 
-type TypeInfo = {
-  id: string
-  name: string
-}
-
-type EventRef = {
+type NamedRef = {
   id: string
   name: string
 }
@@ -26,84 +21,106 @@ type Syntax = {
   deprecated: boolean
 }
 
-type Expression = Syntax & {
-  patterns: string[]
-  returnType?: TypeInfo
-  events?: EventRef[]
-  experimentData?: Record<string, unknown>
-  relatedProperty?: Record<string, unknown>
+type ExperimentData = {
+  required: NamedRef[]
+  disallowed: NamedRef[]
 }
 
-type Condition = Syntax & {
+type ExpressionSyntax = Syntax & {
   patterns: string[]
-  events?: EventRef[]
-  experimentData?: Record<string, unknown>
-  relatedProperty?: Record<string, unknown>
+  returnType: NamedRef
+  events?: NamedRef[]
+  experimentData?: ExperimentData
+  relatedProperty?: NamedRef
+}
+
+type ConditionSyntax = Syntax & {
+  patterns: string[]
+  events?: NamedRef[]
+  experimentData?: ExperimentData
+  relatedProperty?: NamedRef
 }
 
 type EventValue = {
-  type: TypeInfo
+  type: NamedRef
   plural: boolean
-  time: 'NOW'
+  time: 'PAST' | 'NOW' | 'FUTURE'
   patterns: string[]
   supportedChangeModes: string[]
 }
 
-type SkriptEvent = Syntax & {
+type EventSyntax = Syntax & {
   patterns: string[]
   cancellable: boolean
   eventValues: EventValue[]
 }
 
-type Effect = Syntax & {
+type EffectSyntax = Syntax & {
   patterns: string[]
-  events?: EventRef[]
-  experimentData?: Record<string, unknown>
+  events?: NamedRef[]
+  experimentData?: ExperimentData
 }
 
-type Section = Syntax & {
+type SectionSyntax = Syntax & {
   patterns: string[]
 }
 
-type Structure = Syntax & {
-  patterns: string[]
-  nodeType: string
-  entries?: Record<string, unknown>
+type StructureEntry = {
+  key: string
+  optional: boolean
+  multiple: boolean
 }
 
-type Codename = {
+type StructureSyntax = Syntax & {
+  patterns: string[]
+  nodeType: 'SECTION' | 'BOTH' | 'SIMPLE'
+  entries?: Record<string, StructureEntry>
+}
+
+type NameForms = {
   singular: string
   plural: string
 }
 
-type TypeDefinition = Syntax & {
+type TypeSyntax = Syntax & {
   usage?: string[]
-  codename?: Codename
-  properties?: unknown[]
+  codename?: NameForms
+  properties?: Array<{
+    property: NamedRef
+    origin: SyntaxOrigin
+    description: string
+  }>
 }
 
-type Experiment = Syntax & {
-  phase: string
+type ExperimentSyntax = Syntax & {
+  phase: 'STABLE' | 'EXPERIMENTAL' | 'MAINSTREAM'
   pattern: string
 }
 
 type FunctionParameter = {
   name: string
-  type: TypeInfo
+  type: NamedRef
   plural: boolean
+  modifiers?: {
+    optional?: boolean
+    ranged?: {
+      min: string
+      max: string
+    }
+  }
 }
 
-type FunctionDefinition = Syntax & {
-  returnType?: TypeInfo
+type FunctionSyntax = Syntax & {
+  returnType: NamedRef
   parameters?: Record<string, FunctionParameter>
 }
 
-type Property = Syntax & {
-  types: TypeInfo[]
-  syntaxes: EventRef[]
+type PropertySyntax = Syntax & {
+  types: NamedRef[]
+  syntaxes: NamedRef[]
 }
 
-type EntityData = Syntax & {
+type EntityDataSyntax = Syntax & {
   patterns: string[]
 }
 
@@ -116,42 +133,43 @@ type Syntaxes = {
     name: string
     version: string
   }
-  expressions: Record<string, Expression>
-  effects: Record<string, Effect>
-  sections: Record<string, Section>
-  events: Record<string, SkriptEvent>
-  conditions: Record<string, Condition>
-  structures: Record<string, Structure>
-  types: Record<string, TypeDefinition>
-  experiments: Record<string, Experiment>
-  functions: Record<string, FunctionDefinition>
-  properties: Record<string, Property>
-  entitydatas: Record<string, EntityData>
+  expressions: Record<string, ExpressionSyntax>
+  effects: Record<string, EffectSyntax>
+  sections: Record<string, SectionSyntax>
+  events: Record<string, EventSyntax>
+  conditions: Record<string, ConditionSyntax>
+  structures: Record<string, StructureSyntax>
+  types: Record<string, TypeSyntax>
+  experiments: Record<string, ExperimentSyntax>
+  functions: Record<string, FunctionSyntax>
+  properties: Record<string, PropertySyntax>
+  entitydatas: Record<string, EntityDataSyntax>
 }
 
-const syntaxesData = await import('@/assets/syntaxes.json').then((res) => res.default as Syntaxes)
+const syntaxesData = await import('../assets/syntaxes.json').then((res) => res.default as Syntaxes)
 
-export const { version, source, expressions, effects, sections, events, conditions, structures, types, experiments, functions, properties, entitydatas } = syntaxesData
+export const { version, source, expressions, effects, sections, events, conditions, structures, types, experiments, functions, properties, entitydatas: entityData } = syntaxesData
 
 export type {
   SyntaxOrigin,
-  TypeInfo,
-  EventRef,
+  NamedRef,
   Syntax,
-  Expression,
-  Condition,
+  ExperimentData,
+  ExpressionSyntax,
+  ConditionSyntax,
   EventValue,
-  SkriptEvent,
-  Effect,
-  Section,
-  Structure,
-  TypeDefinition,
-  Codename,
-  Experiment,
-  FunctionDefinition,
+  EventSyntax,
+  EffectSyntax,
+  SectionSyntax,
+  StructureEntry,
+  StructureSyntax,
+  NameForms,
+  TypeSyntax,
+  ExperimentSyntax,
   FunctionParameter,
-  Property,
-  EntityData,
+  FunctionSyntax,
+  PropertySyntax,
+  EntityDataSyntax,
   Syntaxes,
 }
 

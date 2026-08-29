@@ -8,18 +8,15 @@ export const useThemeStore = defineStore('theme', () => {
 
   function init() {
     const saved = localStorage.getItem(CURRENT_THEME_KEY)
-    if (saved) {
+    if (saved !== null) {
       override.value = saved === 'true'
     } else {
       const mediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)')
-      mediaQuery.addEventListener('change', () => {
-        if (override.value) updateTheme()
-      })
+      mediaQuery.addEventListener('change', updateTheme)
     }
 
     updateTheme()
 
-    watch(override, updateTheme)
     watch(
       isDark,
       (dark) => {
@@ -39,6 +36,12 @@ export const useThemeStore = defineStore('theme', () => {
     updateTheme()
   }
 
+  function followSystem() {
+    override.value = null
+    localStorage.removeItem(CURRENT_THEME_KEY)
+    updateTheme()
+  }
+
   if (globalThis.window) {
     init()
   }
@@ -46,5 +49,7 @@ export const useThemeStore = defineStore('theme', () => {
   return {
     isDark,
     toggle,
+    followSystem,
+    override,
   }
 })
