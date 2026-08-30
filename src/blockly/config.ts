@@ -70,8 +70,8 @@ export const config = {
   },
 }
 
-export function injectBlockly(element: Element): Blockly.WorkspaceSvg {
-  const workspace = Blockly.inject(element, config)
+export function injectBlockly(element: Element, mixinConfig: Partial<Blockly.BlocklyOptions> = {}): Blockly.WorkspaceSvg {
+  const workspace = Blockly.inject(element, { ...config, ...mixinConfig })
   workspace.addChangeListener(disableOrphans)
   return workspace
 }
