@@ -34,6 +34,12 @@ export const useWorkspaceStore = defineStore('workspace', () => {
   const blockCount = ref(0)
 
   function setWorkspace(workspace: Blockly.Workspace) {
+    updateWorkspace(workspace)
+    globalThis.addEventListener('beforeunload', (e) => !_isSaved.value && e.preventDefault())
+    loadWorkspaceFromBrowser()
+  }
+
+  function updateWorkspace(workspace: Blockly.Workspace) {
     _workspace.value = workspace
     _workspace.value.addChangeListener((e: { type: string; isUiEvent: boolean }) => {
       // const needFilterTypes = ['click', 'selected', 'bubble_open', 'viewport_change', 'toolbox_item_select', 'trashcan_open']
@@ -55,9 +61,6 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         _state.value = t('WORKSPACE_STATUS_READY')
       }
     })
-
-    globalThis.addEventListener('beforeunload', (e) => !_isSaved.value && e.preventDefault())
-    loadWorkspaceFromBrowser()
   }
 
   function getWorkspace(): Blockly.Workspace {
@@ -385,5 +388,6 @@ export const useWorkspaceStore = defineStore('workspace', () => {
     toggleGrid,
     toggleToolbox,
     getWorkspace,
+    updateWorkspace,
   }
 })
