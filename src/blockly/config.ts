@@ -75,10 +75,11 @@ export const config: Blockly.BlocklyOptions = {
 export function injectBlockly(element: Element, mixinConfig: Partial<Blockly.BlocklyOptions> = {}): Blockly.WorkspaceSvg {
   const workspace = Blockly.inject(element, { ...config, ...mixinConfig })
   workspace.addChangeListener(disableOrphans)
+  const flyout = workspace.getFlyout() as Blockly.Flyout
   if (useViewportStore().isMobile) {
-    const flyout = workspace.getFlyout() as Blockly.Flyout
     flyout.setAutoClose(false)
-    Blockly.Touch.console.log(workspace.getGesture())
+  } else {
+    flyout.setAutoClose(true)
   }
   return workspace
 }
