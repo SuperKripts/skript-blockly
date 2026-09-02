@@ -1,10 +1,11 @@
 import * as Blockly from 'blockly/core'
 
 import useToolbox from '@/blockly/toolbox'
-import * as SkriptHubTheme from '@/blockly/themes/skripthub'
 import { useWorkspaceStore } from '@/stores/workspace'
 import { useDialogStore } from '@/stores/dialog'
+import { useViewportStore } from '@/stores/viewport'
 import { pluginInfo as connectionCheckerPluginInfo } from '@/blockly/utils/SkriptConnectionChecker'
+import { enableFlyoutTouchScroll } from './utils/FlyoutTouchScroll'
 
 Blockly.dialog.setAlert((message, optCallback) => {
   const promise = useDialogStore().$alert(message)
@@ -22,6 +23,8 @@ Blockly.dialog.setPrompt((message, defaultValue, callback) => {
 if (!Blockly.ContextMenuRegistry.registry.getItem('commentDuplicate')) {
   Blockly.ContextMenuItems.registerCommentOptions()
 }
+
+enableFlyoutTouchScroll()
 
 const ctrlS = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.S, [Blockly.utils.KeyCodes.CTRL])
 const metaS = Blockly.ShortcutRegistry.registry.createSerializedKey(Blockly.utils.KeyCodes.S, [Blockly.utils.KeyCodes.META])
@@ -46,12 +49,11 @@ Blockly.ShortcutRegistry.registry.register(
   false,
 )
 
-export const config = {
+export const config: Blockly.BlocklyOptions = {
   // scrollbars: false,
   toolbox: useToolbox(),
   // theme,
   media: '/blockly/media',
-  theme: SkriptHubTheme.skript,
   zoom: {
     controls: true,
     wheel: true,
@@ -73,6 +75,11 @@ export const config = {
 export function injectBlockly(element: Element, mixinConfig: Partial<Blockly.BlocklyOptions> = {}): Blockly.WorkspaceSvg {
   const workspace = Blockly.inject(element, { ...config, ...mixinConfig })
   workspace.addChangeListener(disableOrphans)
+  if (useViewportStore().isMobile) {
+    const flyout = workspace.getFlyout() as Blockly.Flyout
+    flyout.setAutoClose(false)
+    Blockly.Touch.console.log(workspace.getGesture())
+  }
   return workspace
 }
 

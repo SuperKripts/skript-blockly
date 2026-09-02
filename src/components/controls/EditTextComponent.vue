@@ -30,7 +30,8 @@ defineExpose({ editText })
 
 <template>
   <div class="click-to-edit">
-    <span class="editable-text" @click="editText" :class="{ 'editable-text--unsaved': !isSaved }" ref="displayText" v-text="text && text != '' ? text : defaultText"></span>
+    <span class="editable-text" @click="editText" :class="{ 'editable-text--unsaved': !isSaved }" ref="displayText"
+      v-text="text && text != '' ? text : defaultText"></span>
     <form class="edit-form" @submit.prevent="saveText">
       <input class="edit-input" @blur="saveText" ref="input" type="text" :placeholder="text" style="display: none" />
     </form>
@@ -89,5 +90,11 @@ defineExpose({ editText })
 .edit-input:focus {
   border-color: var(--accent-primary);
   box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .edit-input {
+    width: 180px;
+  }
 }
 </style>

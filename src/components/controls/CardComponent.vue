@@ -39,7 +39,10 @@ const props = defineProps<{
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
-  transition: var(--transition);
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   color: var(--text-primary);
@@ -107,5 +110,14 @@ const props = defineProps<{
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .card_header {
+    padding: 10px 12px;
+    min-height: 36px;
+  }
+
+
 }
 </style>

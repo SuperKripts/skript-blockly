@@ -35,4 +35,22 @@ const ws = useWorkspaceStore()
   flex: 1;
   overflow: hidden;
 }
+
+@media (max-width: 768px) {
+  .workspace_card {
+    margin: 8px;
+  }
+
+  .workspace_card :deep(.title_text) {
+    display: none;
+  }
+
+  .workspace_card :deep(.card_actions .btn) {
+    padding: 8px 10px;
+  }
+
+  .workspace_card :deep(.card_actions .btn-text) {
+    display: none;
+  }
+}
 </style>

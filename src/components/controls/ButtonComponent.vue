@@ -3,7 +3,7 @@ const { type = 'secondary', i } = defineProps<{ type?: 'secondary' | 'primary'; 
 </script>
 
 <template>
-  <button class="btn" :class="'btn-' + type" @contextmenu="($attrs.onContextmenu as unknown)">
+  <button class="btn" :class="'btn-' + type" @contextmenu="($attrs.onContextmenu as (payload: PointerEvent) => void)">
     <i v-if="i" class="fas" :class="i"></i>
     <span class="btn-text" v-if="$slots.default">
       <slot></slot>

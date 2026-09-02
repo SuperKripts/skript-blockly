@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useThemeStore } from '@/stores/theme'
 import { useWorkspaceStore } from '@/stores/workspace'
+import { useViewportStore } from '@/stores/viewport'
 
 const workspaceStore = useWorkspaceStore()
 const themeStore = useThemeStore()
+const viewportStore = useViewportStore()
 </script>
 
 <template>
@@ -23,14 +25,14 @@ const themeStore = useThemeStore()
           <span>{{ workspaceStore.codeLine }}</span>
         </span>
       </div>
-      <div class="status-item">
+      <div class="status-item" v-if="!viewportStore.isMobile">
         <i class="fas fa-check-circle status-icon"></i>
         <span>
           <span class="status-text">{{ $t('WORKSPACE_STATE') }}</span>
           <span>{{ workspaceStore.state }}</span>
         </span>
       </div>
-      <div class="status-item" v-if="!workspaceStore.isSaved">
+      <div class="status-item" v-if="!workspaceStore.isSaved && !viewportStore.isMobile">
         <i class="fas fa-exclamation-circle status-icon" style="color: #ff9800"></i>
         <span>
           <span>{{ $t('WORKSPACE_UNSAVED') }}</span>
@@ -41,7 +43,7 @@ const themeStore = useThemeStore()
     <div class="status-actions">
       <button class="status-btn" @click.left="themeStore.toggle" @contextmenu.prevent="themeStore.followSystem">
         <i class="fas" :class="themeStore.isDark ? 'fa-sun' : 'fa-moon'"></i>
-        <span>{{ themeStore.isDark ? $t('THEME_LIGHT') : $t('THEME_DARK') }}</span>
+        <span class="btn-text">{{ themeStore.isDark ? $t('THEME_LIGHT') : $t('THEME_DARK') }}</span>
       </button>
       <button class="status-btn" id="toggleGrid" @click="workspaceStore.toggleGrid">
         <i class="fas fa-th"></i>
@@ -130,5 +132,24 @@ const themeStore = useThemeStore()
 
 .btn-text {
   line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .status-bar {
+    padding: 0 12px;
+    font-size: 12px;
+  }
+
+  .status-items {
+    gap: 14px;
+  }
+
+  .status-actions {
+    gap: 14px;
+  }
+
+  .status-actions .btn-text {
+    display: none;
+  }
 }
 </style>

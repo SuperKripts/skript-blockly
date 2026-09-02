@@ -1,0 +1,51 @@
+@use 'sass:color';
+@use 'sass:math';
+@use 'sass:map';
+
+$skript-hub: (
+  event: #a763ff,
+  condition: #ff3d3d,
+  effect: #0178ff,
+  expression: #0de505,
+  type: #f39c12,
+  function: #b4b4b4,
+  section: #1abc9c,
+  structure: #e056fd,
+);
+
+@function skript-border($c) {
+  $mix: color.mix(#fff, $c, 30%);
+  @return rgb(math.round(color.channel($mix, 'red')), math.round(color.channel($mix, 'green')), math.round(color.channel($mix, 'blue')));
+}
+
+:root {
+  @each $name, $c in $skript-hub {
+    --skript-#{$name}: #{$c};
+    --skript-#{$name}-bg: #{color.change($c, $alpha: 0.08)};
+    --skript-#{$name}-selected: #{color.change($c, $alpha: 0.12)};
+  }
+}
+
+:root.dark {
+  @each $name, $c in $skript-hub {
+    --skript-#{$name}-bg: #{color.change($c, $alpha: 0.16)};
+    --skript-#{$name}-selected: #{color.change($c, $alpha: 0.24)};
+  }
+  --skript-function-bg: #{color.change(map.get($skript-hub, function), $alpha: 0.12)};
+  --skript-function-selected: #{color.change(map.get($skript-hub, function), $alpha: 0.18)};
+}
+
+@each $name, $c in $skript-hub {
+  .#{$name} .blocklyPath {
+    fill: $c;
+    stroke: skript-border($c);
+  }
+
+  .blocklyToolboxCategoryContainer.toolbox-#{$name}:hover:not(.blocklyToolboxSelected) {
+    background-color: var(--skript-#{$name}-bg);
+  }
+
+  .blocklyToolboxCategoryContainer.toolbox-#{$name}:has(.blocklyToolboxSelected) {
+    background-color: var(--skript-#{$name}-selected);
+  }
+}

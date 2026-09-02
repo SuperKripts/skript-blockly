@@ -69,4 +69,11 @@ Repository: ${repoUrl}`;
   color: var(--text-secondary);
   letter-spacing: 0.5px;
 }
+
+@media (max-width: 768px) {
+  .logo {
+    transform: scale(0.85);
+    transform-origin: left center;
+  }
+}
 </style>

@@ -1,31 +1,4 @@
 :root {
-  --skript-event: #a763ff;
-  --skript-condition: #ff3d3d;
-  --skript-effect: #0178ff;
-  --skript-expression: #0de505;
-  --skript-type: #f39c12;
-  --skript-function: #b4b4b4;
-  --skript-section: #1abc9c;
-  --skript-structure: #e056fd;
-
-  --skript-event-bg: rgba(167, 99, 255, 0.08);
-  --skript-condition-bg: rgba(255, 61, 61, 0.08);
-  --skript-effect-bg: rgba(1, 120, 255, 0.08);
-  --skript-expression-bg: rgba(13, 229, 5, 0.08);
-  --skript-type-bg: rgba(243, 156, 18, 0.08);
-  --skript-function-bg: rgba(180, 180, 180, 0.08);
-  --skript-section-bg: rgba(26, 188, 156, 0.08);
-  --skript-structure-bg: rgba(224, 86, 253, 0.08);
-
-  --skript-event-selected: rgba(167, 99, 255, 0.12);
-  --skript-condition-selected: rgba(255, 61, 61, 0.12);
-  --skript-effect-selected: rgba(1, 120, 255, 0.12);
-  --skript-expression-selected: rgba(13, 229, 5, 0.12);
-  --skript-type-selected: rgba(243, 156, 18, 0.12);
-  --skript-function-selected: rgba(180, 180, 180, 0.12);
-  --skript-section-selected: rgba(26, 188, 156, 0.12);
-  --skript-structure-selected: rgba(224, 86, 253, 0.12);
-
   --accent-primary-bg-light: rgba(255, 152, 0, 0.04);
   --accent-primary-focus-ring: rgba(255, 152, 0, 0.15);
 
@@ -33,24 +6,6 @@
 }
 
 :root.dark {
-  --skript-event-bg: rgba(167, 99, 255, 0.16);
-  --skript-condition-bg: rgba(255, 61, 61, 0.16);
-  --skript-effect-bg: rgba(1, 120, 255, 0.16);
-  --skript-expression-bg: rgba(13, 229, 5, 0.16);
-  --skript-type-bg: rgba(243, 156, 18, 0.16);
-  --skript-function-bg: rgba(180, 180, 180, 0.12);
-  --skript-section-bg: rgba(26, 188, 156, 0.16);
-  --skript-structure-bg: rgba(224, 86, 253, 0.16);
-
-  --skript-event-selected: rgba(167, 99, 255, 0.24);
-  --skript-condition-selected: rgba(255, 61, 61, 0.24);
-  --skript-effect-selected: rgba(1, 120, 255, 0.24);
-  --skript-expression-selected: rgba(13, 229, 5, 0.24);
-  --skript-type-selected: rgba(243, 156, 18, 0.24);
-  --skript-function-selected: rgba(180, 180, 180, 0.18);
-  --skript-section-selected: rgba(26, 188, 156, 0.24);
-  --skript-structure-selected: rgba(224, 86, 253, 0.24);
-
   --accent-primary-bg-light: rgba(255, 152, 0, 0.08);
   --accent-primary-focus-ring: rgba(255, 152, 0, 0.25);
 
@@ -135,8 +90,8 @@ pattern[id^='blocklyGridPattern'] line {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 14px;
+  height: 14px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
@@ -237,52 +192,18 @@ pattern[id^='blocklyGridPattern'] line {
   animation: fadeIn 0.3s ease-out;
 }
 
-.blocklyToolboxCategoryContainer.toolbox-event:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-event-bg);
-}
-.blocklyToolboxCategoryContainer.toolbox-condition:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-condition-bg);
-}
-.blocklyToolboxCategoryContainer.toolbox-effect:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-effect-bg);
-}
-.blocklyToolboxCategoryContainer.toolbox-expression:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-expression-bg);
-}
-.blocklyToolboxCategoryContainer.toolbox-type:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-type-bg);
-}
-.blocklyToolboxCategoryContainer.toolbox-function:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-function-bg);
-}
-.blocklyToolboxCategoryContainer.toolbox-section:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-section-bg);
-}
-.blocklyToolboxCategoryContainer.toolbox-structure:hover:not(.blocklyToolboxSelected) {
-  background-color: var(--skript-structure-bg);
-}
+@media (max-width: 768px) {
+  .blocklyToolboxCategory {
+    padding: 8px 14px;
+  }
 
-.blocklyToolboxCategoryContainer.toolbox-event:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-event-selected);
-}
-.blocklyToolboxCategoryContainer.toolbox-condition:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-condition-selected);
-}
-.blocklyToolboxCategoryContainer.toolbox-effect:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-effect-selected);
-}
-.blocklyToolboxCategoryContainer.toolbox-expression:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-expression-selected);
-}
-.blocklyToolboxCategoryContainer.toolbox-type:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-type-selected);
-}
-.blocklyToolboxCategoryContainer.toolbox-function:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-function-selected);
-}
-.blocklyToolboxCategoryContainer.toolbox-section:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-section-selected);
-}
-.blocklyToolboxCategoryContainer.toolbox-structure:has(.blocklyToolboxSelected) {
-  background-color: var(--skript-structure-selected);
+  .blocklyToolboxCategoryContainer:has(#toolbox-search-input) {
+    margin: 0;
+    width: 100%;
+    height: 40px;
+  }
+
+  #toolbox-search-input {
+    width: 100%;
+  }
 }

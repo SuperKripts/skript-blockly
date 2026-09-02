@@ -1,7 +1,8 @@
 import * as Blockly from 'blockly/core'
 import { t } from '@/locales/i18n'
-import { register } from './Variables'
-register()
+import { register as registerVariableBlock } from './Variables'
+
+registerVariableBlock()
 
 const VARIABLE_CATEGORY_KIND = 'variables'
 
